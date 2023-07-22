@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_notifications" />
 
+    <item
+        android:id="@+id/navigation_customFragment"
+        android:icon="@drawable/editprofile"
+        android:title="@string/custom_nav_title" />
+
 </menu>
