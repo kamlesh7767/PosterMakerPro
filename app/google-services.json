@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "821720794197",
+    "project_id": "poster-maker-pro-8c63b",
+    "storage_bucket": "poster-maker-pro-8c63b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821720794197:android:cd17047c8852a31bea00dc",
+        "android_client_info": {
+          "package_name": "com.garudpuran.postermakerpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "821720794197-9nvhk9do25m9q52c93385tnsf3pd6rh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUNmII4a_uHxvU76xNdQCoLKK_Om4wxK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "821720794197-9nvhk9do25m9q52c93385tnsf3pd6rh5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

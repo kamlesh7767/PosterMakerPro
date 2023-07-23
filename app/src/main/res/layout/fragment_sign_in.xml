@@ -9,41 +9,102 @@
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
-
-
-      <TextView
+      <ImageView
+          android:id="@+id/imageView"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:fontFamily="@font/roboto_bold"
-          android:text="Welcome"
-          android:layout_marginTop="100dp"
-          android:layout_marginHorizontal="20dp"
-          android:textColor="@color/primary_color_red"
-          android:textSize="40sp"
+          android:layout_height="400dp"
+          android:scaleType="centerCrop"
+          android:layout_marginTop="20dp"
+          android:src="@drawable/start_elipse"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:layout_width="409dp"
+      <TextView
+          android:id="@+id/textView2"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          app:startIconDrawable="@drawable/mobile_number"
-          app:startIconTint="@color/primary_color_red"
-          app:errorEnabled="true"
+          android:layout_marginHorizontal="20dp"
+          android:fontFamily="@font/roboto_bold"
+          android:layout_marginTop="10dp"
+          android:text="Welcome"
+          android:textColor="@color/primary_color_red"
+          android:textSize="40sp"
+          app:layout_constraintTop_toBottomOf="@+id/imageView"
+          tools:layout_editor_absoluteX="20dp" />
+
+      <TextView
+          android:id="@+id/textView3"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="20dp"
+          android:fontFamily="@font/roboto_semibold"
+          android:text="Everything is an imposing and advanced file finder that has been."
+          android:layout_marginTop="10dp"
+          android:textColor="@color/primary_color_red"
+          android:textSize="18sp"
+          app:layout_constraintTop_toBottomOf="@+id/textView2"
+          tools:layout_editor_absoluteX="20dp" />
+
+      <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/mobile_no_tl"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="20dp"
+          app:boxStrokeWidth="0dp"
+          android:layout_marginTop="20dp"
+          app:boxStrokeWidthFocused="0dp"
           app:counterEnabled="true"
           app:counterMaxLength="10"
+          app:errorEnabled="true"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/textView3"
           app:prefixText="+91"
-          app:boxStrokeWidth="0dp"
-          app:boxStrokeWidthFocused="0dp"
           app:prefixTextColor="@android:color/darker_gray"
-          tools:layout_editor_absoluteX="1dp"
-          tools:layout_editor_absoluteY="297dp">
+          app:startIconDrawable="@drawable/mobile_number"
+          app:startIconTint="@color/primary_color_red">
 
           <com.google.android.material.textfield.TextInputEditText
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:hint="Enter Mobile No"
               android:background="@drawable/outlined_primary_rounded_bg"
-             />
+              android:hint="Enter Mobile No" />
       </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:id="@+id/floatingActionButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="20dp"
+          android:layout_marginVertical="20dp"
+          android:backgroundTint="@color/primary_color_red"
+          android:src="@drawable/baseline_arrow_forward_ios_24"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/mobile_no_tl"
+          app:tint="@color/white" />
+
+
+      <TextView
+          android:id="@+id/textView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Or"
+          android:textColor="@android:color/darker_gray"
+          android:textSize="20sp"
+          android:layout_marginTop="40dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/floatingActionButton" />
+
+      <ImageView
+          android:layout_width="100dp"
+          android:layout_height="wrap_content"
+          android:src="@drawable/logo_google"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>
