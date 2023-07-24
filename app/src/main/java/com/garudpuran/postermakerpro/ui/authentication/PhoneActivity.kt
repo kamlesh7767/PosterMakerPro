@@ -26,7 +26,7 @@ class PhoneActivity : AppCompatActivity() {
 
         init()
         binding.proceedBtn.setOnClickListener {
-            number = binding.mobileNoEt.text?.trim().toString()
+            number = binding.loginMobileNoEt.text?.trim().toString()
             if (number.isNotEmpty()){
                 if (number.length == 10){
                     number = "+91$number"

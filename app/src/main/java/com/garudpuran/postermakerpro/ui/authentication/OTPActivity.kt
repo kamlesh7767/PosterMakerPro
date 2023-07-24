@@ -4,23 +4,33 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.Message
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.widget.addTextChangedListener
 import com.garudpuran.postermakerpro.MainActivity
-import com.garudpuran.postermakerpro.databinding.ActivityAuthBinding
+import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityOtpactivityBinding
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import java.util.concurrent.TimeUnit
 
 class OTPActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+
+    private var verificationActive = false
+    private lateinit var handler: Handler
+    private var timerSeconds = 60
+    
 
     private lateinit var OTP: String
     private lateinit var binding: ActivityOtpactivityBinding
@@ -37,56 +47,157 @@ class OTPActivity : AppCompatActivity() {
         phoneNumber = intent.getStringExtra("phoneNumber")!!
 
         init()
-        binding.otpProgressBar.visibility = View.INVISIBLE
-        addTextChangeListener()
-        resendOTPTvVisibility()
+        binding.progress.root.visibility = View.INVISIBLE
 
-        binding.resendTextView.setOnClickListener {
+        binding.resendOtpTv.setOnClickListener {
             resendVerificationCode()
-            resendOTPTvVisibility()
         }
 
-        binding.verifyOTPBtn.setOnClickListener {
-            //collect otp from all the edit texts
-            val typedOTP =
-                (binding.otpEditText1.text.toString() + binding.otpEditText2.text.toString() + binding.otpEditText3.text.toString()
-                        + binding.otpEditText4.text.toString() + binding.otpEditText5.text.toString() + binding.otpEditText6.text.toString())
-
-            if (typedOTP.isNotEmpty()) {
-                if (typedOTP.length == 6) {
-                    val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
-                        OTP, typedOTP
-                    )
-                    binding.otpProgressBar.visibility = View.VISIBLE
-                    signInWithPhoneAuthCredential(credential)
-                } else {
-                    Toast.makeText(this, "Please Enter Correct OTP", Toast.LENGTH_SHORT).show()
+        binding.verifyOtpBtn.setOnClickListener {
+            if(verificationActive){
+                if(getTypedOTP().length == 5){
+                    sendForVerification(getTypedOTP())
                 }
-            } else {
-                Toast.makeText(this, "Please Enter OTP", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this,getString(R.string.enter_correct_otp),Toast.LENGTH_SHORT).show()
             }
 
 
         }
+
+        binding.otpEditText1.addTextChangedListener {
+            val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
+            if(otp1.length == 1){
+                if(getTypedOTP().length == 5){
+                    verificationActive = true
+                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                }else{
+                    binding.otpEditText2.requestFocus()
+                }
+            }else{
+                verificationActive = false
+                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+            }
+        }
+        binding.otpEditText2.addTextChangedListener {
+            val otp1 = it?.trim().toString().filter { !it.isWhitespace()}
+            if(otp1.length == 1){
+                if(getTypedOTP().length == 5){
+                    verificationActive = true
+                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
+                }else{
+                    binding.otpEditText3.requestFocus()
+                }
+            }else{
+                verificationActive = false
+                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+            }
+        }
+        binding.otpEditText3.addTextChangedListener {
+            val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
+            if(otp1.length == 1){
+                if(getTypedOTP().length == 5){
+                    verificationActive = true
+                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
+                }else{
+                    binding.otpEditText4.requestFocus()
+                }
+            }else{
+                verificationActive = false
+                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+            }
+        }
+        binding.otpEditText4.addTextChangedListener {
+            val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
+            if(otp1.length == 1){
+                if(getTypedOTP().length == 5){
+                    verificationActive = true
+                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
+                }else{
+                    binding.otpEditText5.requestFocus()
+                }
+
+            }else{
+                verificationActive = false
+                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+            }
+        }
+        binding.otpEditText5.addTextChangedListener {
+            val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
+            if(otp1.length == 1){
+                if(getTypedOTP().length==5){
+                    verificationActive = true
+                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
+                }else{
+                    verificationActive = false
+                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                }
+
+            }else{
+                verificationActive = false
+                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+            }
+        }
+
+        handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                timerSeconds--
+                if (timerSeconds >= 0) {
+                    updateTimerUI()
+                    sendEmptyMessageDelayed(0, 1000) // Delay by 1 second (1000 milliseconds)
+                } else {
+                    // Timer finished
+                    // Perform any desired action
+                    onTimerFinished()
+                }
+            }
+        }
+        startTimer()
+
+        binding.resendOtpBtn.setOnClickListener {
+            resendVerificationCode()
+        }
+
+
     }
 
-    private fun resendOTPTvVisibility() {
-        binding.otpEditText1.setText("")
-        binding.otpEditText2.setText("")
-        binding.otpEditText3.setText("")
-        binding.otpEditText4.setText("")
-        binding.otpEditText5.setText("")
-        binding.otpEditText6.setText("")
-        binding.resendTextView.visibility = View.INVISIBLE
-        binding.resendTextView.isEnabled = false
+    private fun startTimer() {
+        timerSeconds = 60
+        binding.resendOtpBtn.visibility = View.GONE
+        binding.resendOtpTv.visibility = View.VISIBLE
+        handler.sendEmptyMessage(0)
+    }
 
-        Handler(Looper.myLooper()!!).postDelayed(Runnable {
-            binding.resendTextView.visibility = View.VISIBLE
-            binding.resendTextView.isEnabled = true
-        }, 60000)
+    private fun updateTimerUI() {
+        binding.resendOtpTv.text = getString(R.string.resend_otp_timer, timerSeconds.toString())
+    }
+
+    private fun onTimerFinished() {
+        binding.resendOtpTv.visibility = View.GONE
+        binding.resendOtpBtn.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+
+    private fun getTypedOTP(): String {
+        return (binding.otpEditText1.text.toString() + binding.otpEditText2.text.toString() + binding.otpEditText3.text.toString()
+                + binding.otpEditText4.text.toString() + binding.otpEditText5.text.toString())
+    }
+
+    private fun sendForVerification(typedOTP: String) {
+        val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
+            OTP, typedOTP
+        )
+        binding.progress.root.visibility = View.VISIBLE
+        signInWithPhoneAuthCredential(credential)
     }
 
     private fun resendVerificationCode() {
+        binding.resendOtpBtn.visibility = View.GONE
+
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)       // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -120,7 +231,7 @@ class OTPActivity : AppCompatActivity() {
                 // The SMS quota for the project has been exceeded
                 Log.d("TAG", "onVerificationFailed: ${e.toString()}")
             }
-            binding.otpProgressBar.visibility = View.VISIBLE
+            binding.progress.root.visibility = View.VISIBLE
             // Show a message and update the UI
         }
 
@@ -134,6 +245,7 @@ class OTPActivity : AppCompatActivity() {
             // Save verification ID and resending token so we can use them later
             OTP = verificationId
             resendToken = token
+            startTimer()
         }
     }
 
@@ -153,7 +265,7 @@ class OTPActivity : AppCompatActivity() {
                     }
                     // Update UI
                 }
-                binding.otpProgressBar.visibility = View.VISIBLE
+                binding.progress.root.visibility = View.VISIBLE
             }
     }
 
@@ -161,42 +273,11 @@ class OTPActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
     }
 
-    private fun addTextChangeListener() {
-        binding.otpEditText1.addTextChangedListener(EditTextWatcher(binding.otpEditText1))
-        binding.otpEditText2.addTextChangedListener(EditTextWatcher(binding.otpEditText2))
-        binding.otpEditText3.addTextChangedListener(EditTextWatcher(binding.otpEditText3))
-        binding.otpEditText4.addTextChangedListener(EditTextWatcher(binding.otpEditText4))
-        binding.otpEditText5.addTextChangedListener(EditTextWatcher(binding.otpEditText5))
-        binding.otpEditText6.addTextChangedListener(EditTextWatcher(binding.otpEditText6))
-    }
 
     private fun init() {
         auth = FirebaseAuth.getInstance()
     }
 
 
-    inner class EditTextWatcher(private val view: View) : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-        }
-
-        override fun afterTextChanged(p0: Editable?) {
-
-            val text = p0.toString()
-            when (view.id) {
-                binding.otpEditText1.id -> if (text.length == 1) binding.otpEditText2.requestFocus()
-                binding.otpEditText2.id -> if (text.length == 1) binding.otpEditText3.requestFocus() else if (text.isEmpty()) binding.otpEditText1.requestFocus()
-                binding.otpEditText3.id -> if (text.length == 1) binding.otpEditText4.requestFocus() else if (text.isEmpty()) binding.otpEditText2.requestFocus()
-                binding.otpEditText4.id -> if (text.length == 1) binding.otpEditText5.requestFocus() else if (text.isEmpty()) binding.otpEditText3.requestFocus()
-                binding.otpEditText5.id -> if (text.length == 1) binding.otpEditText6.requestFocus() else if (text.isEmpty()) binding.otpEditText4.requestFocus()
-                binding.otpEditText6.id -> if (text.isEmpty()) binding.otpEditText5.requestFocus()
-
-            }
-        }
-
-    }
 }

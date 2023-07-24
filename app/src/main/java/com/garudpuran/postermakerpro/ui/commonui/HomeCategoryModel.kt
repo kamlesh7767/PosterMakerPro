@@ -2,6 +2,6 @@ package com.garudpuran.postermakerpro.ui.commonui
 
 class HomeCategoryModel(
     val id:Int,
-    val title:String,
+    val title:Int,
     val icon_res:Int
 )
