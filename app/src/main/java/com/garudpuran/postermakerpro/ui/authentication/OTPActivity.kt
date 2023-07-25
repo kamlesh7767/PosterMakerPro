@@ -55,7 +55,7 @@ class OTPActivity : AppCompatActivity() {
 
         binding.verifyOtpBtn.setOnClickListener {
             if(verificationActive){
-                if(getTypedOTP().length == 5){
+                if(getTypedOTP().length == 6){
                     sendForVerification(getTypedOTP())
                 }
             }else{
@@ -68,7 +68,7 @@ class OTPActivity : AppCompatActivity() {
         binding.otpEditText1.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
             if(otp1.length == 1){
-                if(getTypedOTP().length == 5){
+                if(getTypedOTP().length == 6){
                     verificationActive = true
                     binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
                 }else{
@@ -82,7 +82,7 @@ class OTPActivity : AppCompatActivity() {
         binding.otpEditText2.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace()}
             if(otp1.length == 1){
-                if(getTypedOTP().length == 5){
+                if(getTypedOTP().length == 6){
                     verificationActive = true
                     binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
                 }else{
@@ -96,7 +96,7 @@ class OTPActivity : AppCompatActivity() {
         binding.otpEditText3.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
             if(otp1.length == 1){
-                if(getTypedOTP().length == 5){
+                if(getTypedOTP().length == 6){
                     verificationActive = true
                     binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
                 }else{
@@ -110,7 +110,7 @@ class OTPActivity : AppCompatActivity() {
         binding.otpEditText4.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
             if(otp1.length == 1){
-                if(getTypedOTP().length == 5){
+                if(getTypedOTP().length == 6){
                     verificationActive = true
                     binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
                 }else{
@@ -122,10 +122,28 @@ class OTPActivity : AppCompatActivity() {
                 binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
             }
         }
+
         binding.otpEditText5.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
             if(otp1.length == 1){
-                if(getTypedOTP().length==5){
+                if(getTypedOTP().length == 6){
+                    verificationActive = true
+                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
+                }else{
+                    binding.otpEditText6.requestFocus()
+                }
+
+            }else{
+                verificationActive = false
+                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+            }
+        }
+
+
+        binding.otpEditText6.addTextChangedListener {
+            val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
+            if(otp1.length == 1){
+                if(getTypedOTP().length==6){
                     verificationActive = true
                     binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
                 }else{
@@ -184,7 +202,7 @@ class OTPActivity : AppCompatActivity() {
 
     private fun getTypedOTP(): String {
         return (binding.otpEditText1.text.toString() + binding.otpEditText2.text.toString() + binding.otpEditText3.text.toString()
-                + binding.otpEditText4.text.toString() + binding.otpEditText5.text.toString())
+                + binding.otpEditText4.text.toString() + binding.otpEditText5.text.toString() + binding.otpEditText6.text.toString())
     }
 
     private fun sendForVerification(typedOTP: String) {
