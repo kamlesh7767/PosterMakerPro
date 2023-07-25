@@ -159,7 +159,8 @@
                                 android:layout_height="40dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
-                                android:src="@drawable/recharge" />
+                                android:src="@drawable/recharge"
+                                app:tint="@color/white" />
                         </LinearLayout>
 
                         <TextView
@@ -198,7 +199,8 @@
                                 android:layout_height="40dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
-                                android:src="@drawable/recharge" />
+                                android:src="@drawable/transaction"
+                                app:tint="@color/white" />
                         </LinearLayout>
 
                         <TextView
@@ -238,7 +240,8 @@
                                 android:layout_height="40dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
-                                android:src="@drawable/recharge" />
+                                android:src="@drawable/refer_and_earn"
+                                app:tint="@color/white" />
                         </LinearLayout>
 
                         <TextView
