@@ -217,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/primary_color_red"
+                android:textColor="@color/primary_color"
                 android:fontFamily="@font/roboto_semibold"
                 android:text="Retry in 31 sec"
                 android:textSize="17sp" />
@@ -228,7 +228,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:visibility="gone"
-                android:textColor="@color/primary_color_red"
+                android:textColor="@color/primary_color"
                 android:fontFamily="@font/roboto_semibold"
                 android:text="@string/resend_otp"
                 android:textSize="17sp" />

@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.PosterMakerPro" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primary_color_red</item>
-        <item name="colorPrimaryVariant">@color/primary_color_red</item>
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryVariant">@color/primary_color</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
