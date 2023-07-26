@@ -201,7 +201,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rc_today_or_upcoming" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_categories"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

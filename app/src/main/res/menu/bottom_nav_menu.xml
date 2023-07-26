@@ -15,7 +15,7 @@
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/profile"
+        android:icon="@drawable/baseline_person_24"
         android:iconTint="@color/primary_color"
         android:title="@string/title_profile" />
 

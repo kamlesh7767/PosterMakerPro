@@ -8,8 +8,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.garudpuran.postermakerpro.databinding.FragmentDashboardBinding
+import com.garudpuran.postermakerpro.ui.commonui.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.commonui.HomeResources
+import com.garudpuran.postermakerpro.ui.home.HomeTodayOrUpcomingAdapter
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(),HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener {
 
     private var _binding: FragmentDashboardBinding? = null
 
@@ -22,21 +25,34 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
+    private fun initViews() {
+        val adapter = HomeTodayOrUpcomingAdapter(this)
+        adapter.setData(HomeResources.homeCategories())
+        binding.rcBusinessPosts.adapter = adapter
+        binding.rcFestivalPosts.adapter = adapter
+        binding.rcLogosPosts.adapter = adapter
+        binding.rcPoliticalPosts.adapter = adapter
+        binding.rcTrendingPosts.adapter = adapter
+        binding.rcNewsPosts.adapter = adapter
+        binding.rcQuotesPosts.adapter = adapter
+        binding.rcOtherPosts.adapter = adapter
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onHomeTodayOrUpcomingClicked(item: HomeCategoryModel) {
+
     }
 }

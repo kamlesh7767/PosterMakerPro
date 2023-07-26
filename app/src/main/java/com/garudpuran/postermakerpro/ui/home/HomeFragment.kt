@@ -56,14 +56,12 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
     }
 
     override fun onHomeCatClicked(item: HomeCategoryModel) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onHomeTodayOrUpcomingClicked(item: HomeCategoryModel) {
-        TODO("Not yet implemented")
     }
 
     override fun onHomeTrendingStoriesClicked(item: HomeCategoryModel) {
-        TODO("Not yet implemented")
     }
 }

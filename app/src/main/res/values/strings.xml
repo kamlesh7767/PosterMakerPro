@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Poster Maker Pro</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Categories</string>
     <string name="title_profile">Profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -93,12 +93,12 @@
 
     <string name="cat_political_title">Political</string>
     <string name="cat_festival_title">Festival</string>
-    <string name="cat_business_title">Political</string>
-    <string name="cat_trending_title">Political</string>
-    <string name="cat_daily_news_title">Political</string>
-    <string name="cat_logo_design_title">Political</string>
-    <string name="cat_other_title">Political</string>
-    <string name="cat_quotes_title">Political</string>
+    <string name="cat_business_title">Business</string>
+    <string name="cat_trending_title">Trending</string>
+    <string name="cat_daily_news_title">News</string>
+    <string name="cat_logo_design_title">Logos</string>
+    <string name="cat_other_title">Other</string>
+    <string name="cat_quotes_title">Quotes</string>
 
 
 
