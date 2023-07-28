@@ -8,7 +8,6 @@
     <string name="custom_nav_title">Custom</string>
 
 
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -85,9 +84,6 @@
     <string name="network_error_try_again_please_try_again">Network error try again. Please try again</string>
 
 
-
-
-
     // dkfjhsdflkfhflkfhlkjfhflkjfhfhlkfjhlkjfh
 
 
@@ -99,8 +95,6 @@
     <string name="cat_logo_design_title">Logos</string>
     <string name="cat_other_title">Other</string>
     <string name="cat_quotes_title">Quotes</string>
-
-
 
 
 </resources>

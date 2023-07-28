@@ -18,13 +18,30 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_profile"
+        android:id="@+id/profile_fragment"
         android:name="com.garudpuran.postermakerpro.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_referFragment"
+            app:destination="@id/referFragment" />
+        <action
+            android:id="@+id/action_profile_fragment_to_myProfilesFragment"
+            app:destination="@id/myProfilesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_customFragment"
         android:name="com.garudpuran.postermakerpro.ui.custom.CustomFragment"
         android:label="Custom"
         tools:layout="@layout/fragment_custom" />
+    <fragment
+        android:id="@+id/referFragment"
+        android:name="com.garudpuran.postermakerpro.ui.ReferFragment"
+        android:label="fragment_refer"
+        tools:layout="@layout/fragment_refer" />
+    <fragment
+        android:id="@+id/myProfilesFragment"
+        android:name="com.garudpuran.postermakerpro.ui.profile.MyProfilesFragment"
+        android:label="fragment_my_profiles"
+        tools:layout="@layout/fragment_my_profiles" />
 </navigation>

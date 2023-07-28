@@ -25,30 +25,32 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        initTrendingView()
+
         initTodayOrUpcomingView()
-        initCategoryView()
 
         return binding.root
     }
 
-    private fun initCategoryView() {
+   /* private fun initCategoryView() {
         val adapter = HomeCategoryAdapter(this)
         adapter.setData(HomeResources.homeCategories())
         binding.rcCategories.adapter = adapter
-    }
+    }*/
 
     private fun initTodayOrUpcomingView() {
-        val adapter = HomeTodayOrUpcomingAdapter(this)
-        adapter.setData(HomeResources.homeCategories())
-        binding.rcTodayOrUpcoming.adapter = adapter
+        val adapter = HomeFeedRcAdapter()
+        binding.feedRcHome.adapter = adapter
+
+        val ad = HomeTrendingStoriesAdapter(this)
+        ad.setData(HomeResources.homeCategories())
+        binding.rcTrending.adapter = ad
     }
 
-    private fun initTrendingView() {
+    /*private fun initTrendingView() {
         val adapter = HomeTrendingStoriesAdapter(this)
         adapter.setData(HomeResources.homeCategories())
         binding.rcTrending.adapter = adapter
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

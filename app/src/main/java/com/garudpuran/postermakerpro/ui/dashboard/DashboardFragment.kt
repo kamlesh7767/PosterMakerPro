@@ -35,7 +35,7 @@ class DashboardFragment : Fragment(),HomeTodayOrUpcomingAdapter.HomeTodayOrUpcom
     }
 
     private fun initViews() {
-        val adapter = HomeTodayOrUpcomingAdapter(this)
+        val adapter = HomeTodayOrUpcomingAdapter()
         adapter.setData(HomeResources.homeCategories())
         binding.rcBusinessPosts.adapter = adapter
         binding.rcFestivalPosts.adapter = adapter

@@ -59,7 +59,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -74,7 +74,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -104,7 +104,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -119,7 +119,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -150,7 +150,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -165,7 +165,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -196,7 +196,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -211,7 +211,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -242,7 +242,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -257,7 +257,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -288,7 +288,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -303,7 +303,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -334,7 +334,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -349,7 +349,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -379,7 +379,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start"
                 android:gravity="start"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
@@ -394,7 +394,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="end"
                 android:text="See All"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_trending" />
