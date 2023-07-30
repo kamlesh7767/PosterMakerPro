@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.ui.commonui.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProfileItemsAdapter:RecyclerView.Adapter<ProfileItemsAdapter.ItemViewHolder>() {
@@ -32,11 +31,6 @@ class ProfileItemsAdapter:RecyclerView.Adapter<ProfileItemsAdapter.ItemViewHolde
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        Glide
-            .with(holder.itemView.context)
-            .load("https://picsum.photos/seed/200/300")
-            .centerCrop()
-            .into(holder.itemUserImage)
     }
 
     @SuppressLint("NotifyDataSetChanged")

@@ -30,7 +30,7 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/feed_item_user_profile_pic"
             app:layout_constraintStart_toEndOf="@+id/feed_item_user_profile_pic"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/feed_item_user_profile_pic">
 
             <TextView
                 android:id="@+id/feed_item_user_name_tv"

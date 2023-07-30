@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.garudpuran.postermakerpro.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -28,6 +32,9 @@
         <action
             android:id="@+id/action_profile_fragment_to_myProfilesFragment"
             app:destination="@id/myProfilesFragment" />
+        <action
+            android:id="@+id/action_profile_fragment_to_transactionHistoryFragment"
+            app:destination="@id/transactionHistoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_customFragment"
@@ -44,4 +51,12 @@
         android:name="com.garudpuran.postermakerpro.ui.profile.MyProfilesFragment"
         android:label="fragment_my_profiles"
         tools:layout="@layout/fragment_my_profiles" />
+    <fragment
+        android:id="@+id/transactionHistoryFragment"
+        android:name="com.garudpuran.postermakerpro.ui.transactionhistory.TransactionHistoryFragment"
+        android:label="TransactionHistoryFragment" />
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.garudpuran.postermakerpro.ui.editing.EditPostFragment"
+        android:label="EditPostFragment" />
 </navigation>

@@ -37,6 +37,11 @@ class ProfileFragment : Fragment() {
             val action = ProfileFragmentDirections.actionProfileFragmentToMyProfilesFragment()
             findNavController().navigate(action)
         }
+
+        binding.profileTransactionHistoryBtn.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToTransactionHistoryFragment()
+            findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {

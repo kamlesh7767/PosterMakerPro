@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentMyProfilesBinding
 
 class MyProfilesFragment : Fragment() {

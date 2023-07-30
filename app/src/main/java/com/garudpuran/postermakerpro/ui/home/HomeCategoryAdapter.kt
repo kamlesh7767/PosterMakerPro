@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.ui.commonui.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 
 class HomeCategoryAdapter(private val mListener:HomeCategoryGridListener):RecyclerView.Adapter<HomeCategoryAdapter.ItemViewHolder>() {
     private val dataset = ArrayList<HomeCategoryModel>()
@@ -47,7 +47,7 @@ val catTitle:TextView = view.findViewById(R.id.cat_title_tv)
     }
 
   interface HomeCategoryGridListener{
-      fun onHomeCatClicked(item:HomeCategoryModel)
+      fun onHomeCatClicked(item: HomeCategoryModel)
   }
 
 }

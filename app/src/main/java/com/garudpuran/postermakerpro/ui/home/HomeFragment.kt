@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
-import com.garudpuran.postermakerpro.ui.commonui.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
+import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 
 class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener {
 
@@ -27,6 +28,7 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initTodayOrUpcomingView()
+        profileCreate()
 
         return binding.root
     }
@@ -36,6 +38,12 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
         adapter.setData(HomeResources.homeCategories())
         binding.rcCategories.adapter = adapter
     }*/
+
+
+    private fun profileCreate(){
+        val frag = CreatePersonalProfileFragment()
+        frag.show(childFragmentManager,"CreatePersonalProfileFragment")
+    }
 
     private fun initTodayOrUpcomingView() {
         val adapter = HomeFeedRcAdapter()
@@ -65,5 +73,7 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
     }
 
     override fun onHomeTrendingStoriesClicked(item: HomeCategoryModel) {
+        val action = HomeFragmentDirections.actionNavigationHomeToEditPostFragment()
+        findNavController().navigate(action)
     }
 }

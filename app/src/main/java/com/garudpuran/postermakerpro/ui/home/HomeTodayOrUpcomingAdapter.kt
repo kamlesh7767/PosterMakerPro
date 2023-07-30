@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.ui.commonui.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 
 class HomeTodayOrUpcomingAdapter():RecyclerView.Adapter<HomeTodayOrUpcomingAdapter.ItemViewHolder>() {
     private val dataset = ArrayList<HomeCategoryModel>()
@@ -50,7 +48,7 @@ class HomeTodayOrUpcomingAdapter():RecyclerView.Adapter<HomeTodayOrUpcomingAdapt
     }
 
     interface HomeTodayOrUpcomingAdapterListener{
-        fun onHomeTodayOrUpcomingClicked(item:HomeCategoryModel)
+        fun onHomeTodayOrUpcomingClicked(item: HomeCategoryModel)
     }
 
 }

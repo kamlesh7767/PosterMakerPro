@@ -1,6 +1,7 @@
 package com.garudpuran.postermakerpro.ui.commonui
 
 import com.garudpuran.postermakerpro.R
+import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 
 class HomeResources {
 
@@ -14,7 +15,8 @@ class HomeResources {
                 HomeCategoryModel(5, R.string.cat_trending_title,R.drawable.trending),
                 HomeCategoryModel(6, R.string.cat_daily_news_title,R.drawable.daily_news),
                 HomeCategoryModel(7, R.string.cat_logo_design_title,R.drawable.logo_design),
-                HomeCategoryModel(8, R.string.cat_other_title,R.drawable.other))
+                HomeCategoryModel(8, R.string.cat_other_title,R.drawable.other)
+            )
         }
     }
 
