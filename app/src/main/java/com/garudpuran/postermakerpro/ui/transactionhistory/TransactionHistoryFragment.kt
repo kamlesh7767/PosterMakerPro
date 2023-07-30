@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentTransactionHistoryBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class TransactionHistoryFragment : Fragment() {
 private lateinit var _binding:FragmentTransactionHistoryBinding
     private val binding get() = _binding

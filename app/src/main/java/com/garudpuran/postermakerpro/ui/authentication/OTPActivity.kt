@@ -8,12 +8,17 @@ import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.addTextChangedListener
 import com.garudpuran.postermakerpro.MainActivity
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityOtpactivityBinding
+import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.utils.Status
+import com.garudpuran.postermakerpro.viewmodels.UserViewModel
+import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
@@ -21,8 +26,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
-
+@AndroidEntryPoint
 class OTPActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -30,7 +36,7 @@ class OTPActivity : AppCompatActivity() {
     private var verificationActive = false
     private lateinit var handler: Handler
     private var timerSeconds = 60
-    
+    private val viewModel: UserViewModel by viewModels()
 
     private lateinit var OTP: String
     private lateinit var binding: ActivityOtpactivityBinding
@@ -54,12 +60,13 @@ class OTPActivity : AppCompatActivity() {
         }
 
         binding.verifyOtpBtn.setOnClickListener {
-            if(verificationActive){
-                if(getTypedOTP().length == 6){
+            if (verificationActive) {
+                if (getTypedOTP().length == 6) {
                     sendForVerification(getTypedOTP())
                 }
-            }else{
-                Toast.makeText(this,getString(R.string.enter_correct_otp),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.enter_correct_otp), Toast.LENGTH_SHORT)
+                    .show()
             }
 
 
@@ -67,93 +74,106 @@ class OTPActivity : AppCompatActivity() {
 
         binding.otpEditText1.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
-            if(otp1.length == 1){
-                if(getTypedOTP().length == 6){
+            if (otp1.length == 1) {
+                if (getTypedOTP().length == 6) {
                     verificationActive = true
-                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
-                }else{
+                    binding.verifyOtpBtn.background =
+                        AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                } else {
                     binding.otpEditText2.requestFocus()
                 }
-            }else{
+            } else {
                 verificationActive = false
-                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                binding.verifyOtpBtn.background =
+                    AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
             }
         }
         binding.otpEditText2.addTextChangedListener {
-            val otp1 = it?.trim().toString().filter { !it.isWhitespace()}
-            if(otp1.length == 1){
-                if(getTypedOTP().length == 6){
+            val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
+            if (otp1.length == 1) {
+                if (getTypedOTP().length == 6) {
                     verificationActive = true
-                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
-                }else{
+                    binding.verifyOtpBtn.background =
+                        AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                } else {
                     binding.otpEditText3.requestFocus()
                 }
-            }else{
+            } else {
                 verificationActive = false
-                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                binding.verifyOtpBtn.background =
+                    AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
             }
         }
         binding.otpEditText3.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
-            if(otp1.length == 1){
-                if(getTypedOTP().length == 6){
+            if (otp1.length == 1) {
+                if (getTypedOTP().length == 6) {
                     verificationActive = true
-                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
-                }else{
+                    binding.verifyOtpBtn.background =
+                        AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                } else {
                     binding.otpEditText4.requestFocus()
                 }
-            }else{
+            } else {
                 verificationActive = false
-                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                binding.verifyOtpBtn.background =
+                    AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
             }
         }
         binding.otpEditText4.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
-            if(otp1.length == 1){
-                if(getTypedOTP().length == 6){
+            if (otp1.length == 1) {
+                if (getTypedOTP().length == 6) {
                     verificationActive = true
-                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
-                }else{
+                    binding.verifyOtpBtn.background =
+                        AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                } else {
                     binding.otpEditText5.requestFocus()
                 }
 
-            }else{
+            } else {
                 verificationActive = false
-                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                binding.verifyOtpBtn.background =
+                    AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
             }
         }
 
         binding.otpEditText5.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
-            if(otp1.length == 1){
-                if(getTypedOTP().length == 6){
+            if (otp1.length == 1) {
+                if (getTypedOTP().length == 6) {
                     verificationActive = true
-                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
-                }else{
+                    binding.verifyOtpBtn.background =
+                        AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                } else {
                     binding.otpEditText6.requestFocus()
                 }
 
-            }else{
+            } else {
                 verificationActive = false
-                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                binding.verifyOtpBtn.background =
+                    AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
             }
         }
 
 
         binding.otpEditText6.addTextChangedListener {
             val otp1 = it?.trim().toString().filter { !it.isWhitespace() }
-            if(otp1.length == 1){
-                if(getTypedOTP().length==6){
+            if (otp1.length == 1) {
+                if (getTypedOTP().length == 6) {
                     verificationActive = true
-                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_enabled)
-                }else{
+                    binding.verifyOtpBtn.background =
+                        AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                } else {
                     verificationActive = false
-                    binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                    binding.verifyOtpBtn.background =
+                        AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
                 }
 
-            }else{
+            } else {
                 verificationActive = false
-                binding.verifyOtpBtn.background = AppCompatResources.getDrawable(this,R.drawable.btn_disabled)
+                binding.verifyOtpBtn.background =
+                    AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
             }
         }
 
@@ -272,18 +292,20 @@ class OTPActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
+                    val userData =
+                        UserPersonalProfileModel(task.result.user!!.uid, "", phoneNumber, "")
+                    updateUserData(userData)
 
-                    Toast.makeText(this, "Authenticate Successfully", Toast.LENGTH_SHORT).show()
-                    sendToMain()
+
                 } else {
-                    // Sign in failed, display a message and update the UI
+                    Toast.makeText(this, "Authentication Failed", Toast.LENGTH_SHORT).show()
                     Log.d("TAG", "signInWithPhoneAuthCredential: ${task.exception.toString()}")
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
                     }
                     // Update UI
                 }
-                binding.progress.root.visibility = View.VISIBLE
+
             }
     }
 
@@ -296,6 +318,34 @@ class OTPActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
     }
 
+    private fun updateUserData(data: UserPersonalProfileModel) {
+        observeUpdateUserData()
+        viewModel.updateUserDetails(data.uid, data)
+    }
 
+    private fun observeUpdateUserData() {
+        viewModel.onObserveUpdateUserDetailsData().observe(this) {
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.progress.root.visibility = View.VISIBLE
+                }
 
+                Status.ERROR -> {
+                    binding.progress.root.visibility = View.GONE
+                }
+
+                Status.SUCCESS -> {
+                    if (it.data == ResponseStrings.SUCCESS) {
+                        Toast.makeText(this, "Authenticated Successfully", Toast.LENGTH_SHORT).show()
+                        sendToMain()
+                    }
+                }
+
+                Status.SESSION_EXPIRE -> {
+
+                }
+            }
+        }
+
+    }
 }

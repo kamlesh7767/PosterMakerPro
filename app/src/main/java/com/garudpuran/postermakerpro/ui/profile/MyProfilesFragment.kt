@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.garudpuran.postermakerpro.databinding.FragmentMyProfilesBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyProfilesFragment : Fragment() {
     private lateinit var _binding: FragmentMyProfilesBinding
     private val binding get() = _binding

@@ -1,151 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    >
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_corners_rounded_filled_bg"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView4"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="2dp"
-            android:scaleType="fitCenter"
-            android:visibility="gone"
-            android:src="@drawable/red_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#086987" />
+            android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bottom_corners_rounded_filled_bg"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="15dp"
-            android:elevation="5dp"
-            android:visibility="gone"
-            android:src="@drawable/baseline_segment_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="2dp"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone"
+                    android:src="@drawable/red_background"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#086987" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/feed_item_user_profile_pic"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/naruto"
-            android:layout_marginTop="10dp"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="15dp"
+                    android:elevation="5dp"
+                    android:visibility="gone"
+                    android:src="@drawable/baseline_segment_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/feed_item_user_profile_pic"
-            app:layout_constraintStart_toEndOf="@+id/feed_item_user_profile_pic"
-            app:layout_constraintTop_toTopOf="@+id/feed_item_user_profile_pic">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/feed_item_user_profile_pic"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/naruto"
+                    android:layout_marginTop="10dp"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/feed_item_user_profile_pic"
+                    app:layout_constraintStart_toEndOf="@+id/feed_item_user_profile_pic"
+                    app:layout_constraintTop_toTopOf="@+id/feed_item_user_profile_pic">
+
+                    <TextView
+                        android:id="@+id/feed_item_user_name_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Welcome"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/feed_item_user_desp_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_semibold"
+                        android:text="Doglaman Kaptan"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/outlined_primary_rounded_bg"
+                    android:elevation="5dp"
+                    android:gravity="start"
+                    android:hint="search designs here..."
+                    android:inputType="textShortMessage"
+                    android:paddingVertical="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="6dp"
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/feed_item_user_profile_pic" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/feed_item_user_name_tv"
+                android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Welcome"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:text="Trending Stories"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-            <TextView
-                android:id="@+id/feed_item_user_desp_tv"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_trending"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_semibold"
-                android:text="Doglaman Kaptan"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="15dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                tools:listitem="@layout/trending_rc_item" />
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/outlined_primary_rounded_bg"
-            android:elevation="5dp"
-            android:gravity="start"
-            android:hint="search designs here..."
-            android:inputType="textShortMessage"
-            android:paddingVertical="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="6dp"
-            android:singleLine="true"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feed_item_user_profile_pic" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feed_rc_home"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rc_trending"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:itemCount="10"
+                tools:listitem="@layout/feed_rc_item" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+    <include
+        android:id="@+id/progress"
+        layout="@layout/progress_layout_transparent"
+        android:clickable="false"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="Trending Stories"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_trending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="15dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6"
-            tools:listitem="@layout/trending_rc_item" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/feed_rc_home"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rc_trending"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:itemCount="10"
-            tools:listitem="@layout/feed_rc_item" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

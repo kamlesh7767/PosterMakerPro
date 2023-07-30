@@ -1,6 +1,8 @@
 package com.garudpuran.postermakerpro.ui.profile
 
 import android.app.Dialog
+import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,8 +13,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentCreatePersonalProfileBinding
+import com.garudpuran.postermakerpro.utils.UserReferences
+import com.garudpuran.postermakerpro.utils.ViewUtilities
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 
 class CreatePersonalProfileFragment() : BottomSheetDialogFragment()  {
     private lateinit var _binding:FragmentCreatePersonalProfileBinding
@@ -28,6 +34,7 @@ class CreatePersonalProfileFragment() : BottomSheetDialogFragment()  {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCreatePersonalProfileBinding.inflate(inflater,container,false)
+        setAsShowed()
         return binding.root
     }
 
@@ -40,6 +47,22 @@ class CreatePersonalProfileFragment() : BottomSheetDialogFragment()  {
         dialog.setCancelable(true)
         return dialog
 
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        //setAsCancelled()
+        ViewUtilities.showToast(requireActivity(),"cancelled")
+    }
+
+    private fun setAsShowed() {
+        val sharedPreference = requireContext().getSharedPreferences(
+            UserReferences.USER_PROFILE,
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreference.edit()
+        editor.putString(UserReferences.USER_PROFILE_STATUS,  UserReferences.USER_PROFILE_STATUS_SHOWED)
+        editor.apply()
     }
 
 

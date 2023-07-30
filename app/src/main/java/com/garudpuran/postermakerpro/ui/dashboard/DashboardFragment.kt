@@ -9,7 +9,9 @@ import com.garudpuran.postermakerpro.databinding.FragmentDashboardBinding
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 import com.garudpuran.postermakerpro.ui.home.HomeTodayOrUpcomingAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DashboardFragment : Fragment(),HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener {
 
     private var _binding: FragmentDashboardBinding? = null

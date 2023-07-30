@@ -1,10 +1,9 @@
 package com.garudpuran.postermakerpro.data.interfaces
 
-import android.net.Uri
-import com.garudpuran.postermakerpro.ui.commonui.models.ProfileItemModel
-import com.garudpuran.postermakerpro.utils.UiState
+import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 
 interface UserViewModelVMI {
-    suspend fun updateProfile(id: String, mod: ProfileItemModel, onResult: (UiState<String>) -> Unit)
+    suspend fun updateProfile(id: String, mod: UserPersonalProfileModel):String
+    suspend fun getUserProfile(id: String):UserPersonalProfileModel?
 
 }

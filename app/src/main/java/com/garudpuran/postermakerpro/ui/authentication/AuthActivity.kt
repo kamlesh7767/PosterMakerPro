@@ -10,7 +10,9 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityAuthBinding
 import com.garudpuran.postermakerpro.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAuthBinding
     override fun onCreate(savedInstanceState: Bundle?) {

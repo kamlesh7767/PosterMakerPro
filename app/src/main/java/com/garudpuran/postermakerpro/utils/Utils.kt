@@ -26,6 +26,15 @@ object ViewUtilities {
         toast.show()
     }
 
+    fun getProfileBottomPopUpStatus(activity: Activity):Boolean{
+        val profilePref = activity.getSharedPreferences(
+           UserReferences.USER_PROFILE,
+            Context.MODE_PRIVATE
+        )
+        val pref = profilePref.getString(UserReferences.USER_PROFILE_STATUS,"")
+        return pref == UserReferences.USER_PROFILE_STATUS_SHOWED || pref.isNullOrEmpty()
+    }
+
     fun View.hide(){
         visibility = View.GONE
     }
