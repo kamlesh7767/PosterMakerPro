@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.garudpuran.postermakerpro.R.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-object ViewUtilities {
+object Utils {
 
     fun showToast(activity: Activity, message: String){
         val toast = Toast(activity)
@@ -32,7 +32,7 @@ object ViewUtilities {
             Context.MODE_PRIVATE
         )
         val pref = profilePref.getString(UserReferences.USER_PROFILE_STATUS,"")
-        return pref == UserReferences.USER_PROFILE_STATUS_SHOWED || pref.isNullOrEmpty()
+        return pref != UserReferences.USER_PROFILE_STATUS_SHOWED
     }
 
     fun View.hide(){

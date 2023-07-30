@@ -32,7 +32,7 @@
             android:id="@+id/profile_item_user_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_semibold"
             android:text="Doglaman Kaptan"
             android:textColor="@color/black"
             android:textSize="18sp" />

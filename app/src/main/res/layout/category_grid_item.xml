@@ -27,7 +27,7 @@
         android:id="@+id/cat_title_tv"
         android:layout_width="65dp"
         android:layout_height="30dp"
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/roboto_semibold"
         android:text="@string/cat_logo_design_title"
         android:autoSizeTextType="uniform"
         android:maxLength="22"

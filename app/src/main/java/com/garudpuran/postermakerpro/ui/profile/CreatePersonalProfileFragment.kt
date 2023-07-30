@@ -14,7 +14,7 @@ import android.view.WindowManager
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentCreatePersonalProfileBinding
 import com.garudpuran.postermakerpro.utils.UserReferences
-import com.garudpuran.postermakerpro.utils.ViewUtilities
+import com.garudpuran.postermakerpro.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,12 +47,6 @@ class CreatePersonalProfileFragment() : BottomSheetDialogFragment()  {
         dialog.setCancelable(true)
         return dialog
 
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        //setAsCancelled()
-        ViewUtilities.showToast(requireActivity(),"cancelled")
     }
 
     private fun setAsShowed() {

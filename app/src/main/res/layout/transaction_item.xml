@@ -37,7 +37,7 @@
                 android:id="@+id/transaction_item_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_semibold"
                 android:text="Basic Plan"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -66,7 +66,7 @@
                 android:id="@+id/transaction_item_price_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_semibold"
                 android:text="₹300"
                 android:textColor="@color/black"
                 android:textSize="18sp" />

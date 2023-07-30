@@ -13,11 +13,12 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.databinding.FragmentEditPostBinding
 import com.garudpuran.postermakerpro.ui.commonui.models.EditFragOptionsModel
+import com.garudpuran.postermakerpro.ui.editing.adapter.EditFragOptionsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 
-class EditPostFragment : Fragment(),EditFragOptionsAdapter.EditOptionsListener {
+class EditPostFragment : Fragment(), EditFragOptionsAdapter.EditOptionsListener {
     private lateinit var _binding:FragmentEditPostBinding
 
     private val TAG = "PosterSubCategoryFragment"

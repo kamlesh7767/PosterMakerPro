@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_navigation_home_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_profile_fragment"
+            app:destination="@id/profile_fragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_editStoryFragment"
+            app:destination="@id/editStoryFragment" />
     </fragment>
 
     <fragment
@@ -59,4 +65,8 @@
         android:id="@+id/editPostFragment"
         android:name="com.garudpuran.postermakerpro.ui.editing.EditPostFragment"
         android:label="EditPostFragment" />
+    <fragment
+        android:id="@+id/editStoryFragment"
+        android:name="com.garudpuran.postermakerpro.ui.editing.EditStoryFragment"
+        android:label="EditStoryFragment" />
 </navigation>

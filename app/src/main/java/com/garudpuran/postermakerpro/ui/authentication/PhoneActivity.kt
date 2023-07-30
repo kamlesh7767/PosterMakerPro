@@ -3,6 +3,7 @@ package com.garudpuran.postermakerpro.ui.authentication
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.garudpuran.postermakerpro.MainActivity
@@ -30,6 +31,7 @@ class PhoneActivity : AppCompatActivity() {
             number = binding.loginMobileNoEt.text?.trim().toString()
             if (number.isNotEmpty()){
                 if (number.length == 10){
+                    binding.progress.root.visibility = View.VISIBLE
                     number = "+91$number"
                    // mProgressBar.visibility = View.VISIBLE
                     val options = PhoneAuthOptions.newBuilder(auth)
@@ -79,18 +81,11 @@ class PhoneActivity : AppCompatActivity() {
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-            // This callback will be invoked in two situations:
-            // 1 - Instant verification. In some cases the phone number can be instantly
-            //     verified without needing to send or enter a verification code.
-            // 2 - Auto-retrieval. On some devices Google Play services can automatically
-            //     detect the incoming verification SMS and perform verification without
-            //     user action.
+
             signInWithPhoneAuthCredential(credential)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            // This callback is invoked in an invalid request for verification is made,
-            // for instance if the the phone number format is not valid.
 
             if (e is FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
@@ -116,7 +111,7 @@ class PhoneActivity : AppCompatActivity() {
             intent.putExtra("resendToken" , token)
             intent.putExtra("phoneNumber" , number)
             startActivity(intent)
-            //mProgressBar.visibility = View.INVISIBLE
+            binding.progress.root.visibility = View.GONE
         }
     }
 

@@ -1,6 +1,7 @@
 package com.garudpuran.postermakerpro.ui.authentication
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -79,6 +80,7 @@ class OTPActivity : AppCompatActivity() {
                     verificationActive = true
                     binding.verifyOtpBtn.background =
                         AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                    binding.verifyOtpBtn.setTextColor(Color.WHITE)
                 } else {
                     binding.otpEditText2.requestFocus()
                 }
@@ -86,6 +88,7 @@ class OTPActivity : AppCompatActivity() {
                 verificationActive = false
                 binding.verifyOtpBtn.background =
                     AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
+                binding.verifyOtpBtn.setTextColor(Color.BLACK)
             }
         }
         binding.otpEditText2.addTextChangedListener {
@@ -95,6 +98,8 @@ class OTPActivity : AppCompatActivity() {
                     verificationActive = true
                     binding.verifyOtpBtn.background =
                         AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                    binding.verifyOtpBtn.setTextColor(Color.WHITE)
+
                 } else {
                     binding.otpEditText3.requestFocus()
                 }
@@ -102,6 +107,7 @@ class OTPActivity : AppCompatActivity() {
                 verificationActive = false
                 binding.verifyOtpBtn.background =
                     AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
+                binding.verifyOtpBtn.setTextColor(Color.BLACK)
             }
         }
         binding.otpEditText3.addTextChangedListener {
@@ -111,6 +117,8 @@ class OTPActivity : AppCompatActivity() {
                     verificationActive = true
                     binding.verifyOtpBtn.background =
                         AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                    binding.verifyOtpBtn.setTextColor(Color.WHITE)
+
                 } else {
                     binding.otpEditText4.requestFocus()
                 }
@@ -118,6 +126,7 @@ class OTPActivity : AppCompatActivity() {
                 verificationActive = false
                 binding.verifyOtpBtn.background =
                     AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
+                binding.verifyOtpBtn.setTextColor(Color.BLACK)
             }
         }
         binding.otpEditText4.addTextChangedListener {
@@ -127,6 +136,8 @@ class OTPActivity : AppCompatActivity() {
                     verificationActive = true
                     binding.verifyOtpBtn.background =
                         AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                    binding.verifyOtpBtn.setTextColor(Color.WHITE)
+
                 } else {
                     binding.otpEditText5.requestFocus()
                 }
@@ -135,6 +146,7 @@ class OTPActivity : AppCompatActivity() {
                 verificationActive = false
                 binding.verifyOtpBtn.background =
                     AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
+                binding.verifyOtpBtn.setTextColor(Color.BLACK)
             }
         }
 
@@ -145,6 +157,8 @@ class OTPActivity : AppCompatActivity() {
                     verificationActive = true
                     binding.verifyOtpBtn.background =
                         AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                    binding.verifyOtpBtn.setTextColor(Color.WHITE)
+
                 } else {
                     binding.otpEditText6.requestFocus()
                 }
@@ -153,6 +167,7 @@ class OTPActivity : AppCompatActivity() {
                 verificationActive = false
                 binding.verifyOtpBtn.background =
                     AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
+                binding.verifyOtpBtn.setTextColor(Color.BLACK)
             }
         }
 
@@ -164,16 +179,19 @@ class OTPActivity : AppCompatActivity() {
                     verificationActive = true
                     binding.verifyOtpBtn.background =
                         AppCompatResources.getDrawable(this, R.drawable.btn_enabled)
+                    binding.verifyOtpBtn.setTextColor(Color.WHITE)
                 } else {
                     verificationActive = false
                     binding.verifyOtpBtn.background =
                         AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
+                    binding.verifyOtpBtn.setTextColor(Color.BLACK)
                 }
 
             } else {
                 verificationActive = false
                 binding.verifyOtpBtn.background =
                     AppCompatResources.getDrawable(this, R.drawable.btn_disabled)
+                binding.verifyOtpBtn.setTextColor(Color.BLACK)
             }
         }
 

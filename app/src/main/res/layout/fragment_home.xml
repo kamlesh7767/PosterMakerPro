@@ -48,7 +48,7 @@
                     app:tint="@color/white" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/feed_item_user_profile_pic"
+                    android:id="@+id/home_user_profile_pic"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginStart="10dp"
@@ -65,15 +65,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@+id/feed_item_user_profile_pic"
-                    app:layout_constraintStart_toEndOf="@+id/feed_item_user_profile_pic"
-                    app:layout_constraintTop_toTopOf="@+id/feed_item_user_profile_pic">
+                    app:layout_constraintBottom_toBottomOf="@+id/home_user_profile_pic"
+                    app:layout_constraintStart_toEndOf="@+id/home_user_profile_pic"
+                    app:layout_constraintTop_toTopOf="@+id/home_user_profile_pic">
 
                     <TextView
                         android:id="@+id/feed_item_user_name_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_bold"
+                        android:fontFamily="@font/roboto_semibold"
                         android:text="Welcome"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
@@ -106,7 +106,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/feed_item_user_profile_pic" />
+                    app:layout_constraintTop_toBottomOf="@+id/home_user_profile_pic" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -115,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_semibold"
                 android:text="Trending Stories"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"

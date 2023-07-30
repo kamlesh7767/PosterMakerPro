@@ -7,21 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.airbnb.lottie.utils.Utils
-import com.bumptech.glide.util.Util
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.utils.Status
-import com.garudpuran.postermakerpro.utils.ViewUtilities
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener {
+class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,HomeFeedRcAdapter.HomeFeedClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -41,12 +38,19 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeGetUserProfileData()
+
+if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
+    if(userViewModel.onObserveGetUserProfileData().value == null){
+        getUserProfileData()
+    }
+}
 
 
-        if(userViewModel.onObserveGetUserProfileData().value == null){
-            getUserProfileData()
+        binding.homeUserProfilePic.setOnClickListener {
+            val action = HomeFragmentDirections.actionNavigationHomeToProfileFragment()
+            findNavController().navigate(action)
         }
+
 
 
     }
@@ -59,7 +63,7 @@ val uid = auth.uid
             observeGetUserProfileData()
             userViewModel.getUserProfile(uid)
         }else{
-            ViewUtilities.showToast(requireActivity(),"User does not exist!")
+            com.garudpuran.postermakerpro.utils.Utils.showToast(requireActivity(),"User does not exist!")
         }
 
     }
@@ -77,7 +81,7 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
 
         Status.SUCCESS -> {
             if (it.data !=null) {
-                ViewUtilities.showToast(requireActivity(),"Got the data")
+                binding.progress.root.visibility = View.GONE
                profileCreate(it.data)
             }
         }
@@ -100,7 +104,7 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     }
 
     private fun initTodayOrUpcomingView() {
-        val adapter = HomeFeedRcAdapter()
+        val adapter = HomeFeedRcAdapter(this)
         binding.feedRcHome.adapter = adapter
 
         val ad = HomeTrendingStoriesAdapter(this)
@@ -127,6 +131,11 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     }
 
     override fun onHomeTrendingStoriesClicked(item: HomeCategoryModel) {
+        val action = HomeFragmentDirections.actionNavigationHomeToEditStoryFragment()
+        findNavController().navigate(action)
+    }
+
+    override fun onHomeFeedImageClicked() {
         val action = HomeFragmentDirections.actionNavigationHomeToEditPostFragment()
         findNavController().navigate(action)
     }

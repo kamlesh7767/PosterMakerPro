@@ -37,7 +37,7 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/roboto_semibold"
         android:text="Lokmanya Tilak"
         android:maxLength="20"
         android:textColor="@color/black"

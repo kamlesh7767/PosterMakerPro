@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 
-class HomeFeedRcAdapter():RecyclerView.Adapter<HomeFeedRcAdapter.ItemViewHolder>() {
+class HomeFeedRcAdapter(private val mListener:HomeFeedClickListener):RecyclerView.Adapter<HomeFeedRcAdapter.ItemViewHolder>() {
     private val FEED_ITEM_VIEW_TYPE = 100
     private val FEED_RC_ITEM_VIEW_TYPE = 200
 
@@ -39,6 +39,10 @@ return 50
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 if(holder.itemViewType == FEED_ITEM_VIEW_TYPE){
+    holder.itemPostImage.setOnClickListener {
+        mListener.onHomeFeedImageClicked()
+    }
+
     Glide
         .with(holder.itemView.context)
         .load("https://picsum.photos/seed/200/300")
@@ -50,6 +54,10 @@ if(holder.itemViewType == FEED_ITEM_VIEW_TYPE){
     adapter.setData(HomeResources.homeCategories())
     holder.rcView.adapter = adapter
 }
+
+
+
+
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -63,6 +71,10 @@ if(holder.itemViewType == FEED_ITEM_VIEW_TYPE){
             FEED_ITEM_VIEW_TYPE
         }
 
+    }
+
+    interface HomeFeedClickListener{
+        fun onHomeFeedImageClicked()
     }
 
 }

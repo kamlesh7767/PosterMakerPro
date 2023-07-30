@@ -1,4 +1,4 @@
-package com.garudpuran.postermakerpro.ui.editing
+package com.garudpuran.postermakerpro.ui.editing.adapter
 
 import android.content.Context
 import android.graphics.Color
