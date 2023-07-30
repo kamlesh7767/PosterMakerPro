@@ -1,0 +1,69 @@
+package com.garudpuran.postermakerpro.utils
+
+import android.app.Activity
+import android.content.Context
+import android.content.DialogInterface
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.garudpuran.postermakerpro.R.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+
+object ViewUtilities {
+
+    fun showToast(activity: Activity, message: String){
+        val toast = Toast(activity)
+        toast.duration = Toast.LENGTH_SHORT
+        val inflater = activity.layoutInflater
+
+        val view: View = inflater.inflate(
+            layout.layout_toast, activity.findViewById(id.toast_constraint_layout))
+        val toastTxt: TextView =view.findViewById(id.toast_txt)
+        toastTxt.text =  message
+        toast.view = view
+        toast.show()
+    }
+
+    fun View.hide(){
+        visibility = View.GONE
+    }
+
+    fun View.show(){
+        visibility = View.VISIBLE
+    }
+}
+
+fun alertDialog(
+    sActivity: Context?,
+    title: String?,
+    message: String?,
+    yes: String?,
+    no: String?,
+    cancelable:Boolean,
+    dialogInterface: DialogInterface.OnClickListener?
+) {
+    val builder =
+        MaterialAlertDialogBuilder(sActivity!!)
+            .setTitle(title)
+            .setMessage(message)
+            .setCancelable(cancelable)
+            .setPositiveButton(yes, dialogInterface)
+            .setNegativeButton(no, dialogInterface)
+    val alertDialog = builder.create()
+    alertDialog.show()
+}
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(currentFocus ?: View(this))
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
