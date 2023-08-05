@@ -1,6 +1,8 @@
 package com.garudpuran.postermakerpro.dagger_injection
 
+import com.garudpuran.postermakerpro.data.interfaces.HomeRepo
 import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
+import com.garudpuran.postermakerpro.data.repositories.HomeRepoImp
 import com.garudpuran.postermakerpro.data.repositories.UserViewModelVMIIMP
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
@@ -18,6 +20,13 @@ object RepositoryModule {
     @Singleton
     fun provideUserProfileImp(database:FirebaseFirestore,storageReference: StorageReference): UserViewModelVMI {
         return UserViewModelVMIIMP(database,storageReference)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideHomeRepoImp(database:FirebaseFirestore,storageReference: StorageReference): HomeRepo {
+        return HomeRepoImp(database,storageReference)
     }
 
 

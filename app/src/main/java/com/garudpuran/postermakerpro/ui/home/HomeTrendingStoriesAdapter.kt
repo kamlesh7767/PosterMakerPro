@@ -30,6 +30,8 @@ class HomeTrendingStoriesAdapter(private val mListener:HomeTrendingStoriesAdapte
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
+
+
         Glide
             .with(holder.itemView.context)
             .load("https://picsum.photos/200/300")

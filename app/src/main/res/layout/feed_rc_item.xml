@@ -6,21 +6,22 @@
     app:cardElevation="8dp"
     android:layout_marginVertical="6dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp"
-        >
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/feed_item_user_profile_pic"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:src="@drawable/naruto"
-        app:civ_border_color="@color/orange"
-        app:civ_border_width="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:paddingTop="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/feed_item_user_profile_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/naruto"
+            app:civ_border_color="@color/orange"
+            app:civ_border_width="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout6"
@@ -60,27 +61,45 @@
             android:src="@drawable/default_placeholder"
             app:layout_constraintTop_toBottomOf="@+id/feed_item_user_profile_pic" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="10dp"
-        android:src="@drawable/outlined_heart"
-        app:layout_constraintBottom_toBottomOf="@+id/textView10"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView10" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/feed_like_anv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:elevation="8dp"
+            android:layout_margin="20dp"
+            app:lottie_rawRes="@raw/like"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:lottie_speed="1.5"
+            app:layout_constraintBottom_toBottomOf="@+id/feed_item_post_pic"
+            app:layout_constraintEnd_toEndOf="@+id/feed_item_post_pic"
+            app:layout_constraintStart_toStartOf="@+id/feed_item_post_pic"
+            app:layout_constraintTop_toTopOf="@+id/feed_item_post_pic" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Like"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+        <ImageView
+            android:id="@+id/feed_item_like_Iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/outlined_heart"
+            app:tint = "@color/red_one"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/feed_item_like_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Like"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/feed_item_like_Iv"
+            app:layout_constraintStart_toEndOf="@+id/feed_item_like_Iv"
+            app:layout_constraintTop_toTopOf="@+id/feed_item_like_Iv" />
 
         <TextView
             android:id="@+id/textView10"
@@ -100,6 +119,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/feed_item_post_pic" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

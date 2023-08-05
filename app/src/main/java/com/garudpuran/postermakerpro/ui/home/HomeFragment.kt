@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
+import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
@@ -25,6 +26,7 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
     private var auth : FirebaseAuth = FirebaseAuth.getInstance()
 
     private val userViewModel : UserViewModel by viewModels ()
+    private val homeViewModel : HomeViewModel by viewModels ()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,11 +40,13 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        observeGetAllFeed()
+        getAllFeed()
 if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
     if(userViewModel.onObserveGetUserProfileData().value == null){
         getUserProfileData()
     }
+
 }
 
 
@@ -53,6 +57,42 @@ if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(require
 
 
 
+    }
+
+    private fun getAllFeed() {
+        homeViewModel.getAllFeedItems()
+    }
+
+    private fun observeGetAllFeed() {
+        homeViewModel.onObserveGetAllFeedItemsResponseData().observe(requireActivity()){
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.progress.root.visibility = View.VISIBLE
+                }
+
+                Status.ERROR -> {
+                    binding.progress.root.visibility = View.GONE
+                }
+
+                Status.SUCCESS -> {
+                    if (it.data!!.isNotEmpty()) {
+                        binding.progress.root.visibility = View.GONE
+                        initRcView(it.data)
+
+                    }
+                }
+
+                Status.SESSION_EXPIRE -> {
+
+                }
+            }
+        }
+    }
+
+    private fun initRcView(data: List<FeedItem>) {
+        val adapter = HomeFeedRcAdapter(this)
+        adapter.setData(data)
+        binding.feedRcHome.adapter = adapter
     }
 
 
@@ -104,19 +144,14 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     }
 
     private fun initTodayOrUpcomingView() {
-        val adapter = HomeFeedRcAdapter(this)
-        binding.feedRcHome.adapter = adapter
+
 
         val ad = HomeTrendingStoriesAdapter(this)
         ad.setData(HomeResources.homeCategories())
         binding.rcTrending.adapter = ad
     }
 
-    /*private fun initTrendingView() {
-        val adapter = HomeTrendingStoriesAdapter(this)
-        adapter.setData(HomeResources.homeCategories())
-        binding.rcTrending.adapter = adapter
-    }*/
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -136,7 +171,14 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     }
 
     override fun onHomeFeedImageClicked() {
-        val action = HomeFragmentDirections.actionNavigationHomeToEditPostFragment()
-        findNavController().navigate(action)
+    }
+
+    override fun onHomeFeedImageLiked(item: FeedItem) {
+        homeViewModel.likeFeedItem(item)
+    }
+
+
+    override fun onHomeFeedImageUnLiked() {
+
     }
 }

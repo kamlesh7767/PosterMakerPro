@@ -6,12 +6,7 @@ object FireStoreTables{
     const val ONGOING_ORDERS_BRANCH = "ongoingOrders"
 }
 
-object FirebaseStorageConstants{
-    const val ROOT_DIRECTORY = "app"
-    const val MAIN_PRODUCT_IMAGES = "products"
-    const val MAIN_USER_DP = "userImages"
-    const val SERVICES_VISITING_CARDS = "serviceVisitingCards"
-}
+
 object HomeFirebaseReferences{
     const val HOME_AD_ONE = "homeAdOne"
     const val SLIDER_BRANCH ="sliderImageModels"
@@ -54,17 +49,25 @@ object UserReferences{
 
 }
 
+
+
+object FirebaseStorageConstants{
+    const val ROOT_DIRECTORY = "app"
+    const val MAIN_USER_DP = "userImages"
+    const val MAIN_FEED_NODE = "feed"
+    const val MAIN_TRENDING_POSTS_NODE = "trending_posts"
+    const val MAIN_CATEGORIES_NODE = "categories"
+    const val MAIN_SUB_CATEGORIES_NODE = "sub_categories"
+    const val SUB_CATEGORIES_POSTS_NODE = "posts"
+}
+
+
 object ResponseStrings{
     const val SUCCESS = "success"
     const val ERROR = "error"
+    const val FEED_TYPE_POST = "post"
+    const val FEED_TYPE_AD = "ad"
 }
 
-object FromStrings{
-    const val RECENT = "recent"
-    const val USER_FAV = "userFav"
-    const val TRENDING = "sub"
-    const val HOME_SCROLL = "homeScroll"
-    const val HOME_AD1 = "homeAd1"
-    const val SUB_AD1 = "SUBAd1"
-    const val SUB_AD2 = "SUBAd2"
-}
+
+
