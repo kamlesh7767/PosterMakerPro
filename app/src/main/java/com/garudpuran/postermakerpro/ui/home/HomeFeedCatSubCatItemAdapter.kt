@@ -1,23 +1,22 @@
 package com.garudpuran.postermakerpro.ui.home
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.models.SubCategoryItem
-import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 
-class HomeTodayOrUpcomingAdapter():RecyclerView.Adapter<HomeTodayOrUpcomingAdapter.ItemViewHolder>() {
-    private val dataset = ArrayList<SubCategoryItem>()
+class HomeFeedCatSubCatItemAdapter(private val dataset: List<SubCategoryItem>) :RecyclerView.Adapter<HomeFeedCatSubCatItemAdapter.ItemViewHolder>() {
+
 
     class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {
 
         val icon:ImageView = view.findViewById(R.id.today_item_iv)
+        val titleTv:TextView = view.findViewById(R.id.today_item_title_tv)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -32,26 +31,21 @@ class HomeTodayOrUpcomingAdapter():RecyclerView.Adapter<HomeTodayOrUpcomingAdapt
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
-        Log.d("SUBSET2",item.toString())
+        holder.titleTv.text = item.title_eng
         Glide
             .with(holder.itemView.context)
             .load(item.image_url)
             .centerCrop()
             .into(holder.icon)
-       /* holder.itemView.setOnClickListener {
-            mListener.onHomeTodayOrUpcomingClicked(item)
-        }*/
+        /* holder.itemView.setOnClickListener {
+             mListener.onHomeTodayOrUpcomingClicked(item)
+         }*/
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(courses: List<SubCategoryItem>) {
-        dataset.clear()
-        dataset.addAll(courses)
-        notifyDataSetChanged()
-    }
 
-    interface HomeTodayOrUpcomingAdapterListener{
-        fun onHomeTodayOrUpcomingClicked(item: HomeCategoryModel)
+
+    interface HomeFeedCatSubCatItemAdapterListener{
+        fun onHomeFeedCatSubCatItemAdapterClicked(item: SubCategoryItem)
     }
 
 }

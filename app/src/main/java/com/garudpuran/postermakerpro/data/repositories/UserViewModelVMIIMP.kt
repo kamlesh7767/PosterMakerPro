@@ -23,9 +23,6 @@ class UserViewModelVMIIMP(private val database: FirebaseFirestore,
         try {
             val db = database.collection(UserReferences.USER_MAIN_NODE)
                 .document(id)
-                .collection(UserReferences.USER_DOCS_COLLECTION)
-                .document(UserReferences.USER_PROFILE)
-
             db.set(mod).addOnSuccessListener {
                 continuation.resume(ResponseStrings.SUCCESS)
             }.addOnFailureListener { e ->
@@ -40,9 +37,7 @@ class UserViewModelVMIIMP(private val database: FirebaseFirestore,
 
     override suspend fun getUserProfile(id: String): UserPersonalProfileModel? = suspendCoroutine {
         continuation ->
-        val db =  database.collection(UserReferences.USER_MAIN_NODE).document(id).collection(
-            UserReferences.USER_DOCS_COLLECTION
-        ).document(UserReferences.USER_PROFILE)
+        val db =  database.collection(UserReferences.USER_MAIN_NODE).document(id)
         try {
             db.get().addOnSuccessListener {
                 if(it.exists()){

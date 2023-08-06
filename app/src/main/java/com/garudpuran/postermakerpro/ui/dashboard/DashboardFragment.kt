@@ -31,10 +31,10 @@ class DashboardFragment : Fragment(),HomeTodayOrUpcomingAdapter.HomeTodayOrUpcom
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
+        //initViews()
     }
 
-    private fun initViews() {
+    /*private fun initViews() {
         val adapter = HomeTodayOrUpcomingAdapter()
         adapter.setData(HomeResources.homeCategories())
         binding.rcBusinessPosts.adapter = adapter
@@ -45,7 +45,7 @@ class DashboardFragment : Fragment(),HomeTodayOrUpcomingAdapter.HomeTodayOrUpcom
         binding.rcNewsPosts.adapter = adapter
         binding.rcQuotesPosts.adapter = adapter
         binding.rcOtherPosts.adapter = adapter
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

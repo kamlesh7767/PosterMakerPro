@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.garudpuran.postermakerpro.data.interfaces.HomeRepo
-import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
+import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
+import com.garudpuran.postermakerpro.models.SubCategoryItem
+import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
+import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -37,25 +40,43 @@ class HomeViewModel @Inject constructor(
         return getAllFeedItemsResponse
     }
 
-    //likefeedItem
-    private val likeFeedItemResponse = MutableLiveData<Resource<String>>()
+    //GetAllTrendingStories
+    private val getAllTrendingStoriesResponse =  MutableLiveData<Resource<List<TrendingStoriesItemModel>>>()
 
-    fun likeFeedItem(item: FeedItem) {
+    fun getAllTrendingStories() {
         viewModelScope.launch(Dispatchers.IO) {
-            likeFeedItemResponse.postValue(Resource.loading(null))
-            val uc   = mainVMI.likeFeedItem(item)
-            if(uc != null){
-                likeFeedItemResponse.postValue(Resource.success(uc))
-
+            getAllTrendingStoriesResponse.postValue(Resource.loading(emptyList()))
+            val uc   = mainVMI.getAllTrendingStories()
+            if(uc.isNotEmpty()){
+                getAllTrendingStoriesResponse.postValue(Resource.success(uc))
             }else{
-                likeFeedItemResponse.postValue(Resource.error(null))
-
+                getAllTrendingStoriesResponse.postValue(Resource.error(emptyList()))
             }
 
         }
     }
-    fun onObserveLikeFeedItemResponseData(): LiveData<Resource<String>> {
-        return likeFeedItemResponse
+    fun onObserveGetAllTrendingStoriesResponseData(): LiveData<Resource<List<TrendingStoriesItemModel>>> {
+        return getAllTrendingStoriesResponse
+    }
+
+
+    //GetAllCategoriesAndSubCategories
+    private val getAllCategoriesAndSubCategoriesResponse =  MutableLiveData<Resource<List<Pair<CategoryItem,List<SubCategoryItem>>>>>()
+
+    fun getAllCategoriesAndSubCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAllCategoriesAndSubCategoriesResponse.postValue(Resource.loading(emptyList()))
+            val uc   = mainVMI.getAllCategoriesAndSubCategories()
+            if(uc.isNotEmpty()){
+                getAllCategoriesAndSubCategoriesResponse.postValue(Resource.success(uc))
+            }else{
+                getAllCategoriesAndSubCategoriesResponse.postValue(Resource.error(emptyList()))
+            }
+
+        }
+    }
+    fun onObserveGetAllCategoriesAndSubCategoriesResponseData(): LiveData<Resource<List<Pair<CategoryItem,List<SubCategoryItem>>>>> {
+        return getAllCategoriesAndSubCategoriesResponse
     }
 
 
