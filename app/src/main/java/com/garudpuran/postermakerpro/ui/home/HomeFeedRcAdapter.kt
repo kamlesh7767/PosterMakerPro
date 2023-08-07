@@ -35,19 +35,6 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
 
     private fun generateCombinedList(): List<Any> {
         val combined = mutableListOf<Any>()
-      /*  val totalItems = dataset.size + datasetSecond.size
-
-        for (i in 0 until totalItems) {
-            val isFromFirstList = Random.nextBoolean()
-            val item = if (isFromFirstList) {
-                if (i < dataset.size) dataset[i] else datasetSecond[i - dataset.size]
-            } else {
-                if (i < datasetSecond.size) datasetSecond[i] else dataset[i - datasetSecond.size]
-            }
-
-
-            combined.add(item)
-        }*/
     combined.addAll(dataset)
     combined.addAll(datasetSecond)
         return combined.shuffled()
@@ -181,11 +168,6 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
             }
 
         } else {
-           /* val item2 = combinedList[position] as Pair<CategoryItem,List<SubCategoryItem>>
-            holder.catSubCatItemTitleTv.text = item2.first.title_eng
-            val adapter = HomeFeedCatSubCatItemAdapter(item2.second)
-                // adapter.setData(item2.second)
-            holder.rcView.adapter = adapter*/
             val item2 = combinedList[position] as Pair<CategoryItem,List<SubCategoryItem>>
             holder.catSubCatItemTitleTv.text = item2.first.title_eng
             val adapter = HomeFeedCatSubCatItemAdapter(item2.second)
@@ -224,19 +206,6 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
 
     }
 
-   /* @SuppressLint("NotifyDataSetChanged")
-    fun setData(dat: List<FeedItem>) {
-        dataset.clear()
-        dataset.addAll(dat)
-        dataset.shuffle()
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setLikeData(dat: List<String>) {
-        likedPosts.clear()
-        likedPosts.addAll(dat)
-    }*/
 
     interface HomeFeedClickListener {
         fun onHomeFeedImageClicked()
