@@ -1,6 +1,7 @@
 package com.garudpuran.postermakerpro.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,14 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
+import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
+import com.garudpuran.postermakerpro.models.SubCategoryItem
+import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
-import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
+import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Status
+import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +33,9 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
 
     private val userViewModel : UserViewModel by viewModels ()
     private val homeViewModel : HomeViewModel by viewModels ()
+    private  var userModel = UserPersonalProfileModel()
+    private  var feedItemList = listOf<FeedItem>()
+    private  var catSubCatList = listOf<Pair<CategoryItem,List<SubCategoryItem>>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,21 +43,16 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        initTodayOrUpcomingView()
+      getUserProfileData()
+        observeGetAllTrendingStories()
+        getAllTrendingStories()
+        observeGetCatSubCatPairs()
+        getCatSubCatPairs()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeGetAllFeed()
-        getAllFeed()
-if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
-    if(userViewModel.onObserveGetUserProfileData().value == null){
-        getUserProfileData()
-    }
-
-}
-
 
         binding.homeUserProfilePic.setOnClickListener {
             val action = HomeFragmentDirections.actionNavigationHomeToProfileFragment()
@@ -57,6 +61,41 @@ if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(require
 
 
 
+    }
+
+    private fun getAllTrendingStories() {
+        homeViewModel.getAllTrendingStories()
+    }
+
+    private fun observeGetAllTrendingStories() {
+        homeViewModel.onObserveGetAllTrendingStoriesResponseData().observe(requireActivity()){
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.progress.root.visibility = View.VISIBLE
+                }
+
+                Status.ERROR -> {
+                    binding.progress.root.visibility = View.GONE
+                }
+
+                Status.SUCCESS -> {
+                    if (it.data!!.isNotEmpty()) {
+                        binding.progress.root.visibility = View.GONE
+                        initTrendingRcView(it.data)
+                    }
+                }
+
+                Status.SESSION_EXPIRE -> {
+
+                }
+            }
+        }
+    }
+
+    private fun initTrendingRcView(data: List<TrendingStoriesItemModel>) {
+        val adapter = HomeTrendingStoriesAdapter(this)
+        adapter.setData(data)
+        binding.rcTrending.adapter = adapter
     }
 
     private fun getAllFeed() {
@@ -77,7 +116,10 @@ if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(require
                 Status.SUCCESS -> {
                     if (it.data!!.isNotEmpty()) {
                         binding.progress.root.visibility = View.GONE
-                        initRcView(it.data)
+                        feedItemList = it.data
+                        Log.d("USERDATAFEED",it.data.toString())
+                       observeGetCatSubCatPairs()
+                        getCatSubCatPairs()
 
                     }
                 }
@@ -89,9 +131,44 @@ if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(require
         }
     }
 
-    private fun initRcView(data: List<FeedItem>) {
-        val adapter = HomeFeedRcAdapter(this)
-        adapter.setData(data)
+    private fun getCatSubCatPairs() {
+        homeViewModel.getAllCategoriesAndSubCategories()
+    }
+
+    private fun observeGetCatSubCatPairs() {
+        homeViewModel.onObserveGetAllCategoriesAndSubCategoriesResponseData().observe(requireActivity()){
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.progress.root.visibility = View.VISIBLE
+                }
+
+                Status.ERROR -> {
+                    binding.progress.root.visibility = View.GONE
+                }
+
+                Status.SUCCESS -> {
+                    if (it.data!!.isNotEmpty()) {
+                        binding.progress.root.visibility = View.GONE
+                        catSubCatList = it.data
+                        Log.d("USERDATACAT",it.data.toString())
+                        initRcView(feedItemList,it.data,userModel.likedPosts)
+
+                    }
+                }
+
+                Status.SESSION_EXPIRE -> {
+
+                }
+            }
+        }
+    }
+
+    private fun initRcView(
+        data: List<FeedItem>,
+        dataSetSecond: List<Pair<CategoryItem, List<SubCategoryItem>>>,
+        likedPosts: ArrayList<String>
+    ) {
+        val adapter = HomeFeedRcAdapter(this,data,dataSetSecond,likedPosts)
         binding.feedRcHome.adapter = adapter
     }
 
@@ -122,7 +199,13 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
         Status.SUCCESS -> {
             if (it.data !=null) {
                 binding.progress.root.visibility = View.GONE
-               profileCreate(it.data)
+                if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
+                    profileCreate(it.data)
+                }
+                userModel = it.data
+                observeGetAllFeed()
+                getAllFeed()
+                Log.d("USERDATA",it.data.toString())
             }
         }
 
@@ -143,14 +226,6 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
 
     }
 
-    private fun initTodayOrUpcomingView() {
-
-
-        val ad = HomeTrendingStoriesAdapter(this)
-        ad.setData(HomeResources.homeCategories())
-        binding.rcTrending.adapter = ad
-    }
-
 
 
     override fun onDestroyView() {
@@ -165,20 +240,43 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     override fun onHomeTodayOrUpcomingClicked(item: HomeCategoryModel) {
     }
 
-    override fun onHomeTrendingStoriesClicked(item: HomeCategoryModel) {
-        val action = HomeFragmentDirections.actionNavigationHomeToEditStoryFragment()
-        findNavController().navigate(action)
-    }
 
     override fun onHomeFeedImageClicked() {
     }
 
     override fun onHomeFeedImageLiked(item: FeedItem) {
-        homeViewModel.likeFeedItem(item)
+        try {
+            val db = FirebaseFirestore.getInstance()
+            db.collection(FirebaseStorageConstants.MAIN_FEED_NODE).document(item.Id!!).set(item)
+            userModel.likedPosts.add(item.image_url)
+            db.collection(UserReferences.USER_MAIN_NODE)
+                .document(userModel.uid).set(userModel)
+        }catch (_:java.lang.Exception){
+
+        }
+
     }
 
 
-    override fun onHomeFeedImageUnLiked() {
 
+
+    override fun onHomeFeedImageUnLiked(item: FeedItem) {
+
+        try {
+            val db = FirebaseFirestore.getInstance()
+            db.collection(FirebaseStorageConstants.MAIN_FEED_NODE).document(item.Id!!).set(item)
+            userModel.likedPosts.remove(item.image_url)
+            db.collection(UserReferences.USER_MAIN_NODE)
+                .document(userModel.uid).set(userModel)
+        }
+        catch (_:Exception){
+
+        }
+
+    }
+
+    override fun onHomeTrendingStoriesClicked(item: TrendingStoriesItemModel) {
+        val action = HomeFragmentDirections.actionNavigationHomeToEditStoryFragment()
+        findNavController().navigate(action)
     }
 }

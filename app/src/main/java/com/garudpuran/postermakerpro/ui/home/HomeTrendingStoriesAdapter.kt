@@ -4,18 +4,21 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
+import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import de.hdodenhof.circleimageview.CircleImageView
 
 class HomeTrendingStoriesAdapter(private val mListener:HomeTrendingStoriesAdapterListener):RecyclerView.Adapter<HomeTrendingStoriesAdapter.ItemViewHolder>() {
-    private val dataset = ArrayList<HomeCategoryModel>()
+    private val dataset = ArrayList<TrendingStoriesItemModel>()
 
     class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {
 
         val icon:CircleImageView = view.findViewById(R.id.trending_item_civ)
+        val titleTv:TextView = view.findViewById(R.id.trending_item_title_tv)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -31,10 +34,10 @@ class HomeTrendingStoriesAdapter(private val mListener:HomeTrendingStoriesAdapte
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
 
-
+holder.titleTv.text = item.title_eng
         Glide
             .with(holder.itemView.context)
-            .load("https://picsum.photos/200/300")
+            .load(item.image_url)
             .centerCrop()
             .into(holder.icon);
         holder.itemView.setOnClickListener {
@@ -43,14 +46,14 @@ class HomeTrendingStoriesAdapter(private val mListener:HomeTrendingStoriesAdapte
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(courses: List<HomeCategoryModel>) {
+    fun setData(courses: List<TrendingStoriesItemModel>) {
         dataset.clear()
         dataset.addAll(courses)
         notifyDataSetChanged()
     }
 
     interface HomeTrendingStoriesAdapterListener{
-        fun onHomeTrendingStoriesClicked(item: HomeCategoryModel)
+        fun onHomeTrendingStoriesClicked(item: TrendingStoriesItemModel)
     }
 
 }

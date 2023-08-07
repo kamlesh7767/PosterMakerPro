@@ -79,27 +79,40 @@
 
 
         <ImageView
-            android:id="@+id/feed_item_like_Iv"
+            android:id="@+id/feed_item_to_like_iv"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="10dp"
             android:src="@drawable/outlined_heart"
-            app:tint = "@color/red_one"
-            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/feed_item_like_tv"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView10" />
+            app:layout_constraintTop_toTopOf="@+id/feed_item_like_tv"
+            app:tint="@color/red_one" />
+
+        <ImageView
+            android:id="@+id/feed_item_to_unlike_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/filled_heart"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/feed_item_like_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/feed_item_like_tv"
+            app:tint="@color/red_one" />
 
         <TextView
             android:id="@+id/feed_item_like_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Like"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/feed_item_like_Iv"
-            app:layout_constraintStart_toEndOf="@+id/feed_item_like_Iv"
-            app:layout_constraintTop_toTopOf="@+id/feed_item_like_Iv" />
+            android:layout_marginStart="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feed_item_post_pic" />
 
         <TextView
             android:id="@+id/textView10"
