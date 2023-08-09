@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.databinding.FragmentEditPostBinding
 import com.garudpuran.postermakerpro.ui.commonui.models.EditFragOptionsModel
@@ -23,6 +24,7 @@ class EditPostFragment : Fragment(), EditFragOptionsAdapter.EditOptionsListener 
 
     private val TAG = "PosterSubCategoryFragment"
     private val binding get() = _binding
+    private val args:EditPostFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +39,7 @@ class EditPostFragment : Fragment(), EditFragOptionsAdapter.EditOptionsListener 
 
         Glide
             .with(requireActivity())
-            .load("https://picsum.photos/seed/200/300")
+            .load(args.imageUrl)
             .centerCrop()
             .into(binding.imageView)
 

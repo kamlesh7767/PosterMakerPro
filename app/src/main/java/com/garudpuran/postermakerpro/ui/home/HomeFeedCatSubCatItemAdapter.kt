@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 
-class HomeFeedCatSubCatItemAdapter(private val dataset: List<SubCategoryItem>) :RecyclerView.Adapter<HomeFeedCatSubCatItemAdapter.ItemViewHolder>() {
+class HomeFeedCatSubCatItemAdapter(private val dataset: List<SubCategoryItem>,private val mListener:CatSubCatItemAdapterListener) :RecyclerView.Adapter<HomeFeedCatSubCatItemAdapter.ItemViewHolder>() {
 
 
     class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {
@@ -37,15 +37,15 @@ class HomeFeedCatSubCatItemAdapter(private val dataset: List<SubCategoryItem>) :
             .load(item.image_url)
             .centerCrop()
             .into(holder.icon)
-        /* holder.itemView.setOnClickListener {
-             mListener.onHomeTodayOrUpcomingClicked(item)
-         }*/
+         holder.itemView.setOnClickListener {
+             mListener.onCatSubCatItemAdapterClicked(item)
+         }
     }
 
 
 
-    interface HomeFeedCatSubCatItemAdapterListener{
-        fun onHomeFeedCatSubCatItemAdapterClicked(item: SubCategoryItem)
+    interface CatSubCatItemAdapterListener{
+        fun onCatSubCatItemAdapterClicked(item: SubCategoryItem)
     }
 
 }

@@ -1,7 +1,6 @@
 package com.garudpuran.postermakerpro.ui.home
 
 import android.animation.Animator
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +15,9 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
-import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 
 
-class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var dataset : List<FeedItem>,private val datasetSecond:List<Pair<CategoryItem,List<SubCategoryItem>>>,private var likedPosts:MutableList<String>) :
+class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var dataset : List<FeedItem>,private val datasetSecond:List<Pair<CategoryItem,List<SubCategoryItem>>>,private var likedPosts:MutableList<String>,private val mListener2: HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener) :
     RecyclerView.Adapter<HomeFeedRcAdapter.ItemViewHolder>() {
     private val FEED_ITEM_VIEW_TYPE = 100
     private val FEED_RC_ITEM_VIEW_TYPE = 200
@@ -48,6 +46,7 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
         val itemFilledLike = view.findViewById<ImageView>(R.id.feed_item_to_unlike_iv)
         val itemDesp = view.findViewById<TextView>(R.id.feed_item_user_desp_tv)
         val itemLikeTv = view.findViewById<TextView>(R.id.feed_item_like_tv)
+        val checkoutbutton = view.findViewById<TextView>(R.id.feed_checkout_button)
         val likeAnv = view.findViewById<LottieAnimationView>(R.id.feed_like_anv)
         val catSubCatItemTitleTv = view.findViewById<TextView>(R.id.feed_catsubCat_item_title_tv)
 
@@ -166,11 +165,18 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
                 holder.itemOutlinedLike.visibility = View.VISIBLE
                 holder.itemFilledLike.visibility = View.GONE
             }
+            if (item.type==2){
+            holder.checkoutbutton.visibility = View.GONE
+            }
+
+            holder.checkoutbutton.setOnClickListener {
+                mListener.onHomeFeedCheckOutBtnClicked(item)
+            }
 
         } else {
             val item2 = combinedList[position] as Pair<CategoryItem,List<SubCategoryItem>>
             holder.catSubCatItemTitleTv.text = item2.first.title_eng
-            val adapter = HomeFeedCatSubCatItemAdapter(item2.second)
+            val adapter = HomeFeedCatSubCatItemAdapter(item2.second,mListener2)
             holder.rcView.adapter = adapter
         }
 
@@ -209,6 +215,7 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
 
     interface HomeFeedClickListener {
         fun onHomeFeedImageClicked()
+        fun onHomeFeedCheckOutBtnClicked(item: FeedItem)
         fun onHomeFeedImageLiked(item: FeedItem)
         fun onHomeFeedImageUnLiked(item: FeedItem)
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.garudpuran.postermakerpro.data.interfaces.HomeRepo
 import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
+import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
@@ -77,6 +78,27 @@ class HomeViewModel @Inject constructor(
     }
     fun onObserveGetAllCategoriesAndSubCategoriesResponseData(): LiveData<Resource<List<Pair<CategoryItem,List<SubCategoryItem>>>>> {
         return getAllCategoriesAndSubCategoriesResponse
+    }
+
+
+
+    //getAllPosts
+    private val getAllPostsResponse =  MutableLiveData<Resource<List<PostItem>>>()
+
+    fun getAllPosts(catId:String,subCatId:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAllPostsResponse.postValue(Resource.loading(emptyList()))
+            val uc   = mainVMI.getAllPosts(catId,subCatId)
+            if(uc.isNotEmpty()){
+                getAllPostsResponse.postValue(Resource.success(uc))
+            }else{
+                getAllPostsResponse.postValue(Resource.error(emptyList()))
+            }
+
+        }
+    }
+    fun onObserveGetAllPostsResponseData(): LiveData<Resource<List<PostItem>>> {
+        return getAllPostsResponse
     }
 
 

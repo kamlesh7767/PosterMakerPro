@@ -15,6 +15,7 @@ import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.dashboard.CategoriesFragmentDirections
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Status
@@ -25,7 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,HomeFeedRcAdapter.HomeFeedClickListener {
+class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,
+    HomeFeedRcAdapter.HomeFeedClickListener,HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -168,7 +170,7 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
         dataSetSecond: List<Pair<CategoryItem, List<SubCategoryItem>>>,
         likedPosts: ArrayList<String>
     ) {
-        val adapter = HomeFeedRcAdapter(this,data,dataSetSecond,likedPosts)
+        val adapter = HomeFeedRcAdapter(this,data,dataSetSecond,likedPosts,this)
         binding.feedRcHome.adapter = adapter
     }
 
@@ -244,6 +246,11 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     override fun onHomeFeedImageClicked() {
     }
 
+    override fun onHomeFeedCheckOutBtnClicked(item: FeedItem) {
+        val action = HomeFragmentDirections.actionNavigationHomeToEditPostFragment(item.categoryId,item.subCategoryId,item.Id!!,item.image_url)
+        findNavController().navigate(action)
+    }
+
     override fun onHomeFeedImageLiked(item: FeedItem) {
         try {
             val db = FirebaseFirestore.getInstance()
@@ -277,6 +284,11 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
 
     override fun onHomeTrendingStoriesClicked(item: TrendingStoriesItemModel) {
         val action = HomeFragmentDirections.actionNavigationHomeToEditStoryFragment()
+        findNavController().navigate(action)
+    }
+
+    override fun onCatSubCatItemAdapterClicked(item: SubCategoryItem) {
+        val action = HomeFragmentDirections.actionNavigationHomeToSelectedSubCatItems(item.categoryId!!,item.Id!!)
         findNavController().navigate(action)
     }
 }
