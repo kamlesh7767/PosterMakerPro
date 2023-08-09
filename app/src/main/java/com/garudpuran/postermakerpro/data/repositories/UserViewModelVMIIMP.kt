@@ -1,12 +1,20 @@
 package com.garudpuran.postermakerpro.data.repositories
 
+import android.net.Uri
+import android.util.Log
 import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
+import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.garudpuran.postermakerpro.utils.UserReferences
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -55,6 +63,50 @@ class UserViewModelVMIIMP(private val database: FirebaseFirestore,
             continuation.resume(null)
         }
     }
+
+    override suspend fun updatePersonalProfileItem(imageUri: String, item: UserPersonalProfileModel):String? {
+        try {
+            var uri: String
+            if(imageUri.isNotEmpty()){
+                uri = withContext(Dispatchers.IO) {
+                    val parsedUri = Uri.parse(imageUri)
+                    val title = parsedUri.lastPathSegment + System.currentTimeMillis().toString()
+                    storageReference.child(FirebaseStorageConstants.MAIN_USER_DP).child(title)
+                        .putFile(parsedUri)
+                        .await()
+                        .storage
+                        .downloadUrl
+                        .await()
+                }  .toString()
+                if (item.profile_image_url.isNotEmpty()) {
+                    val ref = FirebaseStorage.getInstance()
+                    ref.getReferenceFromUrl(item.profile_image_url).delete()
+                }
+            }else{
+                uri = item.profile_image_url
+            }
+            item.profile_image_url = uri
+            val ctd = suspendCoroutine { ff ->
+                val db = database.collection(UserReferences.USER_MAIN_NODE)
+                db.document(item.uid).set(item)
+                    .addOnSuccessListener {
+                        ff.resume(ResponseStrings.SUCCESS)
+                    }.addOnFailureListener {
+                        ff.resume(ResponseStrings.ERROR)
+                    }
+
+            }
+            return ctd
+
+        } catch (e: FirebaseFirestoreException) {
+            return null
+        } catch (e: Exception) {
+            Log.d("IMAGEUPLOAD",e.toString())
+            return null
+        }
+    }
+
+
 }
 
 

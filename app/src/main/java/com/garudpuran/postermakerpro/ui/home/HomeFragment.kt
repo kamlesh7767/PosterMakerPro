@@ -1,13 +1,11 @@
 package com.garudpuran.postermakerpro.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
@@ -17,28 +15,24 @@ import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
-import com.garudpuran.postermakerpro.ui.dashboard.CategoriesFragmentDirections
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
-import com.garudpuran.postermakerpro.utils.Resource
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
     HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,
     HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,
     HomeFeedRcAdapter.HomeFeedClickListener,
-    HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener {
+    HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener,CreatePersonalProfileFragment.ProfileUpdateListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -56,7 +50,7 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-       observeData()
+        observeData()
         return binding.root
     }
 
@@ -83,6 +77,9 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
         }else{
             initTrendingRcView(trendingStoriesCache.value!!)
             initRcView(feedItemsCache.value!!,catSubCatCache.value!!,userProfilesCache.value!!.likedPosts)
+            if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
+                profileCreate(userProfilesCache.value!!)
+            }
         }
     }
 
@@ -132,6 +129,9 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
                             catSubCatList,
                             userDataResults[0].data!!.likedPosts
                         )
+                        if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
+                            profileCreate(userDataResults[0].data!!)
+                        }
                     }
                 } else {
                     // Handle errors
@@ -160,7 +160,7 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
 
     private fun profileCreate(data: UserPersonalProfileModel) {
         if (data.name.isEmpty()) {
-            val frag = CreatePersonalProfileFragment()
+            val frag = CreatePersonalProfileFragment(data,this)
             frag.show(childFragmentManager, "CreatePersonalProfileFragment")
         }
 
@@ -233,5 +233,9 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
             item.Id!!
         )
         findNavController().navigate(action)
+    }
+
+    override fun onProfileUpdated() {
+
     }
 }

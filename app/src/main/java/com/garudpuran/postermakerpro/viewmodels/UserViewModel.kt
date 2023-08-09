@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
 import com.garudpuran.postermakerpro.models.CategoryItem
+import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.utils.Resource
 import com.garudpuran.postermakerpro.utils.ResponseStrings
+import com.google.firebase.firestore.auth.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,6 +45,28 @@ class UserViewModel @Inject constructor(
     }
     fun onObserveUpdateUserDetailsData(): LiveData<Resource<String>> {
         return updateUserDetailsData
+    }
+
+
+    //UpdatePersonalProfileItem
+    private val updatePersonalProfileItemResponse = MutableLiveData<Resource<String>>()
+
+    fun updatePersonalProfileItem(imageUri:String,item: UserPersonalProfileModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updatePersonalProfileItemResponse.postValue(Resource.loading(null))
+            val uc   = mainVMI.updatePersonalProfileItem(imageUri,item)
+            if(uc != null){
+                updatePersonalProfileItemResponse.postValue(Resource.success(uc))
+
+            }else{
+                updatePersonalProfileItemResponse.postValue(Resource.error(null))
+
+            }
+
+        }
+    }
+    fun onObserveUpdatePersonalProfileItemResponseData(): LiveData<Resource<String>> {
+        return updatePersonalProfileItemResponse
     }
 
     //GetUSerDetails

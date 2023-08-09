@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/profile_frag_user_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_semibold"
@@ -39,13 +39,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/edit_personal_profile_btn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="6dp"
             android:src="@drawable/editprofile"
-            app:layout_constraintBottom_toBottomOf="@+id/textView8"
-            app:layout_constraintStart_toEndOf="@id/textView8"
-            app:layout_constraintTop_toTopOf="@+id/textView8"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_frag_user_name_tv"
+            app:layout_constraintStart_toEndOf="@id/profile_frag_user_name_tv"
+            app:layout_constraintTop_toTopOf="@+id/profile_frag_user_name_tv"
             app:tint="@color/primary_color" />
 
         <TextView
@@ -58,7 +59,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toBottomOf="@+id/profile_frag_user_name_tv" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
@@ -599,6 +600,7 @@
         app:tint="@color/white" />
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_frag_user_pic_civ"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
@@ -610,7 +612,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout2" />
-
+    <include
+        android:id="@+id/progress"
+        layout="@layout/progress_layout_transparent"
+        android:clickable="false"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
