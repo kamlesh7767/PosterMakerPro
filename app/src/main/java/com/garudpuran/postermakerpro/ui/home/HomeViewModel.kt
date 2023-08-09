@@ -15,70 +15,88 @@ import com.garudpuran.postermakerpro.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val mainVMI: HomeRepo
 ) : ViewModel() {
+    private val trendingStoriesCache = MutableLiveData<List<TrendingStoriesItemModel>>()
+    private val feedItemsCache = MutableLiveData<List<FeedItem>>()
+    private val catSubCatCache = MutableLiveData<List<Pair<CategoryItem,List<SubCategoryItem>>>>()
+    fun setTrendingStoriesCache(data: List<TrendingStoriesItemModel>) {
+        trendingStoriesCache.value = data
+    }
+    fun getTrendingStoriesCache(): LiveData<List<TrendingStoriesItemModel>> {
+        return trendingStoriesCache
+    }
+
+    fun setFeedItemsCacheCache(data: List<FeedItem>) {
+        feedItemsCache.value = data
+    }
+    fun getFeedItemsCacheCache(): LiveData<List<FeedItem>> {
+        return feedItemsCache
+    }
+
+    fun setCatSubCatCacheCache(data: List<Pair<CategoryItem,List<SubCategoryItem>>>) {
+        catSubCatCache.value = data
+    }
+    fun getCatSubCatCacheCache(): LiveData<List<Pair<CategoryItem,List<SubCategoryItem>>>> {
+        return catSubCatCache
+    }
 
     //getAllFeedItems
-    private val getAllFeedItemsResponse =  MutableLiveData<Resource<List<FeedItem>>>()
 
-    fun getAllFeedItems() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getAllFeedItemsResponse.postValue(Resource.loading(emptyList()))
-            val uc   = mainVMI.getAllFeedItems()
-            if(uc.isNotEmpty()){
-                getAllFeedItemsResponse.postValue(Resource.success(uc))
-            }else{
-                getAllFeedItemsResponse.postValue(Resource.error(emptyList()))
+    suspend fun getAllFeedItemsAsync(): Resource<List<FeedItem>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val uc = mainVMI.getAllFeedItems()
+                if (uc.isNotEmpty()) {
+                    Resource.success(uc)
+                } else {
+                    Resource.error(emptyList())
+                }
+            } catch (e: Exception) {
+                Resource.error(emptyList())
             }
-
         }
     }
-    fun onObserveGetAllFeedItemsResponseData(): LiveData<Resource<List<FeedItem>>> {
-        return getAllFeedItemsResponse
-    }
+
 
     //GetAllTrendingStories
-    private val getAllTrendingStoriesResponse =  MutableLiveData<Resource<List<TrendingStoriesItemModel>>>()
-
-    fun getAllTrendingStories() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getAllTrendingStoriesResponse.postValue(Resource.loading(emptyList()))
-            val uc   = mainVMI.getAllTrendingStories()
-            if(uc.isNotEmpty()){
-                getAllTrendingStoriesResponse.postValue(Resource.success(uc))
-            }else{
-                getAllTrendingStoriesResponse.postValue(Resource.error(emptyList()))
+    suspend fun getAllTrendingStoriesAsync(): Resource<List<TrendingStoriesItemModel>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val uc = mainVMI.getAllTrendingStories()
+                if (uc.isNotEmpty()) {
+                    Resource.success(uc)
+                } else {
+                    Resource.error(emptyList())
+                }
+            } catch (e: Exception) {
+                Resource.error(emptyList())
             }
-
         }
-    }
-    fun onObserveGetAllTrendingStoriesResponseData(): LiveData<Resource<List<TrendingStoriesItemModel>>> {
-        return getAllTrendingStoriesResponse
     }
 
 
     //GetAllCategoriesAndSubCategories
-    private val getAllCategoriesAndSubCategoriesResponse =  MutableLiveData<Resource<List<Pair<CategoryItem,List<SubCategoryItem>>>>>()
-
-    fun getAllCategoriesAndSubCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getAllCategoriesAndSubCategoriesResponse.postValue(Resource.loading(emptyList()))
-            val uc   = mainVMI.getAllCategoriesAndSubCategories()
-            if(uc.isNotEmpty()){
-                getAllCategoriesAndSubCategoriesResponse.postValue(Resource.success(uc))
-            }else{
-                getAllCategoriesAndSubCategoriesResponse.postValue(Resource.error(emptyList()))
+     suspend fun getAllCategoriesAndSubCategoriesAsync(): Resource<List<Pair<CategoryItem,List<SubCategoryItem>>>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val uc = mainVMI.getAllCategoriesAndSubCategories()
+                if (uc.isNotEmpty()) {
+                    Resource.success(uc)
+                } else {
+                    Resource.error(emptyList())
+                }
+            } catch (e: Exception) {
+                Resource.error(emptyList())
             }
-
         }
     }
-    fun onObserveGetAllCategoriesAndSubCategoriesResponseData(): LiveData<Resource<List<Pair<CategoryItem,List<SubCategoryItem>>>>> {
-        return getAllCategoriesAndSubCategoriesResponse
-    }
+
 
 
 

@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
 import com.garudpuran.postermakerpro.models.CategoryItem
@@ -18,26 +20,35 @@ import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import com.garudpuran.postermakerpro.ui.dashboard.CategoriesFragmentDirections
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
+import com.garudpuran.postermakerpro.utils.Resource
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,
-    HomeFeedRcAdapter.HomeFeedClickListener,HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener {
+class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
+    HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,
+    HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,
+    HomeFeedRcAdapter.HomeFeedClickListener,
+    HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var auth : FirebaseAuth = FirebaseAuth.getInstance()
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    private val userViewModel : UserViewModel by viewModels ()
-    private val homeViewModel : HomeViewModel by viewModels ()
-    private  var userModel = UserPersonalProfileModel()
-    private  var feedItemList = listOf<FeedItem>()
-    private  var catSubCatList = listOf<Pair<CategoryItem,List<SubCategoryItem>>>()
+    private val userViewModel: UserViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
+    private var userModel = UserPersonalProfileModel()
+    private var feedItemList = listOf<FeedItem>()
+    private var catSubCatList = listOf<Pair<CategoryItem, List<SubCategoryItem>>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,11 +56,7 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-      getUserProfileData()
-        observeGetAllTrendingStories()
-        getAllTrendingStories()
-        observeGetCatSubCatPairs()
-        getCatSubCatPairs()
+       observeData()
         return binding.root
     }
 
@@ -62,34 +69,75 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
         }
 
 
-
     }
 
-    private fun getAllTrendingStories() {
-        homeViewModel.getAllTrendingStories()
+    private fun observeData() {
+        // Check cache first
+        val trendingStoriesCache = homeViewModel.getTrendingStoriesCache()
+        val feedItemsCache = homeViewModel.getFeedItemsCacheCache()
+        val catSubCatCache = homeViewModel.getCatSubCatCacheCache()
+        val userProfilesCache = userViewModel.getUserProfileCache()
+        if (trendingStoriesCache.value == null || userProfilesCache.value == null) {
+            binding.progress.root.visibility = View.VISIBLE
+            fetchData()
+        }else{
+            initTrendingRcView(trendingStoriesCache.value!!)
+            initRcView(feedItemsCache.value!!,catSubCatCache.value!!,userProfilesCache.value!!.likedPosts)
+        }
     }
 
-    private fun observeGetAllTrendingStories() {
-        homeViewModel.onObserveGetAllTrendingStoriesResponseData().observe(requireActivity()){
-            when (it.status) {
-                Status.LOADING -> {
-                    binding.progress.root.visibility = View.VISIBLE
-                }
 
-                Status.ERROR -> {
-                    binding.progress.root.visibility = View.GONE
-                }
+    private fun fetchData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val trendingStoriesDeferred1 = async { homeViewModel.getAllTrendingStoriesAsync() }
+                val trendingStoriesDeferred2 =
+                    async { homeViewModel.getAllCategoriesAndSubCategoriesAsync() }
+                val trendingStoriesDeferred3 = async { homeViewModel.getAllFeedItemsAsync() }
+                val trendingStoriesDeferred4 =
+                    async { userViewModel.getUserProfileAsync(auth.uid!!) }
 
-                Status.SUCCESS -> {
-                    if (it.data!!.isNotEmpty()) {
-                        binding.progress.root.visibility = View.GONE
-                        initTrendingRcView(it.data)
+                val results = awaitAll(
+                    trendingStoriesDeferred1,
+                    trendingStoriesDeferred2,
+                    trendingStoriesDeferred3,
+                )
+
+                val userDataResults = awaitAll(
+                    trendingStoriesDeferred4
+                )
+
+                // Check results and proceed
+                val allSuccess = results.all { it.status == Status.SUCCESS }
+                val allUserDataSuccess = userDataResults.all { it.status == Status.SUCCESS }
+                if (allSuccess && allUserDataSuccess) {
+                    val dataList = results.flatMap { resource ->
+                        resource.data ?: emptyList()
                     }
-                }
 
-                Status.SESSION_EXPIRE -> {
-
+                    // Now you have the unwrapped data, proceed accordingly
+                    val trendingStoriesList = dataList.filterIsInstance<TrendingStoriesItemModel>()
+                    feedItemList = dataList.filterIsInstance<FeedItem>()
+                    catSubCatList =
+                        dataList.filterIsInstance<Pair<CategoryItem, List<SubCategoryItem>>>()
+                    if (trendingStoriesList.isNotEmpty()) {
+                        binding.progress.root.visibility = View.GONE
+                        initTrendingRcView(trendingStoriesList)
+                        homeViewModel.setCatSubCatCacheCache(catSubCatList)
+                        homeViewModel.setTrendingStoriesCache(trendingStoriesList)
+                        homeViewModel.setFeedItemsCacheCache(feedItemList)
+                        userViewModel.setUserProfileCache(userDataResults[0].data!!)
+                        initRcView(
+                            feedItemList,
+                            catSubCatList,
+                            userDataResults[0].data!!.likedPosts
+                        )
+                    }
+                } else {
+                    // Handle errors
                 }
+            } catch (e: Exception) {
+                // Handle exceptions
             }
         }
     }
@@ -100,134 +148,24 @@ class HomeFragment : Fragment(),HomeCategoryAdapter.HomeCategoryGridListener,Hom
         binding.rcTrending.adapter = adapter
     }
 
-    private fun getAllFeed() {
-        homeViewModel.getAllFeedItems()
-    }
-
-    private fun observeGetAllFeed() {
-        homeViewModel.onObserveGetAllFeedItemsResponseData().observe(requireActivity()){
-            when (it.status) {
-                Status.LOADING -> {
-                    binding.progress.root.visibility = View.VISIBLE
-                }
-
-                Status.ERROR -> {
-                    binding.progress.root.visibility = View.GONE
-                }
-
-                Status.SUCCESS -> {
-                    if (it.data!!.isNotEmpty()) {
-                        binding.progress.root.visibility = View.GONE
-                        feedItemList = it.data
-                        Log.d("USERDATAFEED",it.data.toString())
-                       observeGetCatSubCatPairs()
-                        getCatSubCatPairs()
-
-                    }
-                }
-
-                Status.SESSION_EXPIRE -> {
-
-                }
-            }
-        }
-    }
-
-    private fun getCatSubCatPairs() {
-        homeViewModel.getAllCategoriesAndSubCategories()
-    }
-
-    private fun observeGetCatSubCatPairs() {
-        homeViewModel.onObserveGetAllCategoriesAndSubCategoriesResponseData().observe(requireActivity()){
-            when (it.status) {
-                Status.LOADING -> {
-                    binding.progress.root.visibility = View.VISIBLE
-                }
-
-                Status.ERROR -> {
-                    binding.progress.root.visibility = View.GONE
-                }
-
-                Status.SUCCESS -> {
-                    if (it.data!!.isNotEmpty()) {
-                        binding.progress.root.visibility = View.GONE
-                        catSubCatList = it.data
-                        Log.d("USERDATACAT",it.data.toString())
-                        initRcView(feedItemList,it.data,userModel.likedPosts)
-
-                    }
-                }
-
-                Status.SESSION_EXPIRE -> {
-
-                }
-            }
-        }
-    }
-
     private fun initRcView(
         data: List<FeedItem>,
         dataSetSecond: List<Pair<CategoryItem, List<SubCategoryItem>>>,
         likedPosts: ArrayList<String>
     ) {
-        val adapter = HomeFeedRcAdapter(this,data,dataSetSecond,likedPosts,this)
+        val adapter = HomeFeedRcAdapter(this, data, dataSetSecond, likedPosts, this)
         binding.feedRcHome.adapter = adapter
     }
 
 
-
-    private fun getUserProfileData() {
-val uid = auth.uid
-        if(!uid.isNullOrEmpty()){
-            observeGetUserProfileData()
-            userViewModel.getUserProfile(uid)
-        }else{
-            com.garudpuran.postermakerpro.utils.Utils.showToast(requireActivity(),"User does not exist!")
-        }
-
-    }
-
-    private fun observeGetUserProfileData() {
-userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
-    when (it.status) {
-        Status.LOADING -> {
-            binding.progress.root.visibility = View.VISIBLE
-        }
-
-        Status.ERROR -> {
-            binding.progress.root.visibility = View.GONE
-        }
-
-        Status.SUCCESS -> {
-            if (it.data !=null) {
-                binding.progress.root.visibility = View.GONE
-                if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
-                    profileCreate(it.data)
-                }
-                userModel = it.data
-                observeGetAllFeed()
-                getAllFeed()
-                Log.d("USERDATA",it.data.toString())
-            }
-        }
-
-        Status.SESSION_EXPIRE -> {
-
-        }
-    }
-}
-    }
-
-    private fun profileCreate(data:UserPersonalProfileModel){
-        if(data.name.isEmpty()){
+    private fun profileCreate(data: UserPersonalProfileModel) {
+        if (data.name.isEmpty()) {
             val frag = CreatePersonalProfileFragment()
-            frag.show(childFragmentManager,"CreatePersonalProfileFragment")
+            frag.show(childFragmentManager, "CreatePersonalProfileFragment")
         }
 
 
-
     }
-
 
 
     override fun onDestroyView() {
@@ -247,7 +185,12 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     }
 
     override fun onHomeFeedCheckOutBtnClicked(item: FeedItem) {
-        val action = HomeFragmentDirections.actionNavigationHomeToEditPostFragment(item.categoryId,item.subCategoryId,item.Id!!,item.image_url)
+        val action = HomeFragmentDirections.actionNavigationHomeToEditPostFragment(
+            item.categoryId,
+            item.subCategoryId,
+            item.Id!!,
+            item.image_url
+        )
         findNavController().navigate(action)
     }
 
@@ -258,13 +201,11 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
             userModel.likedPosts.add(item.image_url)
             db.collection(UserReferences.USER_MAIN_NODE)
                 .document(userModel.uid).set(userModel)
-        }catch (_:java.lang.Exception){
+        } catch (_: java.lang.Exception) {
 
         }
 
     }
-
-
 
 
     override fun onHomeFeedImageUnLiked(item: FeedItem) {
@@ -275,8 +216,7 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
             userModel.likedPosts.remove(item.image_url)
             db.collection(UserReferences.USER_MAIN_NODE)
                 .document(userModel.uid).set(userModel)
-        }
-        catch (_:Exception){
+        } catch (_: Exception) {
 
         }
 
@@ -288,7 +228,10 @@ userViewModel.onObserveGetUserProfileData().observe(requireActivity()){
     }
 
     override fun onCatSubCatItemAdapterClicked(item: SubCategoryItem) {
-        val action = HomeFragmentDirections.actionNavigationHomeToSelectedSubCatItems(item.categoryId!!,item.Id!!)
+        val action = HomeFragmentDirections.actionNavigationHomeToSelectedSubCatItems(
+            item.categoryId!!,
+            item.Id!!
+        )
         findNavController().navigate(action)
     }
 }

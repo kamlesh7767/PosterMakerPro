@@ -33,8 +33,8 @@ class CategoriesFragment : Fragment(),HomeFeedCatSubCatItemAdapter.CatSubCatItem
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
-        observeGetCatSubCatPairs()
-        getCatSubCatPairs()
+       // observeGetCatSubCatPairs()
+        //getCatSubCatPairs()
         return binding.root
     }
 
@@ -62,7 +62,7 @@ class CategoriesFragment : Fragment(),HomeFeedCatSubCatItemAdapter.CatSubCatItem
     }
 
 
-    private fun getCatSubCatPairs() {
+   /* private fun getCatSubCatPairs() {
         homeViewModel.getAllCategoriesAndSubCategories()
     }
 
@@ -92,7 +92,7 @@ class CategoriesFragment : Fragment(),HomeFeedCatSubCatItemAdapter.CatSubCatItem
                 }
             }
         }
-    }
+    }*/
 
     private fun initRcView(data: List<Pair<CategoryItem, List<SubCategoryItem>>>) {
 

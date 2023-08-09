@@ -6,12 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
+import com.garudpuran.postermakerpro.models.CategoryItem
+import com.garudpuran.postermakerpro.models.SubCategoryItem
+import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.utils.Resource
 import com.garudpuran.postermakerpro.utils.ResponseStrings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,25 +46,29 @@ class UserViewModel @Inject constructor(
     }
 
     //GetUSerDetails
-    private val getUserProfileData = MutableLiveData<Resource<UserPersonalProfileModel>>()
-
-    fun getUserProfile(id:String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            getUserProfileData.postValue(Resource.loading(null))
-            val uc   = mainVMI.getUserProfile(id)
-            if(uc != null){
-                getUserProfileData.postValue(Resource.success(uc))
-
-            }else{
-                getUserProfileData.postValue(Resource.error(null))
-
+    suspend fun getUserProfileAsync(id:String): Resource<UserPersonalProfileModel> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val uc = mainVMI.getUserProfile(id)
+                if (uc!= null) {
+                    Resource.success(uc)
+                } else {
+                    Resource.error(null)
+                }
+            } catch (e: Exception) {
+                Resource.error(null)
             }
-
         }
     }
-    fun onObserveGetUserProfileData(): LiveData<Resource<UserPersonalProfileModel>> {
-        return getUserProfileData
+
+    private val userProfileCache = MutableLiveData<UserPersonalProfileModel>()
+    fun setUserProfileCache(data: UserPersonalProfileModel) {
+        userProfileCache.value = data
     }
+    fun getUserProfileCache(): LiveData<UserPersonalProfileModel> {
+        return userProfileCache
+    }
+
 
 
 
