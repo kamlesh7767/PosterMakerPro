@@ -38,17 +38,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/edit_personal_profile_btn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="6dp"
-            android:src="@drawable/editprofile"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_frag_user_name_tv"
-            app:layout_constraintStart_toEndOf="@id/profile_frag_user_name_tv"
-            app:layout_constraintTop_toTopOf="@+id/profile_frag_user_name_tv"
-            app:tint="@color/primary_color" />
-
         <TextView
             android:id="@+id/profile_user_mobile_tv"
             android:layout_width="wrap_content"
@@ -98,9 +87,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:fontFamily="@font/roboto_semibold"
-                    android:text="Days \n Left"
+                    android:text="Days\nLeft"
                     android:textColor="@color/font_grey"
                     android:textSize="18sp"
+                    android:gravity="start"
                     app:layout_constraintBottom_toBottomOf="@+id/textView4"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -126,9 +116,10 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="30dp"
                     android:fontFamily="@font/roboto_semibold"
-                    android:text="wallet \nPoints"
+                    android:text="Wallet\nPoints"
                     android:textColor="@color/font_grey"
                     android:textSize="18sp"
+                    android:gravity="start"
                     app:layout_constraintBottom_toBottomOf="@+id/textView4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -311,7 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Change your profile information"
+                        android:text="View/Edit Business Profiles"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -351,7 +342,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Your Posts"
+                        android:text="My Posts"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -365,6 +356,7 @@
                         android:text="View Your Saved Posts"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/profile_your_posts_title_tv"
                         app:layout_constraintTop_toBottomOf="@+id/profile_your_posts_title_tv" />
 
@@ -464,6 +456,7 @@
                         android:text="Contact Our Team"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/profile_contact_us_title_tv"
                         app:layout_constraintTop_toBottomOf="@+id/profile_contact_us_title_tv" />
 
@@ -483,7 +476,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout6"
+                    android:id="@+id/profile_sign_out_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
@@ -514,6 +507,7 @@
                         android:text="Sign Out From This Account"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/profile_sign_out_title_tv"
                         app:layout_constraintTop_toBottomOf="@+id/profile_sign_out_title_tv" />
 
@@ -542,14 +536,14 @@
                     android:paddingVertical="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+                    app:layout_constraintTop_toBottomOf="@+id/profile_sign_out_btn">
 
                     <TextView
                         android:id="@+id/profile_delete_title_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Delete"
+                        android:text="Delete Account"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -560,9 +554,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Erase all of your data"
+                        android:text="Erase All of Your Data"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/profile_delete_title_tv"
                         app:layout_constraintTop_toBottomOf="@+id/profile_delete_title_tv" />
 
@@ -589,15 +584,33 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/back_button"
+        android:id="@+id/imageView5"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_margin="20dp"
+        android:src="@drawable/baseline_arrow_circle_left_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/edit_personal_profile_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:background="@drawable/outlined_primary_rounded_bg"
+        android:fontFamily="@font/roboto_semibold"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:paddingHorizontal="10dp"
+        android:text="Edit Profile"
+        android:textColor="@color/primary_color"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:drawableTint="@color/primary_color"
+       />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_frag_user_pic_civ"

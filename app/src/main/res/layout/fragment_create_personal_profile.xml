@@ -158,9 +158,10 @@
                     android:layout_height="50dp"
                     android:elevation="5dp"
                     android:paddingHorizontal="20dp"
-                    android:background="@drawable/btn_disabled"
+                    android:textColor="@color/white"
+                    android:background="@drawable/btn_enabled"
                     android:layout_gravity="center_horizontal"
-                   android:drawableTint="@color/primary_color"
+                   android:drawableTint="@color/white"
                     android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="100dp"
@@ -196,6 +197,7 @@
         android:src="@drawable/editprofile"
         app:layout_constraintBottom_toBottomOf="@+id/user_profile_pic"
         app:layout_constraintEnd_toEndOf="@+id/user_profile_pic"
+        app:layout_constraintStart_toEndOf="@+id/user_profile_pic"
         app:layout_constraintTop_toBottomOf="@+id/user_profile_pic"
         app:tint="@color/primary_color" />
 

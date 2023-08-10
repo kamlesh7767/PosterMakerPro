@@ -1,5 +1,6 @@
 package com.garudpuran.postermakerpro.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
 import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
@@ -15,6 +17,7 @@ import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.editing.EditStoryActivity
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Status
@@ -62,6 +65,11 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
             findNavController().navigate(action)
         }
 
+        binding.homeNotificationIcon.setOnClickListener {
+            val action = HomeFragmentDirections.actionNavigationHomeToNotificationFragment()
+            findNavController().navigate(action)
+        }
+
 
     }
 
@@ -77,6 +85,7 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
         }else{
             initTrendingRcView(trendingStoriesCache.value!!)
             initRcView(feedItemsCache.value!!,catSubCatCache.value!!,userProfilesCache.value!!.likedPosts)
+            setUi(userProfilesCache.value!!)
             if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
                 profileCreate(userProfilesCache.value!!)
             }
@@ -129,6 +138,8 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
                             catSubCatList,
                             userDataResults[0].data!!.likedPosts
                         )
+
+                        setUi(userDataResults[0].data!!)
                         if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
                             profileCreate(userDataResults[0].data!!)
                         }
@@ -140,6 +151,12 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
                 // Handle exceptions
             }
         }
+    }
+
+    private fun setUi(data: UserPersonalProfileModel) {
+        Glide.with(requireActivity()).load(data.profile_image_url).into(binding.homeUserProfilePic)
+        binding.homeUserDespTv.text = data.name
+
     }
 
     private fun initTrendingRcView(data: List<TrendingStoriesItemModel>) {
@@ -223,8 +240,13 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
     }
 
     override fun onHomeTrendingStoriesClicked(item: TrendingStoriesItemModel) {
-        val action = HomeFragmentDirections.actionNavigationHomeToEditStoryFragment()
-        findNavController().navigate(action)
+
+        val intent = Intent(requireActivity(),EditStoryActivity::class.java)
+        intent.putExtra("imageUrl",item.image_url)
+        intent.putExtra("engTitle",item.title_eng)
+        intent.putExtra("marTitle",item.title_mar)
+        intent.putExtra("hinTitle",item.title_hin)
+        startActivity(intent)
     }
 
     override fun onCatSubCatItemAdapterClicked(item: SubCategoryItem) {

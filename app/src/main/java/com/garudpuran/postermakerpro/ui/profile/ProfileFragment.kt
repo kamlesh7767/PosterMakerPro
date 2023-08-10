@@ -1,5 +1,6 @@
 package com.garudpuran.postermakerpro.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +13,10 @@ import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentProfileBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.ui.authentication.PhoneActivity
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
@@ -65,6 +68,26 @@ observeUserData()
         binding.profileTransactionHistoryBtn.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToTransactionHistoryFragment()
             findNavController().navigate(action)
+        }
+
+        binding.profileSignOutBtn.setOnClickListener {
+            val builder =
+                MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle("Are you sure?")
+                    .setMessage("You will be signed out!")
+                    .setCancelable(true)
+                    .setPositiveButton(
+                        "yes"
+                    ) { _, _ ->
+                        auth.signOut()
+                        val intent = Intent(requireActivity(),PhoneActivity().javaClass)
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
+                    .setNegativeButton("no", null)
+            val alertDialog = builder.create()
+            alertDialog.show()
+
         }
     }
 

@@ -47,6 +47,28 @@ class UserViewModel @Inject constructor(
         return updateUserDetailsData
     }
 
+    //updateUserDetailsParams
+    private val updateUserDetailsDataParams = MutableLiveData<Resource<String>>()
+
+    fun updateUserDetailsParams(id:String,params: Map<String,Any>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateUserDetailsDataParams.postValue(Resource.loading(null))
+            val uc   = mainVMI.updateProfileFields(id,params)
+            Log.d("RESPONSE_DATA2",uc)
+            if(uc == ResponseStrings.SUCCESS){
+                updateUserDetailsDataParams.postValue(Resource.success(uc))
+                Log.d("RESPONSE_DATA3",uc)
+            }else{
+                updateUserDetailsDataParams.postValue(Resource.error(null))
+                Log.d("RESPONSE_DATA4",uc)
+            }
+
+        }
+    }
+    fun onObserveUpdateUserDetailsParamsData(): LiveData<Resource<String>> {
+        return updateUserDetailsDataParams
+    }
+
 
     //UpdatePersonalProfileItem
     private val updatePersonalProfileItemResponse = MutableLiveData<Resource<String>>()

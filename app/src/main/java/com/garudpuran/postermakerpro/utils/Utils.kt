@@ -3,6 +3,7 @@ package com.garudpuran.postermakerpro.utils
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -16,6 +17,7 @@ object Utils {
     fun showToast(activity: Activity, message: String){
         val toast = Toast(activity)
         toast.duration = Toast.LENGTH_SHORT
+      toast.setGravity(Gravity.TOP,0,0)
         val inflater = activity.layoutInflater
 
         val view: View = inflater.inflate(

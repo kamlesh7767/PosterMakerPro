@@ -43,6 +43,22 @@ class UserViewModelVMIIMP(private val database: FirebaseFirestore,
         }
     }
 
+    override suspend fun updateProfileFields(id: String, paramMap: Map<String, Any>): String = suspendCoroutine { continuation ->
+        try {
+            val db = database.collection(UserReferences.USER_MAIN_NODE)
+                .document(id)
+            db.set(paramMap).addOnSuccessListener {
+                continuation.resume(ResponseStrings.SUCCESS)
+            }.addOnFailureListener { e ->
+                continuation.resumeWithException(e)
+            }
+        } catch (e: FirebaseFirestoreException) {
+            continuation.resume(ResponseStrings.ERROR)
+        } catch (e: Exception) {
+            continuation.resume(ResponseStrings.ERROR)
+        }
+    }
+
     override suspend fun getUserProfile(id: String): UserPersonalProfileModel? = suspendCoroutine {
         continuation ->
         val db =  database.collection(UserReferences.USER_MAIN_NODE).document(id)

@@ -145,6 +145,9 @@ class CreatePersonalProfileFragment(private val data: UserPersonalProfileModel,p
         binding.registrationFullNameEt.setText(data.name)
         binding.registrationMobileNoEt.setText(data.mobile_number.removePrefix("+91"))
         binding.registrationEmailEt.setText(data.email)
+        if(data.profile_image_url.isNotEmpty()){
+            Glide.with(requireActivity()).load(data.profile_image_url).into(binding.userProfilePic)
+        }
     }
 
 

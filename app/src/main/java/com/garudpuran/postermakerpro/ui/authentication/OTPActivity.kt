@@ -17,9 +17,11 @@ import com.garudpuran.postermakerpro.MainActivity
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityOtpactivityBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.garudpuran.postermakerpro.utils.ResponseStrings
+import com.garudpuran.postermakerpro.utils.UserReferences
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
@@ -27,8 +29,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
+
 @AndroidEntryPoint
 class OTPActivity : AppCompatActivity() {
 
@@ -310,9 +314,21 @@ class OTPActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    val userData =
-                        UserPersonalProfileModel(task.result.user!!.uid, "", phoneNumber, "")
-                    updateUserData(userData)
+                    //  val userData = UserPersonalProfileModel(task.result.user!!.uid, "", phoneNumber, "")
+                    val uid = task.result.user!!.uid
+                    val params = mutableMapOf<String, Any>()
+                    params["uid"] = uid
+                    params["mobile_number"] = phoneNumber
+
+                    val db =
+                        FirebaseFirestore.getInstance().collection(UserReferences.USER_MAIN_NODE)
+                    db.document(uid).get().addOnSuccessListener {
+                        if (it.exists()) {
+                            sendToMain()
+                        } else {
+                            updateUserData(uid, params)
+                        }
+                    }
 
 
                 } else {
@@ -329,6 +345,7 @@ class OTPActivity : AppCompatActivity() {
 
     private fun sendToMain() {
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
 
@@ -336,13 +353,13 @@ class OTPActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
     }
 
-    private fun updateUserData(data: UserPersonalProfileModel) {
+    private fun updateUserData(id: String, data: Map<String, Any>) {
         observeUpdateUserData()
-        viewModel.updateUserDetails(data.uid, data)
+        viewModel.updateUserDetailsParams(id, data)
     }
 
     private fun observeUpdateUserData() {
-        viewModel.onObserveUpdateUserDetailsData().observe(this) {
+        viewModel.onObserveUpdateUserDetailsParamsData().observe(this) {
             when (it.status) {
                 Status.LOADING -> {
                     binding.progress.root.visibility = View.VISIBLE
@@ -354,7 +371,8 @@ class OTPActivity : AppCompatActivity() {
 
                 Status.SUCCESS -> {
                     if (it.data == ResponseStrings.SUCCESS) {
-                        Toast.makeText(this, "Authenticated Successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Authenticated Successfully", Toast.LENGTH_SHORT)
+                            .show()
                         sendToMain()
                     }
                 }

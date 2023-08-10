@@ -17,15 +17,15 @@
             android:id="@+id/action_navigation_home_to_profile_fragment"
             app:destination="@id/profile_fragment" />
         <action
-            android:id="@+id/action_navigation_home_to_editStoryFragment"
-            app:destination="@id/editStoryFragment" />
-        <action
             android:id="@+id/action_navigation_home_to_selectedSubCatItems"
             app:destination="@id/selectedSubCatItems" />
+        <action
+            android:id="@+id/action_navigation_home_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_categories"
         android:name="com.garudpuran.postermakerpro.ui.dashboard.CategoriesFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_categories" >
@@ -87,10 +87,6 @@
 
     </fragment>
     <fragment
-        android:id="@+id/editStoryFragment"
-        android:name="com.garudpuran.postermakerpro.ui.editing.EditStoryFragment"
-        android:label="EditStoryFragment" />
-    <fragment
         android:id="@+id/selectedSubCatItems"
         android:name="com.garudpuran.postermakerpro.ui.subcat.SelectedSubCatItemsFragment"
         android:label="SelectedSubCatItems" >
@@ -104,4 +100,9 @@
             android:id="@+id/action_selectedSubCatItems_to_editPostFragment"
             app:destination="@id/editPostFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.garudpuran.postermakerpro.ui.notification.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
 </navigation>
