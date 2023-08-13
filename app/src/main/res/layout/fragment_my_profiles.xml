@@ -23,6 +23,7 @@
             tools:listitem="@layout/my_profile_item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/create_prof_profile_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primary_color"

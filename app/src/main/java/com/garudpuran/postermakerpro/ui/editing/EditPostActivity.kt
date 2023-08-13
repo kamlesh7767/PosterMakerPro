@@ -59,6 +59,9 @@ class EditPostActivity : AppCompatActivity(),
 
     private var userData = UserPersonalProfileModel()
     private var selectedFramePosition = 0
+    private var isNameFontAdded = false
+    private var isAddressFontAdded = false
+    private var isMobileFontAdded = false
 
     private lateinit var userPic: CircleImageView
     private lateinit var userName: TextView
@@ -121,6 +124,12 @@ class EditPostActivity : AppCompatActivity(),
             changeUserMobileSize(value)
         }
 
+        binding.optionAddress.editUserAddressSizeSlider.addOnChangeListener { slider, value, fromUser ->
+
+            changeUserAddressSize(value)
+        }
+
+
         val nameColorSelectorGroup = PickerGroup<IntegerHSLColor>().also {
             it.registerPickers(
                 binding.optionName.nameHueSeekBar,
@@ -132,6 +141,13 @@ class EditPostActivity : AppCompatActivity(),
             it.registerPickers(
                 binding.optionContacts.mobileHueSeekBar,
                 binding.optionContacts.mobileLightnessSeekBar
+            )
+        }
+
+        val addressColorSelectorGroup = PickerGroup<IntegerHSLColor>().also {
+            it.registerPickers(
+                binding.optionAddress.addressHueSeekBar,
+                binding.optionAddress.addressLightnessSeekBar
             )
         }
 
@@ -195,6 +211,37 @@ class EditPostActivity : AppCompatActivity(),
 
         })
 
+        addressColorSelectorGroup.addListener(object : ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
+            override fun onColorChanged(
+                picker: ColorSeekBar<IntegerHSLColor>,
+                color: IntegerHSLColor,
+                value: Int
+            ) {
+                userAddress.setTextColor(color.toColorInt())
+            }
+
+            override fun onColorPicked(
+                picker: ColorSeekBar<IntegerHSLColor>,
+                color: IntegerHSLColor,
+                value: Int,
+                fromUser: Boolean
+            ) {
+
+            }
+
+            override fun onColorPicking(
+                picker: ColorSeekBar<IntegerHSLColor>,
+                color: IntegerHSLColor,
+                value: Int,
+                fromUser: Boolean
+            ) {
+
+            }
+
+
+        })
+
+
         binding.optionProfileImage.editFragOptionsProfileHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
             if(p1){
                 userPic.visibility = View.VISIBLE
@@ -206,9 +253,9 @@ class EditPostActivity : AppCompatActivity(),
 
         binding.optionAddress.editFragOptionsAddressHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
             if(p1){
-               // userPic.visibility = View.VISIBLE
+                userAddress.visibility = View.VISIBLE
             }else{
-                //userPic.visibility = View.GONE
+                userAddress.visibility = View.GONE
             }
 
         }
@@ -255,8 +302,20 @@ class EditPostActivity : AppCompatActivity(),
         userDes.textSize = size
     }
 
+    private fun changeUserAddressSize(size: Float) {
+        userAddress.textSize = size
+    }
 
 
+
+
+
+    private fun setUi(value: UserPersonalProfileModel) {
+        setOptionFrames()
+        initFrameOptions()
+        val adapterOptions = EditFragOptionsAdapter(this,this)
+        binding.editFragOptionsList.adapter = adapterOptions
+    }
     private fun observeUserData() {
         val userProfilesCache = userViewModel.getUserProfileCache()
         if (userProfilesCache.value == null) {
@@ -265,14 +324,6 @@ class EditPostActivity : AppCompatActivity(),
             setUi(userProfilesCache.value!!)
         }
     }
-
-    private fun setUi(value: UserPersonalProfileModel) {
-        setOptionFrames()
-        initFrameOptions()
-        val adapterOptions = EditFragOptionsAdapter(this,this)
-        binding.editFragOptionsList.adapter = adapterOptions
-    }
-
     private fun fetchData() {
         this.lifecycleScope.launch {
             try {
@@ -316,8 +367,9 @@ class EditPostActivity : AppCompatActivity(),
                 // Load the selected font
                 val typeface = ResourcesCompat.getFont(this@EditPostActivity, getFontResourceId(selectedFontName))
 
-                // Apply the selected font to the TextView
+
                 userName.typeface = typeface
+                isNameFontAdded = true
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -345,6 +397,35 @@ class EditPostActivity : AppCompatActivity(),
 
                 // Apply the selected font to the TextView
                 userDes.typeface = typeface
+                isMobileFontAdded = true
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun initAddressFonts(){
+        val fontNames = HomeResources.fonts()
+
+        // Create an ArrayAdapter using the font names and a default spinner layout
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fontNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Apply the adapter to the spinner
+        binding.optionAddress.fontSpinner.adapter = adapter
+
+        // Set an item selected listener for the spinner
+        binding.optionAddress.fontSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Get the selected font name
+                val selectedFontName = fontNames[position]
+
+                // Load the selected font
+                val typeface = ResourcesCompat.getFont(this@EditPostActivity, getFontResourceId(selectedFontName))
+
+                // Apply the selected font to the TextView
+                userAddress.typeface = typeface
+                isAddressFontAdded = true
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -436,7 +517,10 @@ class EditPostActivity : AppCompatActivity(),
         binding.optionName.root.visibility = View.GONE
         binding.optionAddress.root.visibility = View.GONE
         binding.optionContacts.root.visibility = View.VISIBLE
-        initMobileFonts()
+        if(!isMobileFontAdded){
+            initMobileFonts()
+        }
+
     }
 
     private fun setOptionAddress() {
@@ -446,6 +530,9 @@ class EditPostActivity : AppCompatActivity(),
         binding.optionName.root.visibility = View.GONE
         binding.optionAddress.root.visibility = View.VISIBLE
         binding.optionContacts.root.visibility = View.GONE
+        if(!isAddressFontAdded){
+            initAddressFonts()
+        }
     }
 
     private fun setOptionName() {
@@ -455,7 +542,10 @@ class EditPostActivity : AppCompatActivity(),
         binding.optionName.root.visibility = View.VISIBLE
         binding.optionAddress.root.visibility = View.GONE
         binding.optionContacts.root.visibility = View.GONE
-        initNameFonts()
+        if(!isNameFontAdded){
+            initNameFonts()
+        }
+
     }
 
     private fun setOptionIcon() {
@@ -492,8 +582,9 @@ val ady = OptionFramesRcAdapter(this,this)
             userDes = view.findViewById<TextView>(R.id.user_mobile_tv)
             userAddress = view.findViewById<TextView>(R.id.user_address_tv)
 //  downloadAndSetFont("font_text_one.ttf")
-            userDes.text = userData.mobile_number
+            userDes.text = "Mob No: "+userData.mobile_number
             userName.text = userData.name
+            userAddress.text = "Kranti Square SambhajiNagar-431003"
             Glide.with(this).load(userData.profile_image_url).into(userPic)
 
             val layoutParams = ConstraintLayout.LayoutParams(

@@ -64,8 +64,10 @@
         android:text="Mobile no: +919595559577"
         android:textColor="@color/red_two"
         android:textSize="16sp"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.37"
         app:layout_constraintStart_toStartOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView

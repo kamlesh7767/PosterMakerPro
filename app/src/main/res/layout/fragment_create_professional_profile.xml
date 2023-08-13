@@ -123,7 +123,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/registration_email_ti"
+                    android:id="@+id/registration_address_ti"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
@@ -142,12 +142,12 @@
                     app:startIconTint="@color/orange">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/registration_email_et"
+                        android:id="@+id/registration_address_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="top"
-                        android:hint="E-Mail"
+                        android:hint="Address"
                         android:inputType="textPostalAddress"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -164,7 +164,7 @@
                     android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="100dp"
-                    android:text="Save and proceed" />
+                    android:text="Create Profile" />
 
             </LinearLayout>
 

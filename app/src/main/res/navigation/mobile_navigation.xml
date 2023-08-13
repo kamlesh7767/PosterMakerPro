@@ -60,7 +60,11 @@
         android:id="@+id/myProfilesFragment"
         android:name="com.garudpuran.postermakerpro.ui.profile.MyProfilesFragment"
         android:label="fragment_my_profiles"
-        tools:layout="@layout/fragment_my_profiles" />
+        tools:layout="@layout/fragment_my_profiles" >
+        <action
+            android:id="@+id/action_myProfilesFragment_to_createProfessionalProfileFragment"
+            app:destination="@id/createProfessionalProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/transactionHistoryFragment"
         android:name="com.garudpuran.postermakerpro.ui.transactionhistory.TransactionHistoryFragment"
@@ -81,4 +85,8 @@
         android:name="com.garudpuran.postermakerpro.ui.notification.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/createProfessionalProfileFragment"
+        android:name="com.garudpuran.postermakerpro.ui.profile.CreateProfessionalProfileFragment"
+        android:label="CreateProfessionalProfileFragment" />
 </navigation>

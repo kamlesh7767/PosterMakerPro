@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
 import com.garudpuran.postermakerpro.models.CategoryItem
+import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.models.UserProfessionalProfileModel
 import com.garudpuran.postermakerpro.utils.Resource
 import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.google.firebase.firestore.auth.User
@@ -91,6 +93,27 @@ class UserViewModel @Inject constructor(
         return updatePersonalProfileItemResponse
     }
 
+    //UpdateProfessionalProfileItem
+    private val updateProfessionalProfileItemResponse = MutableLiveData<Resource<String>>()
+
+    fun updateProfessionalProfileItem(imageUri:String,item: UserProfessionalProfileModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateProfessionalProfileItemResponse.postValue(Resource.loading(null))
+            val uc   = mainVMI.updateProfessionalProfileItem(imageUri,item)
+            if(uc != null){
+                updateProfessionalProfileItemResponse.postValue(Resource.success(uc))
+
+            }else{
+                updateProfessionalProfileItemResponse.postValue(Resource.error(null))
+
+            }
+
+        }
+    }
+    fun onObserveUpdateProfessionalProfileItemResponseData(): LiveData<Resource<String>> {
+        return updateProfessionalProfileItemResponse
+    }
+
     //GetUSerDetails
     suspend fun getUserProfileAsync(id:String): Resource<UserPersonalProfileModel> {
         return withContext(Dispatchers.IO) {
@@ -113,6 +136,29 @@ class UserViewModel @Inject constructor(
     }
     fun getUserProfileCache(): LiveData<UserPersonalProfileModel> {
         return userProfileCache
+    }
+
+
+    suspend fun getAllProfessionalProfileItemsAsync(): Resource<List<UserProfessionalProfileModel>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val uc = mainVMI.getAllProfessionalProfileItemsAsync()
+                if (uc.isNotEmpty()) {
+                    Resource.success(uc)
+                } else {
+                    Resource.error(emptyList())
+                }
+            } catch (e: Exception) {
+                Resource.error(emptyList())
+            }
+        }
+    }
+    private val allProfessionalProfileItemsCache = MutableLiveData<List<UserProfessionalProfileModel>>()
+    fun setAllProfessionalProfileItemsCache(data: List<UserProfessionalProfileModel>) {
+        allProfessionalProfileItemsCache.value = data
+    }
+    fun getAllProfessionalProfileItemsCache(): LiveData<List<UserProfessionalProfileModel>> {
+        return allProfessionalProfileItemsCache
     }
 
 

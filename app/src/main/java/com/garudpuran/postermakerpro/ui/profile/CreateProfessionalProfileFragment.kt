@@ -18,6 +18,7 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentCreatePersonalProfileBinding
 import com.garudpuran.postermakerpro.databinding.FragmentCreateProfessionalProfileBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.models.UserProfessionalProfileModel
 import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.UserReferences
@@ -28,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 
-class CreateProfessionalProfileFragment(private val data: UserPersonalProfileModel,private val mListener:ProfileUpdateListener) :
+class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateListener) :
     BottomSheetDialogFragment() {
     private lateinit var _binding: FragmentCreateProfessionalProfileBinding
     private val binding get() = _binding
@@ -56,7 +57,6 @@ class CreateProfessionalProfileFragment(private val data: UserPersonalProfileMod
     ): View {
         _binding = FragmentCreateProfessionalProfileBinding.inflate(inflater, container, false)
         setAsShowed()
-        setUI()
         return binding.root
     }
 
@@ -66,28 +66,17 @@ class CreateProfessionalProfileFragment(private val data: UserPersonalProfileMod
             profilePicsContract.launch("image/*")
         }
 
-        binding.removeSelectedImageResetBtn.setOnClickListener {
-            imageSelected = false
-            if (data.profile_image_url.isNotEmpty()) {
-                Glide.with(requireActivity()).load(data.profile_image_url)
-                    .into(binding.userProfilePic)
-            } else {
-                binding.userProfilePic.setImageResource(R.drawable.naruto)
-            }
-            binding.removeSelectedImageResetBtn.visibility = View.GONE
-        }
-
         binding.updateUserProfileBtn.setOnClickListener {
             val userName = binding.registrationFullNameEt.text?.trim().toString()
             val mobile = binding.registrationMobileNoEt.text?.trim().toString()
-            val userEmail = binding.registrationEmailEt.text?.trim().toString()
+            val userAddress = binding.registrationAddressEt.text?.trim().toString()
 
             if (userName.isNotEmpty()) {
                 if (mobile.isNotEmpty()) {
-                    if (userEmail.isNotEmpty()) {
-                        createUserModel(userName, mobile, userEmail)
+                    if (userAddress.isNotEmpty()) {
+                        createUserModel(userName, mobile, userAddress)
                     } else {
-                        Utils.showToast(requireActivity(), "Enter your email id.")
+                        Utils.showToast(requireActivity(), "Enter your address.")
                     }
                 } else {
                     Utils.showToast(requireActivity(), "Enter your mobile number.")
@@ -100,54 +89,48 @@ class CreateProfessionalProfileFragment(private val data: UserPersonalProfileMod
         }
     }
 
-    private fun createUserModel(userName: String, mobile: String, userEmail: String) {
+    private fun createUserModel(userName: String, mobile: String, userAddress: String) {
         observeResponse()
-        val profile = UserPersonalProfileModel(data.uid,userName,data.profile_image_url,mobile,userEmail,data.likedPosts)
+        val profile = UserProfessionalProfileModel("", userName, mobile, userAddress, "")
         if (imageSelected) {
-            userViewModel.updatePersonalProfileItem(imageUri.toString(),profile)
+            userViewModel.updateProfessionalProfileItem(imageUri.toString(), profile)
         } else {
-            userViewModel.updatePersonalProfileItem("",profile)
+            Utils.showToast(requireActivity(), "Please select logo image")
         }
 
 
     }
 
     private fun observeResponse() {
-        userViewModel.onObserveUpdatePersonalProfileItemResponseData().observe(requireActivity()) {
-            when (it.status) {
-                Status.LOADING -> {
-                    binding.progress.root.visibility = View.VISIBLE
-                }
+        userViewModel.onObserveUpdateProfessionalProfileItemResponseData()
+            .observe(requireActivity()) {
+                when (it.status) {
+                    Status.LOADING -> {
+                        binding.progress.root.visibility = View.VISIBLE
+                    }
 
-                Status.ERROR -> {
-                    Utils.showToast(requireActivity(),"Error!")
-                    binding.updateUserProfileBtn.visibility = View.VISIBLE
-                    binding.progress.root.visibility = View.GONE
-                }
-
-                Status.SUCCESS -> {
-                    if (it.data == ResponseStrings.SUCCESS) {
-                        binding.progress.root.visibility = View.GONE
-                        Utils.showToast(requireActivity(),"Updated Successfully")
+                    Status.ERROR -> {
+                        Utils.showToast(requireActivity(), "Error!")
                         binding.updateUserProfileBtn.visibility = View.VISIBLE
-                        mListener.onProfileUpdated()
-                        dismiss()
+                        binding.progress.root.visibility = View.GONE
+                    }
+
+                    Status.SUCCESS -> {
+                        if (it.data == ResponseStrings.SUCCESS) {
+                            binding.progress.root.visibility = View.GONE
+                            Utils.showToast(requireActivity(), "Updated Successfully")
+                            binding.updateUserProfileBtn.visibility = View.VISIBLE
+                            mListener.onProfileUpdated()
+                            dismiss()
+                        }
+                    }
+
+                    Status.SESSION_EXPIRE -> {
+
                     }
                 }
-
-                Status.SESSION_EXPIRE -> {
-
-                }
             }
-        }
     }
-
-    private fun setUI() {
-        binding.registrationFullNameEt.setText(data.name)
-        binding.registrationMobileNoEt.setText(data.mobile_number.removePrefix("+91"))
-        binding.registrationEmailEt.setText(data.email)
-    }
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -171,7 +154,8 @@ class CreateProfessionalProfileFragment(private val data: UserPersonalProfileMod
         )
         editor.apply()
     }
-    interface ProfileUpdateListener {
+
+    interface ProProfileUpdateListener {
         fun onProfileUpdated()
 
     }
