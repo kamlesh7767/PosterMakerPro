@@ -19,5 +19,7 @@
     
     <color name="grade_two_peach">#FF3535</color>
     <color name="grade_one_orange">#FFA235</color>
+    <color name="gold_accent">#FFCE00</color>
+    <color name="brown_accent">#840000</color>
 
 </resources>

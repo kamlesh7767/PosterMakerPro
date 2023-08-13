@@ -11,12 +11,12 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/edit_options_frame_rc_item_iv"
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="150dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image"
+        android:scaleType="fitXY"
+        android:src="@drawable/pmp_image_placeholder"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Dp" />

@@ -100,7 +100,7 @@ class EditStoryActivity : AppCompatActivity() {
 
     private fun setUi(value: UserPersonalProfileModel) {
 
-        val frameList = listOf<Int>(R.layout.frame_1, R.layout.frame_2)
+        val frameList = listOf<Int>(R.layout.story_frame_one, R.layout.story_frame_two)
         val adapter = ViewPagerAdapter(value,frameList)
         binding.viewpager.adapter = adapter
     }

@@ -20,10 +20,10 @@ class HomeResources {
         }
 
         fun fullFrames():List<Int>{
-            return listOf(R.layout.frame_0,R.layout.frame_1,R.layout.frame_2)
+            return listOf(R.layout.frame_0,R.layout.frame_1,R.layout.frame_2,R.layout.frame_3,R.layout.frame_4,R.layout.frame_5,R.layout.frame_6)
         }
         fun miniFrames():List<Int>{
-            return listOf(R.layout.frame_0,R.layout.frame_1,R.layout.frame_2)
+            return listOf(R.layout.frame_0,R.drawable.mini_frame_one,R.drawable.mini_frame_two,R.drawable.mini_frame_three,R.drawable.mini_frame_four,R.drawable.mini_frame_five,R.drawable.mini_frame_six)
         }
 
         fun fonts():List<String>{

@@ -11,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -61,12 +63,20 @@ class EditPostActivity : AppCompatActivity(),
     private lateinit var userPic: CircleImageView
     private lateinit var userName: TextView
     private lateinit var userDes: TextView
+    private lateinit var userAddress: TextView
 
     private val TAG = "EditPostActivity"
 
     fun isEmptyFrameSelected():Boolean{
         return selectedFramePosition == 0
     }
+
+    private val profilePicsContract =
+        registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if (it != null) {
+               userPic.setImageURI(it)
+            }
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditPostBinding.inflate(layoutInflater)
@@ -82,6 +92,18 @@ class EditPostActivity : AppCompatActivity(),
         binding.downloadBtn.setOnClickListener {
             val combinedBitmap = viewToBitmap(binding.fullPostLayout)
             saveImageToGallery(combinedBitmap!!, "combined_image.jpg")
+        }
+
+        binding.optionProfileImage.editFragOptionsProfileChangeImageBtn.setOnClickListener {
+            profilePicsContract.launch("image/*")
+        }
+
+        binding.optionProfileImage.editFragOptionsProfileResetImageBtn.setOnClickListener {
+            Glide
+                .with(this)
+                .load(userData.profile_image_url)
+                .centerCrop()
+                .into(userPic)
         }
 
         binding.optionProfileImage.editProfileImageSizeSlider.addOnChangeListener { slider, value, fromUser ->
@@ -172,6 +194,42 @@ class EditPostActivity : AppCompatActivity(),
 
 
         })
+
+        binding.optionProfileImage.editFragOptionsProfileHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
+            if(p1){
+                userPic.visibility = View.VISIBLE
+            }else{
+                userPic.visibility = View.GONE
+            }
+
+        }
+
+        binding.optionAddress.editFragOptionsAddressHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
+            if(p1){
+               // userPic.visibility = View.VISIBLE
+            }else{
+                //userPic.visibility = View.GONE
+            }
+
+        }
+
+        binding.optionContacts.editFragOptionsMobileHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
+            if(p1){
+                 userDes.visibility = View.VISIBLE
+            }else{
+                userDes.visibility = View.GONE
+            }
+
+        }
+
+        binding.optionName.editFragOptionsNameHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
+            if(p1){
+                userName.visibility = View.VISIBLE
+            }else{
+                userName.visibility = View.GONE
+            }
+
+        }
 
     }
 
@@ -429,9 +487,10 @@ val ady = OptionFramesRcAdapter(this,this)
         binding.fullFrameLayout.removeAllViews()
         if(position!=0){
             val view = LayoutInflater.from(this).inflate( HomeResources.fullFrames()[position], null)
-            userPic = view.findViewById<CircleImageView>(R.id.story_user_profile_pic)
-            userName = view.findViewById<TextView>(R.id.story_user_name_tv)
-            userDes = view.findViewById<TextView>(R.id.story_user_desp_tv)
+            userPic = view.findViewById<CircleImageView>(R.id.user_profile_pic_iv)
+            userName = view.findViewById<TextView>(R.id.user_name_tv)
+            userDes = view.findViewById<TextView>(R.id.user_mobile_tv)
+            userAddress = view.findViewById<TextView>(R.id.user_address_tv)
 //  downloadAndSetFont("font_text_one.ttf")
             userDes.text = userData.mobile_number
             userName.text = userData.name

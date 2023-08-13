@@ -43,6 +43,11 @@ class OptionFramesRcAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.positionTv.text = position.toString()
+        if(position!=0){
+            holder.imageView.setImageDrawable(AppCompatResources.getDrawable(context,dataset[position]))
+        }
+
+
 
         if (position == selectedPosition) {
             holder.parentL.background =
