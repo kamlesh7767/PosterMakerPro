@@ -2,6 +2,7 @@ package com.garudpuran.postermakerpro.ui.subcat
 
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.garudpuran.postermakerpro.databinding.FragmentSelectedSubCatItemsBinding
 import com.garudpuran.postermakerpro.models.PostItem
+import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.ui.home.HomeViewModel
 import com.garudpuran.postermakerpro.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,8 +78,12 @@ class SelectedSubCatItemsFragment : Fragment() ,AllSubCategoryPostsAdapter.AllSu
     }
 
     override fun onAllSubCategoryPostsAdapterListItemClicked(item: PostItem) {
-val action = SelectedSubCatItemsFragmentDirections.actionSelectedSubCatItemsToEditPostFragment(item.categoryId,item.subCategoryId,item.Id!!,item.image_url!!)
-    findNavController().navigate(action)
+        val intent = Intent(requireActivity(), EditPostActivity::class.java)
+        intent.putExtra("imageUrl",item.image_url)
+        intent.putExtra("engTitle",item.title_eng)
+        intent.putExtra("marTitle",item.title_mar)
+        intent.putExtra("hinTitle",item.title_hin)
+        startActivity(intent)
     }
 
 

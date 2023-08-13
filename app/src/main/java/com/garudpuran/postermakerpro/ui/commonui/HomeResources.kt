@@ -18,6 +18,18 @@ class HomeResources {
                 HomeCategoryModel(8, R.string.cat_other_title,R.drawable.other)
             )
         }
+
+        fun fullFrames():List<Int>{
+            return listOf(R.layout.frame_0,R.layout.frame_1,R.layout.frame_2)
+        }
+        fun miniFrames():List<Int>{
+            return listOf(R.layout.frame_0,R.layout.frame_1,R.layout.frame_2)
+        }
+
+        fun fonts():List<String>{
+            return listOf("roboto_light","roboto_regular","roboto_semibold")
+        }
+
     }
 
 }

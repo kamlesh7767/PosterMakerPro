@@ -37,7 +37,9 @@
         <activity
             android:name=".ui.editing.EditStoryActivity"
             android:exported="true" />
-
+        <activity
+            android:name=".ui.editing.EditPostActivity"
+            android:exported="true" />
 
     </application>
 

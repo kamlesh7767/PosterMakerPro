@@ -17,6 +17,7 @@ import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.ui.editing.EditStoryActivity
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
@@ -202,13 +203,12 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
     }
 
     override fun onHomeFeedCheckOutBtnClicked(item: FeedItem) {
-        val action = HomeFragmentDirections.actionNavigationHomeToEditPostFragment(
-            item.categoryId,
-            item.subCategoryId,
-            item.Id!!,
-            item.image_url
-        )
-        findNavController().navigate(action)
+      val intent = Intent(requireActivity(),EditPostActivity::class.java)
+        intent.putExtra("imageUrl",item.image_url)
+        intent.putExtra("engTitle",item.title_eng)
+        intent.putExtra("marTitle",item.title_mar)
+        intent.putExtra("hinTitle",item.title_hin)
+        startActivity(intent)
     }
 
     override fun onHomeFeedImageLiked(item: FeedItem) {

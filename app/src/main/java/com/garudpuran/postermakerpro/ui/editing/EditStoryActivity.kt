@@ -11,10 +11,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
+import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditStoryBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.editing.adapter.StoryFrameRcAdapter
+import com.garudpuran.postermakerpro.ui.editing.adapter.ViewPagerAdapter
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -96,8 +99,10 @@ class EditStoryActivity : AppCompatActivity() {
     }
 
     private fun setUi(value: UserPersonalProfileModel) {
-        val adapter = StoryFrameRcAdapter(value)
-        binding.storyFrameRcAdapter.adapter = adapter
+
+        val frameList = listOf<Int>(R.layout.frame_1, R.layout.frame_2)
+        val adapter = ViewPagerAdapter(value,frameList)
+        binding.viewpager.adapter = adapter
     }
 
     private fun fetchData() {

@@ -11,9 +11,6 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_navigation_home_to_editPostFragment"
-            app:destination="@id/editPostFragment" />
-        <action
             android:id="@+id/action_navigation_home_to_profile_fragment"
             app:destination="@id/profile_fragment" />
         <action
@@ -69,24 +66,6 @@
         android:name="com.garudpuran.postermakerpro.ui.transactionhistory.TransactionHistoryFragment"
         android:label="TransactionHistoryFragment" />
     <fragment
-        android:id="@+id/editPostFragment"
-        android:name="com.garudpuran.postermakerpro.ui.editing.EditPostFragment"
-        android:label="EditPostFragment" >
-        <argument
-            android:name="catId"
-            app:argType="string" />
-        <argument
-            android:name="subCatId"
-            app:argType="string" />
-        <argument
-            android:name="postId"
-            app:argType="string" />
-        <argument
-            android:name="imageUrl"
-            app:argType="string" />
-
-    </fragment>
-    <fragment
         android:id="@+id/selectedSubCatItems"
         android:name="com.garudpuran.postermakerpro.ui.subcat.SelectedSubCatItemsFragment"
         android:label="SelectedSubCatItems" >
@@ -96,9 +75,6 @@
         <argument
             android:name="subCatId"
             app:argType="string" />
-        <action
-            android:id="@+id/action_selectedSubCatItems_to_editPostFragment"
-            app:destination="@id/editPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
