@@ -17,9 +17,10 @@ object EditBrandsFragFirebaseReferences{
     const val BRANDS_BRANCH = "brands"
     const val BRANDS_IMAGES = "brandImages"
 }
-object EditOffersFragFirebaseReferences{
-    const val OFFERS_BRANCH = "offers"
-    const val OFFERS_IMAGES = "offerImages"
+object RechargeStatuses{
+    const val RCG_ACTIVE = "active"
+    const val RCG_PENDING = "pending"
+    const val RCG_EXPIRED = "expired"
 }
 object SearchReferences{
     const val SEARCH_BRANCH = "searchProducts"
@@ -32,8 +33,8 @@ object AdsFirebaseReferences{
     const val AD_TWO = "adTwo"
 }
 
-object TrendingReferences{
-    const val TRENDING_PRODUCTS = "trendingProducts"
+object AppPrefConstants{
+    const val LANGUAGE_PREF = "language_pref"
 }
 object UserReferences{
     const val USER_MAIN_NODE = "users"
@@ -56,6 +57,7 @@ object FirebaseStorageConstants{
     const val ROOT_DIRECTORY = "app"
     const val MAIN_USER_DP = "userImages"
     const val MAIN_FEED_NODE = "feed"
+    const val MAIN_NODE_RCG = "recharges"
     const val MAIN_TRENDING_POSTS_NODE = "trending_posts"
     const val MAIN_CATEGORIES_NODE = "categories"
     const val MAIN_SUB_CATEGORIES_NODE = "sub_categories"

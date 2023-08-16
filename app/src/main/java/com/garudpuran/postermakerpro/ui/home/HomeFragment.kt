@@ -1,10 +1,15 @@
 package com.garudpuran.postermakerpro.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +25,8 @@ import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.ui.editing.EditStoryActivity
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
+import com.garudpuran.postermakerpro.ui.profile.SelectProfessionalProfileBottomSheetFrag
+import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.UserReferences
@@ -32,7 +39,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
+class HomeFragment : Fragment(),
     HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,
     HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,
     HomeFeedRcAdapter.HomeFeedClickListener,
@@ -47,13 +54,40 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
     private var userModel = UserPersonalProfileModel()
     private var feedItemList = listOf<FeedItem>()
     private var catSubCatList = listOf<Pair<CategoryItem, List<SubCategoryItem>>>()
-
+    private var doubleBackToExitPressedOnce = false
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    requireActivity().finish()
+                    return
+                }
+                doubleBackToExitPressedOnce = true
+                Toast.makeText(
+                    requireActivity(),
+                    "Please click BACK again to exit",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                    doubleBackToExitPressedOnce = false
+                }, 2000)
+            }
+
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
+
         observeData()
         return binding.root
     }
@@ -70,7 +104,6 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
             val action = HomeFragmentDirections.actionNavigationHomeToNotificationFragment()
             findNavController().navigate(action)
         }
-
 
     }
 
@@ -161,7 +194,7 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
     }
 
     private fun initTrendingRcView(data: List<TrendingStoriesItemModel>) {
-        val adapter = HomeTrendingStoriesAdapter(this)
+        val adapter = HomeTrendingStoriesAdapter(this,getSelectedLanguage())
         adapter.setData(data)
         binding.rcTrending.adapter = adapter
     }
@@ -171,8 +204,13 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
         dataSetSecond: List<Pair<CategoryItem, List<SubCategoryItem>>>,
         likedPosts: ArrayList<String>
     ) {
-        val adapter = HomeFeedRcAdapter(this, data, dataSetSecond, likedPosts, this)
+        val adapter = HomeFeedRcAdapter(this, data, dataSetSecond, likedPosts, this,getSelectedLanguage())
         binding.feedRcHome.adapter = adapter
+    }
+
+    private fun getSelectedLanguage(): String {
+        val authPref = requireActivity().getSharedPreferences(AppPrefConstants.LANGUAGE_PREF, Context.MODE_PRIVATE)
+        return authPref.getString("language", "")!!
     }
 
 
@@ -191,10 +229,6 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
         _binding = null
     }
 
-    override fun onHomeCatClicked(item: HomeCategoryModel) {
-
-    }
-
     override fun onHomeTodayOrUpcomingClicked(item: HomeCategoryModel) {
     }
 
@@ -203,12 +237,8 @@ class HomeFragment : Fragment(), HomeCategoryAdapter.HomeCategoryGridListener,
     }
 
     override fun onHomeFeedCheckOutBtnClicked(item: FeedItem) {
-      val intent = Intent(requireActivity(),EditPostActivity::class.java)
-        intent.putExtra("imageUrl",item.image_url)
-        intent.putExtra("engTitle",item.title_eng)
-        intent.putExtra("marTitle",item.title_mar)
-        intent.putExtra("hinTitle",item.title_hin)
-        startActivity(intent)
+        val frag = SelectProfessionalProfileBottomSheetFrag(item.image_url,item.title_eng,item.title_mar,item.title_hin)
+        frag.show(childFragmentManager,"SelectProfessionalProfileBottomSheetFrag")
     }
 
     override fun onHomeFeedImageLiked(item: FeedItem) {

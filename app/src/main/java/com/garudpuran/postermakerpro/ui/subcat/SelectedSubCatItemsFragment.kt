@@ -2,6 +2,7 @@ package com.garudpuran.postermakerpro.ui.subcat
 
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,8 @@ import com.garudpuran.postermakerpro.databinding.FragmentSelectedSubCatItemsBind
 import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.ui.home.HomeViewModel
+import com.garudpuran.postermakerpro.ui.profile.SelectProfessionalProfileBottomSheetFrag
+import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,18 +75,19 @@ class SelectedSubCatItemsFragment : Fragment() ,AllSubCategoryPostsAdapter.AllSu
     }
 
     private fun initRcView(data: List<PostItem>) {
-        val adapter = AllSubCategoryPostsAdapter(this)
+        val adapter = AllSubCategoryPostsAdapter(this,getSelectedLanguage())
         adapter.setData(data)
         binding.allPostsRc .adapter = adapter
     }
 
+    private fun getSelectedLanguage(): String {
+        val authPref = requireContext().getSharedPreferences(AppPrefConstants.LANGUAGE_PREF, Context.MODE_PRIVATE)
+        return authPref.getString("language", "")!!
+    }
+
     override fun onAllSubCategoryPostsAdapterListItemClicked(item: PostItem) {
-        val intent = Intent(requireActivity(), EditPostActivity::class.java)
-        intent.putExtra("imageUrl",item.image_url)
-        intent.putExtra("engTitle",item.title_eng)
-        intent.putExtra("marTitle",item.title_mar)
-        intent.putExtra("hinTitle",item.title_hin)
-        startActivity(intent)
+        val frag = SelectProfessionalProfileBottomSheetFrag(item.image_url,item.title_eng,item.title_mar,item.title_hin)
+        frag.show(childFragmentManager,"SelectProfessionalProfileBottomSheetFrag")
     }
 
 

@@ -371,7 +371,7 @@ class OTPActivity : AppCompatActivity() {
 
                 Status.SUCCESS -> {
                     if (it.data == ResponseStrings.SUCCESS) {
-                        Toast.makeText(this, "Authenticated Successfully", Toast.LENGTH_SHORT)
+                        Toast.makeText(this, getString(R.string.authenticated_successfully), Toast.LENGTH_SHORT)
                             .show()
                         sendToMain()
                     }

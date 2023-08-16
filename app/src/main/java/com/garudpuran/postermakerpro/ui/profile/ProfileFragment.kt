@@ -1,19 +1,28 @@
 package com.garudpuran.postermakerpro.ui.profile
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.garudpuran.postermakerpro.PaymentActivity
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentProfileBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.authentication.PhoneActivity
+import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFragment
+import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,15 +31,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateListener {
+class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateListener,LanguageSelectionBottomSheetFragment.LanguageSelectionListener {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val userViewModel: UserViewModel by viewModels()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
     private var userData = UserPersonalProfileModel()
 
     override fun onCreateView(
@@ -39,6 +49,18 @@ class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateLi
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+              startActivity(requireActivity().intent)
+            }
+
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
+
 observeUserData()
         return binding.root
     }
@@ -60,6 +82,20 @@ observeUserData()
             findNavController().navigate(action)
         }
 
+        binding.profileBack.setOnClickListener {
+            startActivity(requireActivity().intent)
+        }
+
+        binding.profileLanguageBtn.setOnClickListener {
+            val action = LanguageSelectionBottomSheetFragment(false,this)
+            action.show(childFragmentManager,"")
+        }
+
+        binding.profileRechargeBtn.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToRechargesFragment()
+            findNavController().navigate(action)
+        }
+
         binding.profileMyProfileBtn.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToMyProfilesFragment()
             findNavController().navigate(action)
@@ -73,18 +109,18 @@ observeUserData()
         binding.profileSignOutBtn.setOnClickListener {
             val builder =
                 MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle("Are you sure?")
-                    .setMessage("You will be signed out!")
+                    .setTitle(getString(R.string.are_you_sure))
+                    .setMessage(getString(R.string.you_will_be_signed_out))
                     .setCancelable(true)
                     .setPositiveButton(
-                        "yes"
+                        getString(R.string.yes)
                     ) { _, _ ->
                         auth.signOut()
                         val intent = Intent(requireActivity(),PhoneActivity().javaClass)
                         startActivity(intent)
                         requireActivity().finish()
                     }
-                    .setNegativeButton("no", null)
+                    .setNegativeButton(getString(R.string.no), null)
             val alertDialog = builder.create()
             alertDialog.show()
 
@@ -117,6 +153,8 @@ observeUserData()
         if(userImgrl.isNotEmpty()){
             Glide.with(requireActivity()).load(userImgrl).placeholder(R.drawable.naruto).into(binding.profileFragUserPicCiv)
         }
+
+        binding.profileWalletPointsTv.text = data.points.toString()
 
         if(userMobile.isNotEmpty()){
             binding.profileUserMobileTv.text = userMobile
@@ -163,5 +201,45 @@ observeUserData()
 
     override fun onProfileUpdated() {
        fetchData()
+    }
+
+    override fun onLanguageSelected(language: Int) {
+        var lang: String
+        if(language == 1){
+            setAppLocale(requireActivity(),"en")
+            lang = "en"
+        }
+        else if(language == 2){
+            setAppLocale(requireActivity(),"hi")
+            lang = "hi"
+        }
+
+        else{
+            setAppLocale(requireActivity(),"mr")
+            lang = "mr"
+        }
+
+        val sharedPreference = requireActivity().getSharedPreferences(
+            AppPrefConstants.LANGUAGE_PREF,
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreference.edit()
+        editor.putString("language", lang)
+        editor.apply()
+        requireActivity().finish()
+        startActivity(requireActivity().intent)
+    }
+
+    private fun setAppLocale(context: Context, languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.locale = locale
+
+        context.resources.updateConfiguration(
+            config,
+            context.resources.displayMetrics
+        )
     }
 }

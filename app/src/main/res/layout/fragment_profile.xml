@@ -31,7 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_semibold"
-            android:text="Akshay Kumar"
             android:textColor="@color/font_grey"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_semibold"
-            android:text="9595559577"
             android:textColor="@color/grey_font"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,60 +66,30 @@
                 android:paddingBottom="5dp">
 
                 <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:fontFamily="@font/roboto_semibold"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="51"
-                    android:textColor="@color/font_grey"
-                    android:textSize="50sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/profile_days_left_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:fontFamily="@font/roboto_semibold"
-                    android:text="Days\nLeft"
-                    android:textColor="@color/font_grey"
-                    android:textSize="18sp"
-                    android:gravity="start"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView4"
-                    app:layout_constraintStart_toEndOf="@+id/textView4"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
                     android:id="@+id/profile_wallet_points_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_semibold"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:layout_marginEnd="10dp"
-                    android:text="13"
                     android:textColor="@color/orange"
                     android:textSize="50sp"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_wallet_points_left_tv"
+                    app:layout_constraintEnd_toStartOf="@+id/profile_transaction_history_btn"
+                    app:layout_constraintStart_toStartOf="@+id/profile_transaction_history_btn"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/profile_wallet_points_left_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginEnd="30dp"
                     android:fontFamily="@font/roboto_semibold"
-                    android:text="Wallet\nPoints"
+                    android:gravity="start"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/wallet_npoints"
                     android:textColor="@color/font_grey"
                     android:textSize="18sp"
-                    android:gravity="start"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView4"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/profile_wallet_points_tv"
+                    app:layout_constraintStart_toEndOf="@+id/profile_wallet_points_tv"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
@@ -133,7 +101,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/profile_wallet_points_tv" />
 
                 <LinearLayout
-                    android:id="@+id/linearLayout2"
+                    android:id="@+id/profile_recharge_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="8dp"
@@ -164,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Recharge"
+                        android:text="@string/recharge"
                         android:textColor="@color/grey_font"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -180,7 +148,7 @@
                     android:layout_marginVertical="8dp"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toStartOf="@+id/profile_refer_earn_btn"
-                    app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+                    app:layout_constraintStart_toEndOf="@+id/profile_recharge_btn"
                     app:layout_constraintTop_toBottomOf="@+id/partition_view">
 
                     <LinearLayout
@@ -205,7 +173,7 @@
                         android:layout_gravity="center"
                         android:fontFamily="@font/roboto_semibold"
                         android:gravity="center"
-                        android:text="Transaction\nHistory"
+                        android:text="@string/transaction_nhistory"
                         android:textColor="@color/grey_font"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -245,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Refer &amp; Earn"
+                        android:text="@string/refer_amp_earn"
                         android:textColor="@color/grey_font"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -291,7 +259,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="My Profile"
+                        android:text="@string/my_profile"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -302,7 +270,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="View/Edit Business Profiles"
+                        android:text="@string/view_edit_business_profiles"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -330,6 +298,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginVertical="8dp"
+                    android:visibility="gone"
                     android:background="@drawable/outlined_rounded_grey_stroke_bg"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="8dp"
@@ -342,7 +311,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="My Posts"
+                        android:text="@string/my_posts"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -353,7 +322,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="View Your Saved Posts"
+                        android:text="@string/view_your_saved_posts"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -376,7 +345,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout5"
+                    android:id="@+id/profile_language_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
@@ -389,26 +358,27 @@
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
 
                     <TextView
-                        android:id="@+id/profile_privacy_title_tv"
+                        android:id="@+id/profile_language_btn_title_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Privacy Policy"
+                        android:text="@string/language_settings"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/profile_privacy_des_tv"
+                        android:id="@+id/profile_language_btn_des_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Our Terms and Conditions"
+                        android:text="@string/change_app_language"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
-                        app:layout_constraintStart_toStartOf="@+id/profile_privacy_title_tv"
-                        app:layout_constraintTop_toBottomOf="@+id/profile_privacy_title_tv" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/profile_language_btn_title_tv"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_language_btn_title_tv" />
 
 
                     <ImageView
@@ -426,6 +396,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_contact_us_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
@@ -435,14 +406,14 @@
                     android:paddingVertical="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+                    app:layout_constraintTop_toBottomOf="@+id/profile_language_btn">
 
                     <TextView
                         android:id="@+id/profile_contact_us_title_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Contact Us"
+                        android:text="@string/contact_us"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -453,12 +424,63 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Contact Our Team"
+                        android:text="@string/contact_our_team"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/profile_contact_us_title_tv"
                         app:layout_constraintTop_toBottomOf="@+id/profile_contact_us_title_tv" />
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/baseline_arrow_forward_ios_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/primary_color" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_privacy_policy_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="@drawable/outlined_rounded_grey_stroke_bg"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_contact_us_btn">
+
+                    <TextView
+                        android:id="@+id/profile_privacy_policy_title_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_semibold"
+                        android:text="@string/privacy_policy"
+                        android:textColor="@color/font_grey"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/profile_privacy_policy_des_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/view_our_privacy_policy"
+                        android:textColor="@color/font_grey"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/profile_privacy_policy_title_tv"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_privacy_policy_title_tv" />
 
 
                     <ImageView
@@ -486,14 +508,14 @@
                     android:paddingVertical="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+                    app:layout_constraintTop_toBottomOf="@+id/profile_privacy_policy_btn">
 
                     <TextView
                         android:id="@+id/profile_sign_out_title_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Sign Out"
+                        android:text="@string/sign_out"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -504,7 +526,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Sign Out From This Account"
+                        android:text="@string/sign_out_from_this_account"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -543,7 +565,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Delete Account"
+                        android:text="@string/delete_account"
                         android:textColor="@color/font_grey"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -554,7 +576,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Erase All of Your Data"
+                        android:text="@string/erase_all_of_your_data"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -585,7 +607,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/profile_back"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_margin="20dp"
@@ -603,12 +625,12 @@
         android:gravity="center"
         android:layout_margin="10dp"
         android:paddingHorizontal="10dp"
-        android:text="Edit Profile"
+        android:text="@string/edit_profile"
         android:textColor="@color/primary_color"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_back"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="@+id/profile_back"
         app:drawableTint="@color/primary_color"
        />
 
@@ -617,7 +639,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/naruto"
+        android:src="@drawable/pmp_image_placeholder"
         app:civ_border_color="@color/white"
         app:civ_border_width="6dp"
         app:civ_border_overlay="true"

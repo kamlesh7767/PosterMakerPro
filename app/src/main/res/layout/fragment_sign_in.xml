@@ -27,7 +27,7 @@
           android:layout_marginHorizontal="20dp"
           android:fontFamily="@font/roboto_semibold"
           android:layout_marginTop="10dp"
-          android:text="Welcome"
+          android:text="@string/welcome"
           android:textColor="@color/primary_color"
           android:textSize="40sp"
           app:layout_constraintTop_toBottomOf="@+id/imageView"
@@ -39,7 +39,7 @@
           android:layout_height="wrap_content"
           android:layout_marginHorizontal="20dp"
           android:fontFamily="@font/roboto_semibold"
-          android:text="Everything is an imposing and advanced file finder that has been."
+          android:text="@string/welcome_note"
           android:layout_marginTop="10dp"
           android:textColor="@color/primary_color"
           android:textSize="18sp"
@@ -69,7 +69,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/outlined_primary_rounded_bg"
-              android:hint="Enter Mobile No" />
+              android:hint="@string/enter_mobile_no" />
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -90,7 +90,7 @@
           android:id="@+id/textView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Or"
+          android:text="@string/or"
           android:textColor="@android:color/darker_gray"
           android:textSize="20sp"
           android:layout_marginTop="40dp"

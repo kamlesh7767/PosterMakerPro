@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentMyProfilesBinding
 import com.garudpuran.postermakerpro.models.UserProfessionalProfileModel
 import com.garudpuran.postermakerpro.ui.authentication.PhoneActivity
@@ -74,6 +75,7 @@ observeUserData()
                 // Check results and proceed
                 val allUserDataSuccess = userDataResults.all { it.status == Status.SUCCESS }
                 if (allUserDataSuccess) {
+                    userViewModel.setAllProfessionalProfileItemsCache(userDataResults[0].data!!)
                     setUi(userDataResults[0].data!!)
                 } else {
                     // Handle errors
@@ -94,18 +96,18 @@ val adapter = ProfileItemsAdapter(this)
 
         val builder =
             MaterialAlertDialogBuilder(requireActivity())
-                .setTitle("Are you sure?")
-                .setMessage("Profile will be deleted!")
+                .setTitle(getString(R.string.are_you_sure))
+                .setMessage(getString(R.string.profile_will_be_deleted))
                 .setCancelable(true)
                 .setPositiveButton(
-                    "yes"
+                    getString(R.string.yes)
                 ) { _, _ ->
                    FirebaseFirestore.getInstance().collection(UserReferences.USER_MAIN_NODE).document(auth.uid!!).collection(UserReferences.USER_PROFESSIONAL_PROFILES).document(item.id!!).delete().addOnSuccessListener {
-                        Utils.showToast(requireActivity(),"Profile Deleted")
+                        Utils.showToast(requireActivity(),getString(R.string.profile_deleted))
                         fetchData()
                     }
                 }
-                .setNegativeButton("no", null)
+                .setNegativeButton(getString(R.string.no), null)
         val alertDialog = builder.create()
         alertDialog.show()
     }

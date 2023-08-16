@@ -1,31 +1,35 @@
 package com.garudpuran.postermakerpro.ui.authentication
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.garudpuran.postermakerpro.MainActivity
+import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityPhoneBinding
+import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFragment
+import com.garudpuran.postermakerpro.utils.AppPrefConstants
+import com.garudpuran.postermakerpro.utils.Utils
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
-class PhoneActivity : AppCompatActivity() {
-
-
+class PhoneActivity : AppCompatActivity(){
     private lateinit var auth : FirebaseAuth
     private lateinit var number : String
     private lateinit var binding: ActivityPhoneBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhoneBinding.inflate(layoutInflater)
+        setAppLocale(this,getSelectedLanguage())
         setContentView(binding.root)
-
-
         init()
         binding.proceedBtn.setOnClickListener {
             number = binding.loginMobileNoEt.text?.trim().toString()
@@ -43,25 +47,45 @@ class PhoneActivity : AppCompatActivity() {
                     PhoneAuthProvider.verifyPhoneNumber(options)
 
                 }else{
-                    Toast.makeText(this , "Please Enter correct Number" , Toast.LENGTH_SHORT).show()
+                    Utils.showToast(this,getString(R.string.enter_10_digit_mobile_no))
                 }
             }else{
-                Toast.makeText(this , "Please Enter Number" , Toast.LENGTH_SHORT).show()
+                Utils.showToast(this,getString(R.string.enter_10_digit_mobile_no))
 
             }
         }
+    }
+
+    private fun getSelectedLanguage(): String {
+        val authPref = this.getSharedPreferences(AppPrefConstants.LANGUAGE_PREF, Context.MODE_PRIVATE)
+        return authPref.getString("language", "")!!
+    }
+
+    private fun setAppLocale(context: Context, languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.locale = locale
+
+        context.resources.updateConfiguration(
+            config,
+            context.resources.displayMetrics
+        )
     }
 
     private fun init(){
         auth = FirebaseAuth.getInstance()
     }
 
+
+
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this , "Authenticate Successfully" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this , getString(R.string.authenticated_successfully) , Toast.LENGTH_SHORT).show()
                     sendToMain()
                 } else {
                     // Sign in failed, display a message and update the UI
@@ -115,11 +139,14 @@ class PhoneActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onStart() {
         super.onStart()
-        if (auth.currentUser != null){
+        if (FirebaseAuth.getInstance().currentUser != null){
             startActivity(Intent(this , MainActivity::class.java))
+            finish()
         }
     }
+
+
+
 }

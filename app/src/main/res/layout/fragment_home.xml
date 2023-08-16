@@ -53,7 +53,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginStart="10dp"
-                    android:src="@drawable/naruto"
+                    android:src="@drawable/pmp_image_placeholder"
                     android:layout_marginTop="10dp"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dp"
@@ -87,7 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Welcome"
+                        android:text="@string/welcome"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -96,7 +96,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_semibold"
-                        android:text="Doglaman Kaptan"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -109,7 +108,7 @@
                     android:background="@drawable/outlined_primary_rounded_bg"
                     android:elevation="5dp"
                     android:gravity="start"
-                    android:hint="search designs here..."
+                    android:hint="@string/search_designs_here"
                     android:inputType="textShortMessage"
                     android:paddingVertical="10dp"
                     android:paddingStart="10dp"

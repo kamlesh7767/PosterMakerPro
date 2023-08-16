@@ -13,7 +13,7 @@ import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.ui.home.HomeFeedCatSubCatItemAdapter
 
 
-class CategoriesAdapter(private val datasetSecond:List<Pair<CategoryItem,List<SubCategoryItem>>>,private val mListener: HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener) :
+class CategoriesAdapter(private val datasetSecond:List<Pair<CategoryItem,List<SubCategoryItem>>>,private val mListener: HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener,private val language:String) :
     RecyclerView.Adapter<CategoriesAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -44,8 +44,15 @@ class CategoriesAdapter(private val datasetSecond:List<Pair<CategoryItem,List<Su
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val item2 = datasetSecond[position]
-            holder.catSubCatItemTitleTv.text = item2.first.title_eng
-            val adapter = HomeFeedCatSubCatItemAdapter(item2.second,mListener)
+
+        when(language){
+        "en"->    holder.catSubCatItemTitleTv.text = item2.first.title_eng
+        "mr"->    holder.catSubCatItemTitleTv.text = item2.first.title_mar
+        "hi"->    holder.catSubCatItemTitleTv.text = item2.first.title_hin
+        }
+
+
+            val adapter = HomeFeedCatSubCatItemAdapter(item2.second,mListener,language)
             holder.rcView.adapter = adapter
 
 

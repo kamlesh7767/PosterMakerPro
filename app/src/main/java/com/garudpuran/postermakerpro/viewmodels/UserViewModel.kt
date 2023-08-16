@@ -9,6 +9,7 @@ import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
 import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
+import com.garudpuran.postermakerpro.models.RechargeItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
@@ -34,13 +35,11 @@ class UserViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             updateUserDetailsData.postValue(Resource.loading(null))
             val uc   = mainVMI.updateProfile(id,userModel)
-            Log.d("RESPONSE_DATA2",uc)
             if(uc == ResponseStrings.SUCCESS){
                 updateUserDetailsData.postValue(Resource.success(uc))
-                Log.d("RESPONSE_DATA3",uc)
             }else{
                 updateUserDetailsData.postValue(Resource.error(null))
-                Log.d("RESPONSE_DATA4",uc)
+
             }
 
         }
@@ -159,6 +158,31 @@ class UserViewModel @Inject constructor(
     }
     fun getAllProfessionalProfileItemsCache(): LiveData<List<UserProfessionalProfileModel>> {
         return allProfessionalProfileItemsCache
+    }
+
+
+    //GetUSerDetails
+    suspend fun getRechargeItemAsync(id:String): Resource<RechargeItem> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val uc = mainVMI.getRechargeItem(id)
+                if (uc!= null) {
+                    Resource.success(uc)
+                } else {
+                    Resource.error(null)
+                }
+            } catch (e: Exception) {
+                Resource.error(null)
+            }
+        }
+    }
+
+    private val getRechargeItemAsyncCache = MutableLiveData<RechargeItem>()
+    fun setRechargeItemAsyncCache(data: RechargeItem) {
+        getRechargeItemAsyncCache.value = data
+    }
+    fun getRechargeItemAsyncCache(): LiveData<RechargeItem> {
+        return getRechargeItemAsyncCache
     }
 
 

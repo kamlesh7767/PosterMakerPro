@@ -7,11 +7,10 @@
     android:background="@color/grey_light"
     tools:context=".ui.custom.CustomFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Coming Soon.."
+        android:text="@string/coming_soon"
         android:textColor="@color/primary_color"
         android:textSize="20sp"
         android:fontFamily="@font/roboto_semibold"

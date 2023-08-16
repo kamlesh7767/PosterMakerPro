@@ -17,7 +17,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
-            android:src="@drawable/naruto"
+            android:src="@drawable/pmp_image_placeholder"
             app:civ_border_color="@color/orange"
             app:civ_border_width="2dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_semibold"
-                android:text="Doglaman Kaptan"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -47,7 +46,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_semibold"
-                android:text="Doglaman Kaptan"
                 android:textColor="@color/font_grey"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -120,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
-            android:text="Like"
+            android:text="@string/like"
             android:textSize="14sp"
             android:layout_marginVertical="10dp"
             android:layout_marginStart="40dp"
@@ -139,7 +137,7 @@
             android:fontFamily="@font/roboto_semibold"
             android:gravity="center"
             android:paddingHorizontal="10dp"
-            android:text="Check This Poster"
+            android:text="@string/check_this_poster"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"

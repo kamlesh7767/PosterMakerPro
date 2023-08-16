@@ -53,9 +53,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:value="18"
-        android:valueFrom="10"
-        android:valueTo="30"
+        android:value="14"
+        android:valueFrom="0"
+        android:valueTo="28"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
         tools:layout_editor_absoluteX="20dp" />
 

@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_profile_fragment_to_transactionHistoryFragment"
             app:destination="@id/transactionHistoryFragment" />
+        <action
+            android:id="@+id/action_profile_fragment_to_rechargesFragment"
+            app:destination="@id/rechargesFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_customFragment"
@@ -89,4 +92,9 @@
         android:id="@+id/createProfessionalProfileFragment"
         android:name="com.garudpuran.postermakerpro.ui.profile.CreateProfessionalProfileFragment"
         android:label="CreateProfessionalProfileFragment" />
+    <fragment
+        android:id="@+id/rechargesFragment"
+        android:name="com.garudpuran.postermakerpro.ui.recharge.RechargesFragment"
+        android:label="fragment_recharges"
+        tools:layout="@layout/fragment_recharges" />
 </navigation>

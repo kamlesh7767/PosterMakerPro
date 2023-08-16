@@ -20,37 +20,46 @@
 
         <LinearLayout
             android:id="@+id/linearLayout6"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="4dp"
+            android:layout_marginEnd="80dp"
+            android:layout_marginStart="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.37"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/user_name_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_semibold"
-                android:text="@string/placeholder_poster_pro_mar"
-                android:gravity="center"
+                android:singleLine="true"
                 android:layout_gravity="center"
+                android:autoSizeMaxTextSize="35sp"
+                android:autoSizeMinTextSize="16sp"
+                android:autoSizeStepGranularity="2sp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@string/app_name"
                 android:textColor="@color/red_two"
-                android:textSize="25sp" />
+                android:textSize="20sp"
+                />
 
             <TextView
                 android:id="@+id/user_address_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_semibold"
+                android:fontFamily="@font/roboto_regular"
                 android:gravity="center"
+                android:singleLine="true"
+                android:autoSizeMaxTextSize="35sp"
+                android:autoSizeMinTextSize="16sp"
+                android:autoSizeStepGranularity="2sp"
                 android:layout_gravity="center"
                 android:text="Your Business Address"
                 android:textColor="@color/red_two"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
 
@@ -58,23 +67,25 @@
 
     <TextView
         android:id="@+id/user_mobile_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_semibold"
+        android:fontFamily="@font/roboto_regular"
         android:text="Mobile no: +919595559577"
         android:textColor="@color/red_two"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:gravity="center"
+        android:singleLine="true"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="50dp"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.37"
         app:layout_constraintStart_toStartOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_profile_pic_iv"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/naruto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/pmp_image_placeholder"
         app:civ_border_color="@color/gold_accent"
         app:civ_border_width="5dp"
         android:scaleType="centerCrop"

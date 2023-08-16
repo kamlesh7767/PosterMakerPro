@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     tools:context=".ui.profile.CreatePersonalProfileFragment">
 
@@ -28,7 +28,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:paddingHorizontal="15dp"
@@ -45,7 +45,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:elevation="30dp"
-                    android:text="Business Profile"
+                    android:text="@string/business_profile"
                     android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/top_logo_title_iv" />
@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="top"
-                        android:hint="Business Name"
+                        android:hint="@string/business_name_hint"
                         android:inputType="textPersonName"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -115,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="top"
-                        android:hint="Contact Number"
+                        android:hint="@string/contact_number_hint"
                         android:inputType="phone"
                         android:maxLength="10"
                         android:textColor="@color/black"
@@ -138,7 +138,7 @@
                     app:boxStrokeWidthFocused="3dp"
                     app:errorEnabled="true"
                     app:hintTextColor="@color/orange"
-                    app:startIconDrawable="@drawable/email"
+                    app:startIconDrawable="@drawable/baseline_location_on_24"
                     app:startIconTint="@color/orange">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -147,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="top"
-                        android:hint="Address"
+                        android:hint="@string/address_hint"
                         android:inputType="textPostalAddress"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -158,13 +158,14 @@
                     android:layout_height="50dp"
                     android:elevation="5dp"
                     android:paddingHorizontal="20dp"
-                    android:background="@drawable/btn_disabled"
+                    android:background="@drawable/btn_enabled"
                     android:layout_gravity="center_horizontal"
                     android:drawableTint="@color/primary_color"
                     android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
                     android:layout_marginTop="20dp"
+                    android:textColor="@color/white"
                     android:layout_marginBottom="100dp"
-                    android:text="Create Profile" />
+                    android:text="@string/create_profile" />
 
             </LinearLayout>
 
@@ -178,7 +179,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/naruto"
+        android:src="@drawable/pmp_image_placeholder"
         app:civ_border_color="@color/white"
         app:civ_border_overlay="true"
         app:civ_border_width="6dp"

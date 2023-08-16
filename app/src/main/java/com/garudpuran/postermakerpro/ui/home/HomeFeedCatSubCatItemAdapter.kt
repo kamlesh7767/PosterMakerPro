@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 
-class HomeFeedCatSubCatItemAdapter(private val dataset: List<SubCategoryItem>,private val mListener:CatSubCatItemAdapterListener) :RecyclerView.Adapter<HomeFeedCatSubCatItemAdapter.ItemViewHolder>() {
+class HomeFeedCatSubCatItemAdapter(private val dataset: List<SubCategoryItem>,private val mListener:CatSubCatItemAdapterListener,private val language:String) :RecyclerView.Adapter<HomeFeedCatSubCatItemAdapter.ItemViewHolder>() {
 
 
     class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {
@@ -31,7 +31,14 @@ class HomeFeedCatSubCatItemAdapter(private val dataset: List<SubCategoryItem>,pr
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
-        holder.titleTv.text = item.title_eng
+
+        when(language){
+            "en"->     holder.titleTv.text = item.title_eng
+            "mr"->    holder.titleTv.text = item.title_mar
+            "hi"->     holder.titleTv.text = item.title_hin
+        }
+
+
         Glide
             .with(holder.itemView.context)
             .load(item.image_url)

@@ -20,9 +20,9 @@
             app:layout_constraintTop_toTopOf="parent" >
 
             <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:id="@+id/back_btn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/baseline_arrow_circle_left_24"
                 app:layout_constraintStart_toStartOf="parent"
@@ -33,24 +33,25 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto_semibold"
-                android:text="Transaction History"
+                android:text="@string/transaction_history"
                 android:textColor="@color/white"
                 android:textSize="20sp"
+
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                app:layout_constraintTop_toBottomOf="@+id/back_btn" />
 
             <TextView
                 android:id="@+id/profile_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_semibold"
-                android:text="View your subscriptions history"
+                android:text="@string/view_your_subscriptions_history"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -66,27 +67,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/appCompatSpinner"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:layout_margin="20dp"
-                android:backgroundTint="@color/primary_color"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/transaction_history_rc_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
                 android:orientation="vertical"
-                tools:listitem="@layout/transaction_item"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appCompatSpinner" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/transaction_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

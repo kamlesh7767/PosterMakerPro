@@ -12,7 +12,7 @@
         android:layout_width="100dp"
         android:layout_height="120dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/default_placeholder"
+        android:src="@drawable/pmp_image_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Dp" />
@@ -26,7 +26,6 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:text="अश्या प्रकारच्या designs साठी आजच डाउनलोड करा इन्फिकॉम ग्राफिक्स अप्प्लीकेशन"
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
         app:layout_constraintEnd_toEndOf="parent"

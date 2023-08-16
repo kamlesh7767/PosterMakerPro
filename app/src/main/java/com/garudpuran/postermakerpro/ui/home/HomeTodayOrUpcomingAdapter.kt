@@ -12,7 +12,7 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 
-class HomeTodayOrUpcomingAdapter():RecyclerView.Adapter<HomeTodayOrUpcomingAdapter.ItemViewHolder>() {
+class HomeTodayOrUpcomingAdapter(private val language:String):RecyclerView.Adapter<HomeTodayOrUpcomingAdapter.ItemViewHolder>() {
     private val dataset = ArrayList<SubCategoryItem>()
 
     class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {

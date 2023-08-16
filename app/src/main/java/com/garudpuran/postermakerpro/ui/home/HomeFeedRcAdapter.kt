@@ -17,7 +17,7 @@ import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 
 
-class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var dataset : List<FeedItem>,private val datasetSecond:List<Pair<CategoryItem,List<SubCategoryItem>>>,private var likedPosts:MutableList<String>,private val mListener2: HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener) :
+class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var dataset : List<FeedItem>,private val datasetSecond:List<Pair<CategoryItem,List<SubCategoryItem>>>,private var likedPosts:MutableList<String>,private val mListener2: HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener,private val language:String) :
     RecyclerView.Adapter<HomeFeedRcAdapter.ItemViewHolder>() {
     private val FEED_ITEM_VIEW_TYPE = 100
     private val FEED_RC_ITEM_VIEW_TYPE = 200
@@ -154,7 +154,14 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
                 .centerCrop()
                 .into(holder.itemPostImage)
 
-            holder.itemDesp.text = item.title_eng
+
+            when(language){
+                "en"->    holder.itemDesp.text = item.title_eng
+                "mr"->    holder.itemDesp.text = item.title_mar
+                "hi"->    holder.itemDesp.text = item.title_hin
+            }
+
+
             holder.itemLikeTv!!.text = "${item.likes} Likes"
 
             if (likedPosts.contains(item.image_url)) {
@@ -175,8 +182,16 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
 
         } else {
             val item2 = combinedList[position] as Pair<CategoryItem,List<SubCategoryItem>>
-            holder.catSubCatItemTitleTv.text = item2.first.title_eng
-            val adapter = HomeFeedCatSubCatItemAdapter(item2.second,mListener2)
+
+
+            when(language){
+                "en"->    holder.catSubCatItemTitleTv.text = item2.first.title_eng
+                "mr"->    holder.catSubCatItemTitleTv.text = item2.first.title_mar
+                "hi"->    holder.catSubCatItemTitleTv.text = item2.first.title_hin
+            }
+
+
+            val adapter = HomeFeedCatSubCatItemAdapter(item2.second,mListener2,language)
             holder.rcView.adapter = adapter
         }
 

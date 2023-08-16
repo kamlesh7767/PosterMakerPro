@@ -56,8 +56,6 @@ class EditPostActivity : AppCompatActivity(),
 
     private val userViewModel: UserViewModel by viewModels()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-
-    private var userData = UserPersonalProfileModel()
     private var selectedFramePosition = 0
     private var isNameFontAdded = false
     private var isAddressFontAdded = false
@@ -84,7 +82,7 @@ class EditPostActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         binding = ActivityEditPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        observeUserData()
+       setUi()
         binding.titlePostTv.text = intent.getStringExtra("engTitle")
         Glide
             .with(this)
@@ -104,7 +102,7 @@ class EditPostActivity : AppCompatActivity(),
         binding.optionProfileImage.editFragOptionsProfileResetImageBtn.setOnClickListener {
             Glide
                 .with(this)
-                .load(userData.profile_image_url)
+                .load(intent.getStringExtra("imageUrl"))
                 .centerCrop()
                 .into(userPic)
         }
@@ -310,42 +308,11 @@ class EditPostActivity : AppCompatActivity(),
 
 
 
-    private fun setUi(value: UserPersonalProfileModel) {
+    private fun setUi() {
         setOptionFrames()
         initFrameOptions()
         val adapterOptions = EditFragOptionsAdapter(this,this)
         binding.editFragOptionsList.adapter = adapterOptions
-    }
-    private fun observeUserData() {
-        val userProfilesCache = userViewModel.getUserProfileCache()
-        if (userProfilesCache.value == null) {
-            fetchData()
-        }else{
-            setUi(userProfilesCache.value!!)
-        }
-    }
-    private fun fetchData() {
-        this.lifecycleScope.launch {
-            try {
-                val trendingStoriesDeferred4 =
-                    async { userViewModel.getUserProfileAsync(auth.uid!!) }
-
-                val userDataResults = awaitAll(
-                    trendingStoriesDeferred4
-                )
-
-                // Check results and proceed
-                val allUserDataSuccess = userDataResults.all { it.status == Status.SUCCESS }
-                if (allUserDataSuccess) {
-                    userData = userDataResults[0].data!!
-                    setUi(userData)
-                } else {
-                    // Handle errors
-                }
-            } catch (e: Exception) {
-                // Handle exceptions
-            }
-        }
     }
 
     private fun initNameFonts(){
@@ -582,10 +549,10 @@ val ady = OptionFramesRcAdapter(this,this)
             userDes = view.findViewById<TextView>(R.id.user_mobile_tv)
             userAddress = view.findViewById<TextView>(R.id.user_address_tv)
 //  downloadAndSetFont("font_text_one.ttf")
-            userDes.text = "Mob No: "+userData.mobile_number
-            userName.text = userData.name
-            userAddress.text = "Kranti Square SambhajiNagar-431003"
-            Glide.with(this).load(userData.profile_image_url).into(userPic)
+            userDes.text = "Mob No: "+intent.getStringExtra("profileMobileNumber")
+            userName.text = intent.getStringExtra("profileName")
+            userAddress.text = intent.getStringExtra("profileAddress")
+            Glide.with(this).load(intent.getStringExtra("profileLogoUrl")).into(userPic)
 
             val layoutParams = ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.MATCH_PARENT,

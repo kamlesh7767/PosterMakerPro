@@ -101,7 +101,7 @@ class CreatePersonalProfileFragment(private val data: UserPersonalProfileModel,p
 
     private fun createUserModel(userName: String, mobile: String, userEmail: String) {
         observeResponse()
-        val profile = UserPersonalProfileModel(data.uid,userName,data.profile_image_url,mobile,userEmail,data.likedPosts)
+        val profile = UserPersonalProfileModel(data.uid,userName,data.profile_image_url,mobile,userEmail,data.points,data.likedPosts,data.recharges)
         if (imageSelected) {
     userViewModel.updatePersonalProfileItem(imageUri.toString(),profile)
         } else {

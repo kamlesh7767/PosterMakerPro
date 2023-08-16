@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -56,7 +57,6 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCreateProfessionalProfileBinding.inflate(inflater, container, false)
-        setAsShowed()
         return binding.root
     }
 
@@ -72,20 +72,25 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
             val userAddress = binding.registrationAddressEt.text?.trim().toString()
 
             if (userName.isNotEmpty()) {
-                if (mobile.isNotEmpty()) {
+                if (mobile.isNotEmpty()&&mobile.length==10) {
                     if (userAddress.isNotEmpty()) {
                         createUserModel(userName, mobile, userAddress)
                     } else {
-                        Utils.showToast(requireActivity(), "Enter your address.")
+                        Utils.showToast(requireActivity(), getString(R.string.enter_your_address))
                     }
                 } else {
-                    Utils.showToast(requireActivity(), "Enter your mobile number.")
+                    Utils.showToast(requireActivity(), getString(R.string.enter_your_mobile_no))
                 }
             } else {
-                Utils.showToast(requireActivity(), "Enter your name.")
+                Utils.showToast(requireActivity(), getString(R.string.enter_your_name))
             }
 
 
+        }
+
+
+        binding.registrationMobileNoEt.addTextChangedListener {
+            val ss = it?.removePrefix("+91")
         }
     }
 
@@ -95,7 +100,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
         if (imageSelected) {
             userViewModel.updateProfessionalProfileItem(imageUri.toString(), profile)
         } else {
-            Utils.showToast(requireActivity(), "Please select logo image")
+            Utils.showToast(requireActivity(), getString(R.string.please_select_logo_image))
         }
 
 
@@ -110,7 +115,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
                     }
 
                     Status.ERROR -> {
-                        Utils.showToast(requireActivity(), "Error!")
+                        Utils.showToast(requireActivity(), getString(R.string.error))
                         binding.updateUserProfileBtn.visibility = View.VISIBLE
                         binding.progress.root.visibility = View.GONE
                     }
@@ -118,7 +123,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
                     Status.SUCCESS -> {
                         if (it.data == ResponseStrings.SUCCESS) {
                             binding.progress.root.visibility = View.GONE
-                            Utils.showToast(requireActivity(), "Updated Successfully")
+                            Utils.showToast(requireActivity(), getString(R.string.updated_successfully))
                             binding.updateUserProfileBtn.visibility = View.VISIBLE
                             mListener.onProfileUpdated()
                             dismiss()
@@ -130,29 +135,6 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
                     }
                 }
             }
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.setCancelable(true)
-        return dialog
-    }
-
-
-    private fun setAsShowed() {
-        val sharedPreference = requireContext().getSharedPreferences(
-            UserReferences.USER_PROFILE,
-            Context.MODE_PRIVATE
-        )
-        val editor = sharedPreference.edit()
-        editor.putString(
-            UserReferences.USER_PROFILE_STATUS,
-            UserReferences.USER_PROFILE_STATUS_SHOWED
-        )
-        editor.apply()
     }
 
     interface ProProfileUpdateListener {

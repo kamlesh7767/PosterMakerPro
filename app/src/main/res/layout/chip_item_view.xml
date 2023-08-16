@@ -4,7 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:text="Frames"
     android:textSize="16sp"
     android:fontFamily="@font/roboto_semibold"
     android:textColor="@color/grey_font"

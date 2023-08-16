@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="fsdfdfdfdffdf"
         android:textSize="16sp"
         android:fontFamily="@font/roboto_semibold"
         android:textColor="@color/black"

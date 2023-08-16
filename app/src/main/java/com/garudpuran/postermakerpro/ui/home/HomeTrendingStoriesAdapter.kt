@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
-import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
 import de.hdodenhof.circleimageview.CircleImageView
 
-class HomeTrendingStoriesAdapter(private val mListener:HomeTrendingStoriesAdapterListener):RecyclerView.Adapter<HomeTrendingStoriesAdapter.ItemViewHolder>() {
+class HomeTrendingStoriesAdapter(private val mListener:HomeTrendingStoriesAdapterListener,private val language:String):RecyclerView.Adapter<HomeTrendingStoriesAdapter.ItemViewHolder>() {
     private val dataset = ArrayList<TrendingStoriesItemModel>()
 
     class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {
@@ -34,7 +33,13 @@ class HomeTrendingStoriesAdapter(private val mListener:HomeTrendingStoriesAdapte
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
 
-holder.titleTv.text = item.title_eng
+        when(language){
+            "en"->    holder.titleTv.text = item.title_eng
+            "mr"->    holder.titleTv.text = item.title_mar
+            "hi"->    holder.titleTv.text = item.title_hin
+        }
+
+
         Glide
             .with(holder.itemView.context)
             .load(item.image_url)

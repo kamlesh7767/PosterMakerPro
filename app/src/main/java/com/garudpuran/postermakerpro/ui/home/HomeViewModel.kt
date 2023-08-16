@@ -8,6 +8,7 @@ import com.garudpuran.postermakerpro.data.interfaces.HomeRepo
 import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
+import com.garudpuran.postermakerpro.models.RechargeItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
@@ -117,6 +118,25 @@ class HomeViewModel @Inject constructor(
     }
     fun onObserveGetAllPostsResponseData(): LiveData<Resource<List<PostItem>>> {
         return getAllPostsResponse
+    }
+
+    //getAllRcg
+    private val getAllRcgResponse =  MutableLiveData<Resource<List<RechargeItem>>>()
+
+    fun getAllRcg() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAllRcgResponse.postValue(Resource.loading(emptyList()))
+            val uc   = mainVMI.getAllRecharges()
+            if(uc.isNotEmpty()){
+                getAllRcgResponse.postValue(Resource.success(uc))
+            }else{
+                getAllRcgResponse.postValue(Resource.error(emptyList()))
+            }
+
+        }
+    }
+    fun onObserveGetAllRcgResponseData(): LiveData<Resource<List<RechargeItem>>> {
+        return getAllRcgResponse
     }
 
 

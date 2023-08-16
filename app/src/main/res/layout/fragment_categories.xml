@@ -34,7 +34,7 @@
                     android:drawableEnd="@drawable/baseline_search_24"
                     android:elevation="5dp"
                     android:gravity="start"
-                    android:hint="search designs here..."
+                    android:hint="@string/search_designs_here"
                     android:inputType="textShortMessage"
                     android:paddingVertical="10dp"
                     android:paddingStart="10dp"

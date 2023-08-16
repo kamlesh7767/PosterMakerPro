@@ -6,7 +6,7 @@ data class UserPersonalProfileModel(
     var profile_image_url:String = "",
     var mobile_number:String = "",
     var email:String = "",
-    var likedPosts: ArrayList<String> = ArrayList<String>()
-
-
+    var points:Int = 0,
+    var likedPosts: ArrayList<String> = ArrayList(),
+    var recharges: ArrayList<SuccessfulRecharges> = ArrayList()
     )

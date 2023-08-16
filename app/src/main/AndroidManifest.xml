@@ -12,35 +12,42 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:windowSoftInputMode="adjustResize"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PosterMakerPro"
         tools:targetApi="31">
         <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.authentication.OTPActivity"
             android:exported="false" />
         <activity
             android:name=".ui.authentication.PhoneActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.authentication.AuthActivity"
             android:exported="true"/>
         <activity
-            android:name=".MainActivity"
-            android:exported="true" />
+            android:name=".ui.authentication.AuthActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing"
+            />
         <activity
             android:name=".ui.editing.EditStoryActivity"
             android:exported="true" />
         <activity
             android:name=".ui.editing.EditPostActivity"
             android:exported="true" />
-
     </application>
 
 </manifest>

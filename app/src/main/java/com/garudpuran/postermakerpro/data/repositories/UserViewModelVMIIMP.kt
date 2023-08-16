@@ -5,6 +5,7 @@ import android.util.Log
 import com.garudpuran.postermakerpro.data.interfaces.UserViewModelVMI
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
+import com.garudpuran.postermakerpro.models.RechargeItem
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.models.UserProfessionalProfileModel
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
@@ -69,6 +70,28 @@ class UserViewModelVMIIMP(private val database: FirebaseFirestore,
             db.get().addOnSuccessListener {
                 if(it.exists()){
                     val profile = it.toObject(UserPersonalProfileModel::class.java)
+                    continuation.resume(profile!!)
+                }else{
+                    continuation.resume(null)
+                }
+            }.addOnFailureListener {
+                continuation.resume(null)
+            }
+        } catch (e: FirebaseFirestoreException) {
+            continuation.resume(null)
+        } catch (e: Exception) {
+            continuation.resume(null)
+        }
+    }
+
+
+    override suspend fun getRechargeItem(id: String): RechargeItem? = suspendCoroutine {
+            continuation ->
+        val db =  database.collection(FirebaseStorageConstants.MAIN_NODE_RCG).document(id)
+        try {
+            db.get().addOnSuccessListener {
+                if(it.exists()){
+                    val profile = it.toObject(RechargeItem::class.java)
                     continuation.resume(profile!!)
                 }else{
                     continuation.resume(null)

@@ -5,6 +5,7 @@ import com.garudpuran.postermakerpro.data.interfaces.HomeRepo
 import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
+import com.garudpuran.postermakerpro.models.RechargeItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
@@ -106,6 +107,26 @@ class HomeRepoImp(private val database: FirebaseFirestore,
             db.get().addOnSuccessListener {
                 for (doc in it.documents) {
                     val data = doc.toObject(PostItem::class.java)
+                    list.add(data!!)
+                }
+                continuation.resume(list)
+            }
+        }catch (e: FirebaseFirestoreException){
+            continuation.resume(emptyList())
+        } catch (e:Exception){
+            continuation.resume(emptyList())
+        }
+
+    }
+
+    override suspend fun getAllRecharges(): List<RechargeItem>  = suspendCoroutine {
+            continuation ->
+        val db = database.collection(FirebaseStorageConstants.MAIN_NODE_RCG)
+        try {
+            val list = ArrayList<RechargeItem>()
+            db.get().addOnSuccessListener {
+                for (doc in it.documents) {
+                    val data = doc.toObject(RechargeItem::class.java)
                     list.add(data!!)
                 }
                 continuation.resume(list)
