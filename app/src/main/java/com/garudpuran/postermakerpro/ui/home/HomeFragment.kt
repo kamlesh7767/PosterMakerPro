@@ -22,7 +22,6 @@ import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
-import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.ui.editing.EditStoryActivity
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.ui.profile.SelectProfessionalProfileBottomSheetFrag
@@ -237,7 +236,7 @@ class HomeFragment : Fragment(),
     }
 
     override fun onHomeFeedCheckOutBtnClicked(item: FeedItem) {
-        val frag = SelectProfessionalProfileBottomSheetFrag(item.image_url,item.title_eng,item.title_mar,item.title_hin)
+        val frag = SelectProfessionalProfileBottomSheetFrag(item.image_url,item.title_eng,item.title_mar,item.title_hin,item.categoryId,item.subCategoryId,item.postId)
         frag.show(childFragmentManager,"SelectProfessionalProfileBottomSheetFrag")
     }
 

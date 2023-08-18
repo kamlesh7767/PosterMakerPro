@@ -10,12 +10,17 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditStoryBinding
+import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.ui.commonui.DownloadAndShareCustomDialog
 import com.garudpuran.postermakerpro.ui.editing.adapter.ViewPagerAdapter
+import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.garudpuran.postermakerpro.utils.Status
+import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +30,8 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class EditStoryActivity : AppCompatActivity() {
+class EditStoryActivity : AppCompatActivity()
+    {
     private lateinit var binding: ActivityEditStoryBinding
 
     private val userViewModel: UserViewModel by viewModels()
@@ -48,7 +54,12 @@ class EditStoryActivity : AppCompatActivity() {
 
         binding.downloadBtn.setOnClickListener {
             val combinedBitmap = viewToBitmap(binding.completeStoryLayout)
-            saveImageToGallery(combinedBitmap!!, "combined_image.jpg")
+            saveImageToGallery(combinedBitmap!!, intent.getStringExtra("engTitle")!!)
+
+        }
+
+        binding.backBtn.setOnClickListener {
+            finish()
         }
 
 
@@ -83,14 +94,14 @@ class EditStoryActivity : AppCompatActivity() {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             }
         }
-        Toast.makeText(this,"Saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show()
     }
 
     private fun observeUserData() {
         val userProfilesCache = userViewModel.getUserProfileCache()
         if (userProfilesCache.value == null) {
             fetchData()
-        }else{
+        } else {
             setUi(userProfilesCache.value!!)
         }
     }
@@ -98,7 +109,7 @@ class EditStoryActivity : AppCompatActivity() {
     private fun setUi(value: UserPersonalProfileModel) {
 
         val frameList = listOf<Int>(R.layout.story_frame_one, R.layout.story_frame_two)
-        val adapter = ViewPagerAdapter(value,frameList)
+        val adapter = ViewPagerAdapter(value, frameList)
         binding.viewpager.adapter = adapter
     }
 
@@ -125,6 +136,8 @@ class EditStoryActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
 
 }

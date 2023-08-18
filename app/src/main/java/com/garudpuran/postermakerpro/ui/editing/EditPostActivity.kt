@@ -3,24 +3,19 @@ package com.garudpuran.postermakerpro.ui.editing
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.TypefaceCompat
 import androidx.lifecycle.lifecycleScope
 import codes.side.andcolorpicker.converter.toColorInt
 import codes.side.andcolorpicker.group.PickerGroup
@@ -30,28 +25,29 @@ import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditPostBinding
+import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.ui.commonui.DownloadAndShareCustomDialog
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 import com.garudpuran.postermakerpro.ui.commonui.models.EditFragOptionsModel
 import com.garudpuran.postermakerpro.ui.editing.adapter.EditFragOptionsAdapter
 import com.garudpuran.postermakerpro.ui.editing.adapter.OptionFramesRcAdapter
+import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.IOException
 
 @AndroidEntryPoint
 class EditPostActivity : AppCompatActivity(),
     EditFragOptionsAdapter.EditOptionsListener,
-    OptionFramesRcAdapter.OptionFramesRcAdapterListener {
+    OptionFramesRcAdapter.OptionFramesRcAdapterListener,
+    DownloadAndShareCustomDialog.DownAndShareDialogListener{
     private lateinit var binding:ActivityEditPostBinding
 
     private val userViewModel: UserViewModel by viewModels()
@@ -91,8 +87,13 @@ class EditPostActivity : AppCompatActivity(),
             .into(binding.imageView)
 
         binding.downloadBtn.setOnClickListener {
-            val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-            saveImageToGallery(combinedBitmap!!, "combined_image.jpg")
+
+            val dialog = DownloadAndShareCustomDialog(this, this)
+            dialog.show(supportFragmentManager,"DownloadAndShareCustomDialog")
+            }
+
+        binding.backBtn.setOnClickListener {
+            finish()
         }
 
         binding.optionProfileImage.editFragOptionsProfileChangeImageBtn.setOnClickListener {
@@ -399,37 +400,7 @@ class EditPostActivity : AppCompatActivity(),
         }
     }
 
-    private fun viewToBitmap(view: View): Bitmap? {
-        var createBitmap: Bitmap? = null
-        view.isDrawingCacheEnabled = true
-        view.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
-        return try {
-            createBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-            view.draw(Canvas(createBitmap))
-            createBitmap
-        } catch (e: Exception) {
-            createBitmap
-        } finally {
-            view.destroyDrawingCache()
-        }
-    }
 
-    private fun saveImageToGallery(bitmap: Bitmap, fileName: String) {
-        val resolver = this.contentResolver
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/")
-        }
-
-        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        uri?.let {
-            resolver.openOutputStream(it)?.use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            }
-        }
-        Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show()
-    }
 
     override fun onEditOptionsClicked(item: EditFragOptionsModel) {
         if(selectedFramePosition == 0){
@@ -564,7 +535,148 @@ val ady = OptionFramesRcAdapter(this,this)
 
     }
 
+    private fun shareAndDownloadPost(value: UserPersonalProfileModel) {
 
+        if(!isEmptyFrameSelected()){
+            val feedItem =
+                FeedItem(
+                    null,
+                    intent.getStringExtra("engTitle")!!,
+                    intent.getStringExtra("marTitle")!!,
+                    intent.getStringExtra("hinTitle")!!,
+                    "",false,intent.getStringExtra("postCatId")!!,intent.getStringExtra("postSubCatId")!!,intent.getStringExtra("postId")!!,1,0,true,value
+                )
+
+            val combinedBitmap = viewToBitmap(binding.fullPostLayout)
+            saveImageToGalleryAndUpload(combinedBitmap!!,  intent.getStringExtra("engTitle")!!,feedItem)
+        }
+    }
+
+    private fun viewToBitmap(view: View): Bitmap? {
+        var createBitmap: Bitmap? = null
+        view.isDrawingCacheEnabled = true
+        view.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
+        return try {
+            createBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            view.draw(Canvas(createBitmap))
+            createBitmap
+        } catch (e: Exception) {
+            createBitmap
+        } finally {
+            view.destroyDrawingCache()
+        }
+    }
+
+    private fun saveImageToGallery(bitmap: Bitmap, fileName: String,) {
+        val resolver = this.contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/")
+        }
+
+        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        uri?.let {
+            resolver.openOutputStream(it)?.use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
+        }
+        Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun saveImageToGalleryAndUpload(bitmap: Bitmap, fileName: String,feedItem: FeedItem) {
+        val resolver = this.contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/")
+        }
+
+        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        uri?.let {
+            resolver.openOutputStream(it)?.use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
+        }
+        observeResponse()
+        userViewModel.uploadFeedPostItem(uri!!,feedItem)
+
+    }
+
+
+
+    private fun observeResponse() {
+        userViewModel.onObserveUploadFeedPostItemResponseData().observe(this){
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.progress.root.visibility = View.VISIBLE
+                }
+
+                Status.ERROR -> {
+                    Utils.showToast(this,"Error!")
+                    binding.downloadBtn.visibility = View.VISIBLE
+                }
+
+                Status.SUCCESS -> {
+                    if (it.data == ResponseStrings.SUCCESS) {
+                        binding.progress.root.visibility = View.GONE
+                        val combinedBitmap = viewToBitmap(binding.fullPostLayout)
+                        saveImageToGallery(combinedBitmap!!,intent.getStringExtra("engTitle")!! )
+                        binding.downloadBtn.visibility = View.VISIBLE
+                        Toast.makeText(this,"Uploaded Successfully",Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                Status.SESSION_EXPIRE -> {
+
+                }
+            }
+        }
+    }
+
+    private fun fetchData() {
+        this.lifecycleScope.launch {
+            try {
+                val trendingStoriesDeferred4 =
+                    async { userViewModel.getUserProfileAsync(auth.uid!!) }
+
+                val userDataResults = awaitAll(
+                    trendingStoriesDeferred4
+                )
+
+                // Check results and proceed
+                val allUserDataSuccess = userDataResults.all { it.status == Status.SUCCESS }
+                if (allUserDataSuccess) {
+                  val  userData = userDataResults[0].data!!
+                   shareAndDownloadPost(userData)
+                } else {
+                    // Handle errors
+                }
+            } catch (e: Exception) {
+                // Handle exceptions
+            }
+        }
+    }
+
+    private fun observeUserData() {
+        val userProfilesCache = userViewModel.getUserProfileCache()
+        if (userProfilesCache.value == null) {
+            fetchData()
+        }else{
+shareAndDownloadPost(userProfilesCache.value!!)
+        }
+    }
+
+    override fun onJustDownClicked() {
+        val combinedBitmap = viewToBitmap(binding.fullPostLayout)
+        saveImageToGallery(combinedBitmap!!,  intent.getStringExtra("engTitle")!!)
+
+    }
+
+    override fun onShareItClicked() {
+      observeUserData()
+    }
 
 
 }

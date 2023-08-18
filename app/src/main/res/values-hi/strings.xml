@@ -4,7 +4,7 @@
     <string name="frame_1">फ्रेम 1</string>
     <string name="frame_2">फ्रेम 2</string>
     <string name="frame_3">फ्रेम 3</string>
-    <string name="share">साझा करें</string>
+    <string name="share">"शेअर करे "</string>
     <string name="verify">सत्यापित करें</string>
     <string name="didn_t_receive_otp">OTP प्राप्त नहीं हुआ?</string>
     <string name="resend_otp_timer">OTP को %s सेकंड में पुनः भेजें</string>
@@ -16,9 +16,9 @@
     <string name="full_name_hint">पूरा नाम</string>
     <string name="e_mail_hint">ई-मेल</string>
     <string name="like">पसंद</string>
-    <string name="check_this_poster">इस पोस्टर की जाँच करें</string>
+    <string name="check_this_poster">"यह पोस्टर देखें "</string>
     <string name="search_designs_here">यहाँ डिज़ाइन खोजें...</string>
-    <string name="save_and_proceed">सहेजें और आगे बढ़ें</string>
+    <string name="save_and_proceed">"सेव्ह करें और आगे बढे "</string>
     <string name="business_profile">व्यापारिक प्रोफ़ाइल</string>
     <string name="business_name_hint">व्यापार का नाम</string>
     <string name="contact_number_hint">संपर्क नंबर</string>
@@ -32,7 +32,7 @@
     <string name="my_profile">मेरी प्रोफ़ाइल</string>
     <string name="view_edit_business_profiles">व्यापारिक प्रोफ़ाइल देखें/संपादित करें</string>
     <string name="my_posts">मेरी पोस्ट्स</string>
-    <string name="view_your_saved_posts">आपकी सहेजी हुई पोस्ट्स देखें</string>
+    <string name="view_your_saved_posts">"आपकी सेव्हड पोस्ट्स देखें "</string>
     <string name="privacy_policy">गोपनीयता नीति</string>
     <string name="our_terms_and_conditions">हमारे नियम और शर्तें</string>
     <string name="contact_us">हमसे संपर्क करें</string>
@@ -72,7 +72,7 @@
     <string name="apply">चयन लागू करें</string>
     <string name="enter_otp">OTP डालें</string>
     <string name="title_home">होम</string>
-    <string name="title_dashboard">श्रेणियाँ</string>
+    <string name="title_dashboard">" कॅटेगरीज् "</string>
     <string name="title_profile">प्रोफाइल</string>
     <string name="custom_nav_title">कस्टम</string>
 
@@ -83,7 +83,7 @@
     <string name="enter_your_name">अपना नाम दर्ज करें</string>
     <string name="language_settings">भाषा सेटिंग्स</string>
     <string name="change_app_language">ऐप भाषा बदलें</string>
-
+    <string name="address_hint">" पता"</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.garudpuran.postermakerpro.data.interfaces
 
+import android.net.Uri
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.models.RechargeItem
@@ -11,7 +12,7 @@ interface UserViewModelVMI {
     suspend fun updateProfileFields(id: String, paramMap:Map<String,Any>):String
     suspend fun getUserProfile(id: String):UserPersonalProfileModel?
     suspend fun getRechargeItem(id: String):RechargeItem?
-
+    suspend fun uploadFeedPostItem(imageUri: Uri?, item: FeedItem):String?
     suspend fun updatePersonalProfileItem(imageUri: String, item: UserPersonalProfileModel):String?
     suspend fun updateProfessionalProfileItem(imageUri: String, item: UserProfessionalProfileModel):String?
 

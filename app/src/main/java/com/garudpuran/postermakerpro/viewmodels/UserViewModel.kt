@@ -1,5 +1,6 @@
 package com.garudpuran.postermakerpro.viewmodels
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -46,6 +47,28 @@ class UserViewModel @Inject constructor(
     }
     fun onObserveUpdateUserDetailsData(): LiveData<Resource<String>> {
         return updateUserDetailsData
+    }
+
+
+    //uploadFeedPostItem
+    private val uploadFeedPostItemResponse = MutableLiveData<Resource<String>>()
+
+    fun uploadFeedPostItem(imageUri: Uri?, item:FeedItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            uploadFeedPostItemResponse.postValue(Resource.loading(null))
+            val uc   = mainVMI.uploadFeedPostItem(imageUri,item)
+            if(uc != null){
+                uploadFeedPostItemResponse.postValue(Resource.success(uc))
+
+            }else{
+                uploadFeedPostItemResponse.postValue(Resource.error(null))
+
+            }
+
+        }
+    }
+    fun onObserveUploadFeedPostItemResponseData(): LiveData<Resource<String>> {
+        return uploadFeedPostItemResponse
     }
 
     //updateUserDetailsParams

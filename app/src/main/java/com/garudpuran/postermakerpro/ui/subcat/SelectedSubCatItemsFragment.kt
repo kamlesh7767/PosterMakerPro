@@ -3,7 +3,6 @@ package com.garudpuran.postermakerpro.ui.subcat
 
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,11 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.garudpuran.postermakerpro.databinding.FragmentSelectedSubCatItemsBinding
 import com.garudpuran.postermakerpro.models.PostItem
-import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.ui.home.HomeViewModel
 import com.garudpuran.postermakerpro.ui.profile.SelectProfessionalProfileBottomSheetFrag
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
@@ -86,7 +83,15 @@ class SelectedSubCatItemsFragment : Fragment() ,AllSubCategoryPostsAdapter.AllSu
     }
 
     override fun onAllSubCategoryPostsAdapterListItemClicked(item: PostItem) {
-        val frag = SelectProfessionalProfileBottomSheetFrag(item.image_url,item.title_eng,item.title_mar,item.title_hin)
+        val frag = SelectProfessionalProfileBottomSheetFrag(
+            item.image_url,
+            item.title_eng,
+            item.title_mar,
+            item.title_hin,
+            item.categoryId,
+            item.subCategoryId,
+            item.Id!!
+        )
         frag.show(childFragmentManager,"SelectProfessionalProfileBottomSheetFrag")
     }
 

@@ -63,6 +63,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:paddingBottom="5dp">
 
                 <TextView
@@ -549,6 +550,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
@@ -597,6 +599,16 @@
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/profile_banner_ad_v"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:adSize="BANNER"
+                    app:adUnitId="@string/profile_ad_unit_id"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

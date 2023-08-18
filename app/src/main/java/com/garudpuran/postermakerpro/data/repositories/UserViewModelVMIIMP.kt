@@ -106,6 +106,41 @@ class UserViewModelVMIIMP(private val database: FirebaseFirestore,
         }
     }
 
+
+    override suspend fun uploadFeedPostItem(imageUri: Uri?,item: FeedItem): String? {
+        try {
+            val uri: Uri = withContext(Dispatchers.IO) {
+                val title = imageUri!!.lastPathSegment + System.currentTimeMillis().toString()
+                storageReference.child(FirebaseStorageConstants.MAIN_FEED_NODE).child(title)
+                    .putFile(imageUri)
+                    .await()
+                    .storage
+                    .downloadUrl
+                    .await()
+            }
+            val ctd = suspendCoroutine { ff ->
+
+                val db = database.collection(FirebaseStorageConstants.MAIN_FEED_NODE)
+                val key = db.document().id
+                item.Id = key
+                item.image_url = uri.toString()
+                db.document(key).set(item)
+                    .addOnSuccessListener {
+                        ff.resume(ResponseStrings.SUCCESS)
+                    }.addOnFailureListener {
+                        ff.resume(ResponseStrings.ERROR)
+                    }
+
+            }
+            return ctd
+
+        } catch (e: FirebaseFirestoreException) {
+            return null
+        } catch (e: Exception) {
+            return null
+        }
+    }
+
     override suspend fun updatePersonalProfileItem(imageUri: String, item: UserPersonalProfileModel):String? {
         try {
             var uri: String

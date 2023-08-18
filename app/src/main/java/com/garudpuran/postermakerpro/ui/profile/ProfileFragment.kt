@@ -1,22 +1,19 @@
 package com.garudpuran.postermakerpro.ui.profile
 
+import android.adservices.common.AdData
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.garudpuran.postermakerpro.PaymentActivity
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentProfileBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
@@ -25,6 +22,11 @@ import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFra
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdSize.BANNER
+import com.google.android.gms.ads.AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +34,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.util.Locale
+
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateListener,LanguageSelectionBottomSheetFragment.LanguageSelectionListener {
@@ -62,7 +65,14 @@ class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateLi
         )
 
 observeUserData()
+
+        showAd()
         return binding.root
+    }
+
+    private fun showAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.profileBannerAdV.loadAd(adRequest)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

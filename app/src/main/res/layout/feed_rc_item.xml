@@ -37,6 +37,7 @@
                 android:id="@+id/feed_item_user_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Poster Maker Pro"
                 android:fontFamily="@font/roboto_semibold"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -50,27 +51,18 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-
-        <FrameLayout
-            android:id="@+id/feed_item_post_pic_fl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feed_item_user_profile_pic" >
             <ImageView
                 android:id="@+id/feed_item_post_pic"
-                android:layout_width="match_parent"
-                android:layout_height="370dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="8dp"
-                android:scaleType="fitCenter"
+                android:scaleType="fitXY"
                 app:layout_constraintDimensionRatio="1:1"
                 android:src="@drawable/kamlaekadashi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/feed_item_user_profile_pic" />
 
-        </FrameLayout>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/feed_like_anv"
@@ -83,10 +75,10 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="false"
             app:lottie_speed="1.5"
-            app:layout_constraintBottom_toBottomOf="@+id/feed_item_post_pic_fl"
-            app:layout_constraintEnd_toEndOf="@+id/feed_item_post_pic_fl"
-            app:layout_constraintStart_toStartOf="@+id/feed_item_post_pic_fl"
-            app:layout_constraintTop_toTopOf="@+id/feed_item_post_pic_fl" />
+            app:layout_constraintBottom_toBottomOf="@+id/feed_item_post_pic"
+            app:layout_constraintEnd_toEndOf="@+id/feed_item_post_pic"
+            app:layout_constraintStart_toStartOf="@+id/feed_item_post_pic"
+            app:layout_constraintTop_toTopOf="@+id/feed_item_post_pic" />
 
 
         <ImageView
@@ -124,7 +116,7 @@
             android:layout_marginStart="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feed_item_post_pic_fl" />
+            app:layout_constraintTop_toBottomOf="@+id/feed_item_post_pic" />
 
         <TextView
             android:id="@+id/feed_checkout_button"
@@ -142,7 +134,7 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feed_item_post_pic_fl" />
+            app:layout_constraintTop_toBottomOf="@+id/feed_item_post_pic" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

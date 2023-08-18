@@ -4,7 +4,7 @@
     <string name="frame_1">फ्रेम 1</string>
     <string name="frame_2">फ्रेम 2</string>
     <string name="frame_3">फ्रेम 3</string>
-    <string name="share">सामायिक करा</string>
+    <string name="share">"शेअर करा "</string>
     <string name="verify">सत्यापित करा</string>
     <string name="didn_t_receive_otp">OTP प्राप्त झालेला नाही?</string>
     <string name="resend_otp_timer">%s सेकंदांत OTP पुन्हा पाठवा</string>
@@ -23,10 +23,10 @@
     <string name="business_name_hint">व्यवसायाचे नाव</string>
     <string name="contact_number_hint">संपर्क क्रमांक</string>
     <string name="create_profile">प्रोफाइल तयार करा</string>
-    <string name="coming_soon">शीघ्र आवतो..</string>
+    <string name="coming_soon">लवकरच उपलब्ध होईल</string>
     <string name="notifications">सूचना</string>
-    <string name="wallet_npoints">बटवा\nपॉइंट्स</string>
-    <string name="recharge">पुनरार्ज करा</string>
+    <string name="wallet_npoints">वॉलेट</string>
+    <string name="recharge">रिचार्ज</string>
     <string name="transaction_nhistory">लेन-देन\nइतिहास</string>
     <string name="refer_amp_earn">संदर्भित करा\nआणि कमवा</string>
     <string name="my_profile">माझी प्रोफाइल</string>
@@ -37,11 +37,11 @@
     <string name="our_terms_and_conditions">आमच्या अटी आणि अटे</string>
     <string name="contact_us">आमच्याशी संपर्क साधा</string>
     <string name="contact_our_team">आमच्या टीमशी संपर्क साधा</string>
-    <string name="view_our_privacy_policy">आमच्या गोपनीयता धोरण पहा</string>
+    <string name="view_our_privacy_policy">"आमचे गोपनीयता धोरण पहा "</string>
     <string name="sign_out">साइन आउट</string>
-    <string name="sign_out_from_this_account">ही खाते बंद करा</string>
+    <string name="sign_out_from_this_account">"येथून बाहेर पडा "</string>
     <string name="delete_account">खाते हटवा</string>
-    <string name="erase_all_of_your_data">तुमच्या सर्व डेटा विचलित केला जाईल</string>
+    <string name="erase_all_of_your_data">अकाउंट व सर्व डेटा डिलिट  केला जाईल</string>
     <string name="edit_profile">प्रोफाइल संपादित करा</string>
     <string name="refer_a_friend">मित्राला संदर्भित करा</string>
     <string name="and_you_can_earn_50_points">आणि तुम्ही 50 पॉइंट्स कमवू शकता</string>
@@ -55,7 +55,7 @@
     <string name="transaction_history">लेन-देन इतिहास</string>
     <string name="view_your_subscriptions_history">तुमच्या सदस्यतेचा इतिहास पहा</string>
     <string name="are_you_sure">तुम्हाला का खात्री आहे?</string>
-    <string name="you_will_be_signed_out">तुम्ही साइन आउट होईल!</string>
+    <string name="you_will_be_signed_out">तुम्ही साइन आउट व्हाल!</string>
     <string name="yes">हो</string>
     <string name="no">नाही</string>
     <string name="profile_will_be_deleted">प्रोफाइल हटवली जाईल!</string>
@@ -72,17 +72,18 @@
     <string name="apply">निवड लागू करा</string>
     <string name="enter_otp">OTP प्रविष्ट करा</string>
     <string name="title_home">होम</string>
-    <string name="title_dashboard">श्रेणियां</string>
+    <string name="title_dashboard">" कॅटेगरीज् "</string>
     <string name="title_profile">प्रोफाइल</string>
     <string name="custom_nav_title">कस्टम</string>
 
-    <string name="enter_correct_otp">सचित्र OTP प्रविष्ट करा</string>
+    <string name="enter_correct_otp">अचूक OTP प्रविष्ट करा</string>
     <string name="enter_10_digit_mobile_no">दहा अंकी मोबाइल क्रमांक प्रविष्ट करा</string>
     <string name="enter_your_address">तुमचा पत्ता प्रविष्ट करा</string>
     <string name="enter_your_mobile_no">तुमचा मोबाइल क्रमांक प्रविष्ट करा</string>
     <string name="enter_your_name">तुमचं नाव प्रविष्ट करा</string>
     <string name="language_settings">भाषा सेटिंग्ज</string>
     <string name="change_app_language">ऍप भाषा बदला</string>
+    <string name="address_hint">"पत्ता "</string>
 
 
 </resources>

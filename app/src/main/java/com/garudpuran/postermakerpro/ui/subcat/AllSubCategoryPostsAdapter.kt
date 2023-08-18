@@ -39,13 +39,13 @@ class AllSubCategoryPostsAdapter(private val mListener:AllSubCategoryPostsAdapte
             "hi"->     holder.titleTv.text = item.title_hin
         }
 
-        if(item.paid!!){
+       /* if(item.paid!!){
             holder.pointsTv.text = item.price+" Points"
             holder.pointsTv.visibility = View.VISIBLE
         }else{
             holder.pointsTv.text = "Free"
             holder.pointsTv.visibility = View.VISIBLE
-        }
+        }*/
 
 
         Glide.with(holder.itemView.context).load(item.image_url).into(holder.titleIv)

@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.garudpuran.postermakerpro.databinding.ActivityMainBinding
 import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFragment
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        MobileAds.initialize(this) {}
         binding = ActivityMainBinding.inflate(layoutInflater)
 
 
