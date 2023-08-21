@@ -2,8 +2,10 @@ package com.garudpuran.postermakerpro.ui.profile
 
 import android.adservices.common.AdData
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,8 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentProfileBinding
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.authentication.PhoneActivity
+import com.garudpuran.postermakerpro.ui.commonui.ContactUsDialog
+import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFragment
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
@@ -37,7 +41,8 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateListener,LanguageSelectionBottomSheetFragment.LanguageSelectionListener {
+class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateListener,LanguageSelectionBottomSheetFragment.LanguageSelectionListener,
+    ErrorDialogFrag.ErrorDialogListener, ContactUsDialog.ContactUsDialogListener {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -55,6 +60,7 @@ class ProfileFragment : Fragment(),CreatePersonalProfileFragment.ProfileUpdateLi
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
               startActivity(requireActivity().intent)
+                requireActivity().finish()
             }
 
         }
@@ -92,6 +98,18 @@ observeUserData()
             findNavController().navigate(action)
         }
 
+        binding.profilePrivacyPolicyBtn.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToWebViewFragment()
+            findNavController().navigate(action)
+        }
+
+        binding.profileContactUsBtn.setOnClickListener {
+            val errorD = ContactUsDialog(this)
+            val fragmentTransaction = childFragmentManager.beginTransaction()
+            fragmentTransaction.add(errorD, "ErrorDialogFrag")
+            fragmentTransaction.commitAllowingStateLoss()
+        }
+
         binding.profileBack.setOnClickListener {
             startActivity(requireActivity().intent)
         }
@@ -114,6 +132,10 @@ observeUserData()
         binding.profileTransactionHistoryBtn.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToTransactionHistoryFragment()
             findNavController().navigate(action)
+        }
+
+        binding.profileFragUserPicCiv.setOnClickListener {
+        binding.editPersonalProfileBtn.performClick()
         }
 
         binding.profileSignOutBtn.setOnClickListener {
@@ -197,13 +219,21 @@ observeUserData()
                     setUi(userData)
                 } else {
                     // Handle errors
+                    setErrorDialog()
                 }
             } catch (e: Exception) {
                 // Handle exceptions
+                setErrorDialog()
             }
         }
     }
 
+    private fun setErrorDialog() {
+        val errorD = ErrorDialogFrag(this)
+        val fragmentTransaction = childFragmentManager.beginTransaction()
+        fragmentTransaction.add(errorD, "ErrorDialogFrag")
+        fragmentTransaction.commitAllowingStateLoss()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -251,5 +281,25 @@ observeUserData()
             config,
             context.resources.displayMetrics
         )
+    }
+
+    override fun onDialogDismissed() {
+        startActivity(requireActivity().intent)
+    }
+
+    override fun onCreateMailClicked() {
+        composeEmail("postermakerpro@gmail.com")
+    }
+
+    private fun composeEmail(emailAddress: String) {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:")  // Specifies that this is a mailto: intent
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
+
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(intent)
+        } else {
+            // Handle the case where no email client is available
+        }
     }
 }

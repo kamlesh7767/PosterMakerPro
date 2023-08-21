@@ -4,6 +4,7 @@ import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.models.RechargeItem
+import com.garudpuran.postermakerpro.models.SearchModel
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
@@ -15,5 +16,7 @@ interface HomeRepo {
 
     suspend fun getAllPosts(catId:String,subCatId:String):List<PostItem>
     suspend fun getAllRecharges():List<RechargeItem>
+
+    suspend fun getAllSearchItems():List<SearchModel>
 
 }

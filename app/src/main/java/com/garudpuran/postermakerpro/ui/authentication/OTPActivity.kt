@@ -16,8 +16,6 @@ import androidx.core.widget.addTextChangedListener
 import com.garudpuran.postermakerpro.MainActivity
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityOtpactivityBinding
-import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
-import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.garudpuran.postermakerpro.utils.ResponseStrings
@@ -60,7 +58,7 @@ class OTPActivity : AppCompatActivity() {
         init()
         binding.progress.root.visibility = View.INVISIBLE
 
-        binding.resendOtpTv.setOnClickListener {
+        binding.resendOtpBtn.setOnClickListener {
             resendVerificationCode()
         }
 

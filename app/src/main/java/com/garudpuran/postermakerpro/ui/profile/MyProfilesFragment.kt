@@ -87,9 +87,15 @@ observeUserData()
     }
 
     private fun setUi(data: List<UserProfessionalProfileModel>) {
-val adapter = ProfileItemsAdapter(this)
-        adapter.setData(data)
-        binding.myProfileItems.adapter = adapter
+        if(data.isEmpty()){
+            binding.noProfilesLl.visibility = View.VISIBLE
+        }else{
+            val adapter = ProfileItemsAdapter(this)
+            adapter.setData(data)
+            binding.myProfileItems.adapter = adapter
+            binding.noProfilesLl.visibility = View.GONE
+        }
+
     }
 
     override fun onProfileDeleteBtnClicked(item: UserProfessionalProfileModel) {

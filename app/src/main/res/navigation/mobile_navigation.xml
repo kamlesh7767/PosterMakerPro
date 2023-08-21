@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_navigation_home_to_notificationFragment"
             app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_categories"
+            app:destination="@id/navigation_categories" />
     </fragment>
 
     <fragment
@@ -29,6 +32,10 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_selectedSubCatItems"
             app:destination="@id/selectedSubCatItems" />
+        <argument
+            android:name="catId"
+            app:argType="string"
+            android:defaultValue='' />
     </fragment>
 
     <fragment
@@ -48,6 +55,9 @@
         <action
             android:id="@+id/action_profile_fragment_to_rechargesFragment"
             app:destination="@id/rechargesFragment" />
+        <action
+            android:id="@+id/action_profile_fragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_customFragment"
@@ -97,4 +107,9 @@
         android:name="com.garudpuran.postermakerpro.ui.recharge.RechargesFragment"
         android:label="fragment_recharges"
         tools:layout="@layout/fragment_recharges" />
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.garudpuran.postermakerpro.ui.commonui.WebViewFragment"
+        android:label="fragment_web_view"
+        tools:layout="@layout/fragment_web_view" />
 </navigation>

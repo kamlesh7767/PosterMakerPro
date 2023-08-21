@@ -14,6 +14,7 @@ import com.garudpuran.postermakerpro.databinding.ActivityPhoneBinding
 import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFragment
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Utils
+import com.garudpuran.postermakerpro.utils.hideKeyboard
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -32,6 +33,7 @@ class PhoneActivity : AppCompatActivity(){
         setContentView(binding.root)
         init()
         binding.proceedBtn.setOnClickListener {
+            this.hideKeyboard()
             number = binding.loginMobileNoEt.text?.trim().toString()
             if (number.isNotEmpty()){
                 if (number.length == 10){
@@ -86,9 +88,12 @@ class PhoneActivity : AppCompatActivity(){
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this , getString(R.string.authenticated_successfully) , Toast.LENGTH_SHORT).show()
+                    binding.progress.root.visibility = View.GONE
+
                     sendToMain()
                 } else {
                     // Sign in failed, display a message and update the UI
+                    binding.progress.root.visibility = View.GONE
                     Log.d("TAG", "signInWithPhoneAuthCredential: ${task.exception.toString()}")
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
@@ -110,7 +115,7 @@ class PhoneActivity : AppCompatActivity(){
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-
+            binding.progress.root.visibility = View.GONE
             if (e is FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
                 Log.d("TAG", "onVerificationFailed: ${e.toString()}")

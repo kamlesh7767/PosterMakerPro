@@ -10,25 +10,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.FragmentHomeBinding
-import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
-import com.garudpuran.postermakerpro.models.SubCategoryItem
+import com.garudpuran.postermakerpro.models.SearchModel
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
-import com.garudpuran.postermakerpro.ui.commonui.models.HomeCategoryModel
+import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.editing.EditStoryActivity
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.ui.profile.SelectProfessionalProfileBottomSheetFrag
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
+import com.garudpuran.postermakerpro.utils.SearchItemType
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.UserReferences
+import com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,9 +43,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment(),
     HomeTrendingStoriesAdapter.HomeTrendingStoriesAdapterListener,
-    HomeTodayOrUpcomingAdapter.HomeTodayOrUpcomingAdapterListener,
     HomeFeedRcAdapter.HomeFeedClickListener,
-    HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener,CreatePersonalProfileFragment.ProfileUpdateListener {
+    CreatePersonalProfileFragment.ProfileUpdateListener,
+    SearchItemsRCAdapter.SearchItemClickListener , ErrorDialogFrag.ErrorDialogListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -51,8 +54,7 @@ class HomeFragment : Fragment(),
     private val userViewModel: UserViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
     private var userModel = UserPersonalProfileModel()
-    private var feedItemList = listOf<FeedItem>()
-    private var catSubCatList = listOf<Pair<CategoryItem, List<SubCategoryItem>>>()
+    private var searchItemList = listOf<SearchModel>()
     private var doubleBackToExitPressedOnce = false
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     override fun onCreateView(
@@ -104,22 +106,64 @@ class HomeFragment : Fragment(),
             findNavController().navigate(action)
         }
 
+        binding.homeSearchEt.addTextChangedListener {
+            val s = it?.trim()
+            if (s!!.isNotEmpty()) {
+                initSearch(s)
+            } else {
+                binding.homeSearchRc.visibility = View.GONE
+            }
+        }
+
+    }
+
+    private fun initSearch(s: CharSequence) {
+        val foundItemsList = mutableListOf<SearchModel>()
+        searchItemList.forEach { it ->
+            if (it.title_eng.lowercase()
+                    .startsWith(s.toString().lowercase()) || it.title_hin.lowercase()
+                    .startsWith(s.toString().lowercase()) || it.title_mar.lowercase()
+                    .startsWith(s.toString().lowercase())
+                && it.visibility!!
+            ) {
+                foundItemsList.add(it)
+            }
+        }
+        if (foundItemsList.isNotEmpty()) {
+            initSearchRcView(foundItemsList)
+        } else {
+            binding.homeSearchRc.visibility = View.GONE
+            foundItemsList.clear()
+        }
+
+
+    }
+
+    private fun initSearchRcView(foundItemsList: MutableList<SearchModel>) {
+        val adapter = SearchItemsRCAdapter(this, getSelectedLanguage())
+        adapter.setItems(foundItemsList)
+        binding.homeSearchRc.adapter = adapter
+        binding.homeSearchRc.visibility = View.VISIBLE
     }
 
     private fun observeData() {
         // Check cache first
         val trendingStoriesCache = homeViewModel.getTrendingStoriesCache()
         val feedItemsCache = homeViewModel.getFeedItemsCacheCache()
-        val catSubCatCache = homeViewModel.getCatSubCatCacheCache()
+        val searchItems = homeViewModel.getAllSearchItemsCache()
         val userProfilesCache = userViewModel.getUserProfileCache()
-        if (trendingStoriesCache.value == null || userProfilesCache.value == null) {
+        if (trendingStoriesCache.value == null || userProfilesCache.value == null || searchItems.value == null) {
             binding.progress.root.visibility = View.VISIBLE
             fetchData()
-        }else{
+        } else {
             initTrendingRcView(trendingStoriesCache.value!!)
-            initRcView(feedItemsCache.value!!,catSubCatCache.value!!,userProfilesCache.value!!.likedPosts)
+            initRcView(feedItemsCache.value!!, userProfilesCache.value!!.likedPosts)
             setUi(userProfilesCache.value!!)
-            if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
+            searchItemList = searchItems.value!!
+            if (getProfileBottomPopUpStatus(
+                    requireActivity()
+                )
+            ) {
                 profileCreate(userProfilesCache.value!!)
             }
         }
@@ -128,97 +172,150 @@ class HomeFragment : Fragment(),
 
     private fun fetchData() {
         viewLifecycleOwner.lifecycleScope.launch {
+            var userData: UserPersonalProfileModel? = null
             try {
-                val trendingStoriesDeferred1 = async { homeViewModel.getAllTrendingStoriesAsync() }
-                val trendingStoriesDeferred2 =
-                    async { homeViewModel.getAllCategoriesAndSubCategoriesAsync() }
-                val trendingStoriesDeferred3 = async { homeViewModel.getAllFeedItemsAsync() }
-                val trendingStoriesDeferred4 =
-                    async { userViewModel.getUserProfileAsync(auth.uid!!) }
+                val trendingStoriesDeferred = async { homeViewModel.getAllTrendingStoriesAsync() }
+                val searchItemsDeferred = async { homeViewModel.getAllSearchItems() }
+                val feedItemsDeferred = async { homeViewModel.getAllFeedItemsAsync() }
+                val userProfileDeferred = async { userViewModel.getUserProfileAsync(auth.uid!!) }
 
                 val results = awaitAll(
-                    trendingStoriesDeferred1,
-                    trendingStoriesDeferred2,
-                    trendingStoriesDeferred3,
+                    searchItemsDeferred,
+                    feedItemsDeferred
                 )
 
-                val userDataResults = awaitAll(
-                    trendingStoriesDeferred4
-                )
+                val userResults = awaitAll(userProfileDeferred)
+                val trendingResults = awaitAll(trendingStoriesDeferred)
 
                 // Check results and proceed
                 val allSuccess = results.all { it.status == Status.SUCCESS }
-                val allUserDataSuccess = userDataResults.all { it.status == Status.SUCCESS }
-                if (allSuccess && allUserDataSuccess) {
-                    val dataList = results.flatMap { resource ->
-                        resource.data ?: emptyList()
+                val userDataSuccess = userResults.all { it.status == Status.SUCCESS }
+                val trendingDataSuccess = trendingResults[0].status == Status.SUCCESS
+
+                // Set userData if userDataSuccess
+                if (userDataSuccess) {
+                    userData = userResults[0].data as UserPersonalProfileModel
+                    userViewModel.setUserProfileCache(userData)
+                    setUi(userData)
+
+                    if (getProfileBottomPopUpStatus(requireActivity())) {
+                        profileCreate(userData)
+                    }
+                }else{
+                    if(auth.currentUser ==null){
+                        setErrorDialog()
                     }
 
-                    // Now you have the unwrapped data, proceed accordingly
-                    val trendingStoriesList = dataList.filterIsInstance<TrendingStoriesItemModel>()
-                    feedItemList = dataList.filterIsInstance<FeedItem>()
-                    catSubCatList =
-                        dataList.filterIsInstance<Pair<CategoryItem, List<SubCategoryItem>>>()
-                    if (trendingStoriesList.isNotEmpty()) {
-                        binding.progress.root.visibility = View.GONE
-                        initTrendingRcView(trendingStoriesList)
-                        homeViewModel.setCatSubCatCacheCache(catSubCatList)
-                        homeViewModel.setTrendingStoriesCache(trendingStoriesList)
-                        homeViewModel.setFeedItemsCacheCache(feedItemList)
-                        userViewModel.setUserProfileCache(userDataResults[0].data!!)
-                        initRcView(
-                            feedItemList,
-                            catSubCatList,
-                            userDataResults[0].data!!.likedPosts
-                        )
+                    binding.homeWelComeTv.visibility = View.GONE
+                    binding.homeUserNameTv.visibility = View.GONE
+                    binding.homeUserProfilePic.visibility = View.GONE
+                    if (searchItemList.isEmpty()) {
+                        // Handle search items
+                        binding.homeTopCard.visibility = View.GONE
+                    }
+                }
 
-                        setUi(userDataResults[0].data!!)
-                        if(com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus(requireActivity())){
-                            profileCreate(userDataResults[0].data!!)
+                if (allSuccess) {
+                    binding.progress.root.visibility = View.GONE
+                    val dataList = results.flatMap { resource -> resource.data ?: emptyList() }
+                    val feedItemList = dataList.filterIsInstance<FeedItem>()
+                    searchItemList = dataList.filterIsInstance<SearchModel>()
+                    homeViewModel.setAllSearchItemsCache(searchItemList)
+                    val visibleFeedList = feedItemList.filter { it.visibility!! }
+
+                    if (visibleFeedList.isNotEmpty()) {
+                        homeViewModel.setFeedItemsCacheCache(visibleFeedList)
+                        if (userData != null) {
+                            initRcView(
+                                visibleFeedList,
+                                userData.likedPosts
+                            )
+                        }else{
+                            initRcView(
+                                visibleFeedList,
+                                null
+                            )
                         }
+                    } else {
+                        // no feed
                     }
                 } else {
-                    // Handle errors
+                    setErrorDialog()
+                }
+                if (searchItemList.isEmpty()) {
+                    // Handle search items
+                    binding.homeSearchEt.visibility = View.GONE
+                }
+                if (trendingDataSuccess) {
+                    val trendingStoriesData =
+                        trendingResults[0].data
+                    val visibleTrendingStoriesList = trendingStoriesData!!.filter { it.visibility!! }
+                    if (visibleTrendingStoriesList.isNotEmpty()) {
+                        initTrendingRcView(visibleTrendingStoriesList)
+                        homeViewModel.setTrendingStoriesCache(visibleTrendingStoriesList)
+                    } else {
+                        // no trending stories
+                        binding.rcTrending.visibility = View.GONE
+                        binding.textView6.visibility = View.GONE
+                    }
+                }else{
+                    setErrorDialog()
                 }
             } catch (e: Exception) {
                 // Handle exceptions
+                setErrorDialog()
             }
         }
     }
 
+    private fun setErrorDialog() {
+        binding.progress.root.visibility = View.GONE
+        val errorD = ErrorDialogFrag(this)
+        val fragmentTransaction = childFragmentManager.beginTransaction()
+        fragmentTransaction.add(errorD, "ErrorDialogFrag")
+        fragmentTransaction.commitAllowingStateLoss()
+    }
+
     private fun setUi(data: UserPersonalProfileModel) {
-        Glide.with(requireActivity()).load(data.profile_image_url).into(binding.homeUserProfilePic)
-        binding.homeUserDespTv.text = data.name
+        if(data.name.isEmpty()){
+
+        }else{
+            Glide.with(requireActivity()).load(data.profile_image_url).into(binding.homeUserProfilePic)
+            binding.homeUserNameTv.text = data.name
+            binding.homeWelComeTv.text = getString(R.string.welcome)
+        }
+
 
     }
 
     private fun initTrendingRcView(data: List<TrendingStoriesItemModel>) {
-        val adapter = HomeTrendingStoriesAdapter(this,getSelectedLanguage())
+        val adapter = HomeTrendingStoriesAdapter(this, getSelectedLanguage())
         adapter.setData(data)
         binding.rcTrending.adapter = adapter
     }
 
     private fun initRcView(
         data: List<FeedItem>,
-        dataSetSecond: List<Pair<CategoryItem, List<SubCategoryItem>>>,
-        likedPosts: ArrayList<String>
+        likedPosts: ArrayList<String>?
     ) {
-        val adapter = HomeFeedRcAdapter(this, data, dataSetSecond, likedPosts, this,getSelectedLanguage())
+        val adapter = HomeFeedRcAdapter(this, data, likedPosts!!, getSelectedLanguage())
         binding.feedRcHome.adapter = adapter
     }
 
     private fun getSelectedLanguage(): String {
-        val authPref = requireActivity().getSharedPreferences(AppPrefConstants.LANGUAGE_PREF, Context.MODE_PRIVATE)
+        val authPref = requireActivity().getSharedPreferences(
+            AppPrefConstants.LANGUAGE_PREF,
+            Context.MODE_PRIVATE
+        )
         return authPref.getString("language", "")!!
     }
 
 
     private fun profileCreate(data: UserPersonalProfileModel) {
         if (data.name.isEmpty()) {
-            val frag = CreatePersonalProfileFragment(data,this)
+            val frag = CreatePersonalProfileFragment(data, this)
             frag.show(childFragmentManager, "CreatePersonalProfileFragment")
         }
-
 
     }
 
@@ -228,16 +325,38 @@ class HomeFragment : Fragment(),
         _binding = null
     }
 
-    override fun onHomeTodayOrUpcomingClicked(item: HomeCategoryModel) {
-    }
-
 
     override fun onHomeFeedImageClicked() {
     }
 
     override fun onHomeFeedCheckOutBtnClicked(item: FeedItem) {
-        val frag = SelectProfessionalProfileBottomSheetFrag(item.image_url,item.title_eng,item.title_mar,item.title_hin,item.categoryId,item.subCategoryId,item.postId)
-        frag.show(childFragmentManager,"SelectProfessionalProfileBottomSheetFrag")
+
+        if (item.createdByAdmin){
+            val frag = SelectProfessionalProfileBottomSheetFrag(
+                item.image_url,
+                item.title_eng,
+                item.title_mar,
+                item.title_hin,
+                item.categoryId,
+                item.subCategoryId,
+                item.postId
+            )
+            frag.show(childFragmentManager, "SelectProfessionalProfileBottomSheetFrag")
+        }else{
+            val frag = SelectProfessionalProfileBottomSheetFrag(
+                item.original_image_url,
+                item.title_eng,
+                item.title_mar,
+                item.title_hin,
+                item.categoryId,
+                item.subCategoryId,
+                item.postId
+            )
+            frag.show(childFragmentManager, "SelectProfessionalProfileBottomSheetFrag")
+        }
+
+
+
     }
 
     override fun onHomeFeedImageLiked(item: FeedItem) {
@@ -270,23 +389,43 @@ class HomeFragment : Fragment(),
 
     override fun onHomeTrendingStoriesClicked(item: TrendingStoriesItemModel) {
 
-        val intent = Intent(requireActivity(),EditStoryActivity::class.java)
-        intent.putExtra("imageUrl",item.image_url)
-        intent.putExtra("engTitle",item.title_eng)
-        intent.putExtra("marTitle",item.title_mar)
-        intent.putExtra("hinTitle",item.title_hin)
+        val intent = Intent(requireActivity(), EditStoryActivity::class.java)
+        intent.putExtra("trending_story_id", item.Id)
         startActivity(intent)
-    }
-
-    override fun onCatSubCatItemAdapterClicked(item: SubCategoryItem) {
-        val action = HomeFragmentDirections.actionNavigationHomeToSelectedSubCatItems(
-            item.categoryId!!,
-            item.Id!!
-        )
-        findNavController().navigate(action)
     }
 
     override fun onProfileUpdated() {
 
+    }
+
+    override fun onSearchItemClicked(item: SearchModel) {
+        when (item.type) {
+            SearchItemType.POST_TYPE -> {
+                val action = HomeFragmentDirections.actionNavigationHomeToSelectedSubCatItems(
+                    item.categoryId!!,
+                    item.subCategoryId
+                )
+                findNavController().navigate(action)
+
+            }
+
+            SearchItemType.CAT_TYPE -> {
+                val action =
+                    HomeFragmentDirections.actionNavigationHomeToNavigationCategories(item.Id!!)
+                findNavController().navigate(action)
+            }
+
+            SearchItemType.SUB_CAT_TYPE -> {
+                val action = HomeFragmentDirections.actionNavigationHomeToSelectedSubCatItems(
+                    item.categoryId!!,
+                    item.Id!!
+                )
+                findNavController().navigate(action)
+            }
+        }
+    }
+
+    override fun onDialogDismissed() {
+        startActivity(requireActivity().intent)
     }
 }

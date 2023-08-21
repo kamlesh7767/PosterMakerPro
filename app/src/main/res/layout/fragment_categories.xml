@@ -28,6 +28,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <EditText
+                    android:id="@+id/cat_frag_search_et"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/outlined_primary_rounded_bg"

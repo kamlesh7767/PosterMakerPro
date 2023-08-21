@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     tools:context=".ui.profile.CreatePersonalProfileFragment">
 
@@ -153,6 +153,38 @@
                         android:textColor="@color/black"
                         android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registration_address_ti"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/grey"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="3dp"
+                    app:errorEnabled="true"
+                    app:hintTextColor="@color/orange"
+                    app:startIconDrawable="@drawable/baseline_location_on_24"
+                    app:startIconTint="@color/orange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registration_address_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:gravity="top"
+                        android:hint="@string/address_hint"
+                        android:inputType="textPostalAddress"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/update_user_profile_btn"
                     android:layout_width="match_parent"
@@ -190,17 +222,7 @@
         app:layout_constraintTop_toTopOf="@+id/constraintLayout2" />
 
 
-    <ImageView
-        android:id="@+id/edit_profile_pic_btn"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:elevation="4dp"
-        android:src="@drawable/editprofile"
-        app:layout_constraintBottom_toBottomOf="@+id/user_profile_pic"
-        app:layout_constraintEnd_toEndOf="@+id/user_profile_pic"
-        app:layout_constraintStart_toEndOf="@+id/user_profile_pic"
-        app:layout_constraintTop_toBottomOf="@+id/user_profile_pic"
-        app:tint="@color/primary_color" />
+
 
     <ImageView
         android:id="@+id/remove_selected_image_reset_btn"
@@ -214,15 +236,29 @@
         app:layout_constraintTop_toTopOf="@+id/user_profile_pic"
         app:tint="@color/primary_color" />
 
-    <include
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progress"
-        layout="@layout/progress_layout_transparent"
-        android:clickable="false"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading_orange_circle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

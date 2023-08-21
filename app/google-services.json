@@ -14,7 +14,52 @@
       },
       "oauth_client": [
         {
-          "client_id": "821720794197-9nvhk9do25m9q52c93385tnsf3pd6rh5.apps.googleusercontent.com",
+          "client_id": "821720794197-qb4ee17anfv6onmtvvt4jtdo6bsm7i9u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.garudpuran.postermakerpro",
+            "certificate_hash": "3461aef8e94ee399cdbec005ddb4acb49f596a73"
+          }
+        },
+        {
+          "client_id": "821720794197-l5jjkdh4v2usv0phj5vrchtgtchm3t4s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUNmII4a_uHxvU76xNdQCoLKK_Om4wxK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "821720794197-9nvhk9do25m9q52c93385tnsf3pd6rh5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821720794197:android:4d63a13921172092ea00dc",
+        "android_client_info": {
+          "package_name": "com.garudpuran.postermakerproadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "821720794197-qhntqqu2dfufs9epv1onl8ts18ai6i32.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.garudpuran.postermakerproadmin",
+            "certificate_hash": "49db161d8158596f681c320ee827f5383eddaf46"
+          }
+        },
+        {
+          "client_id": "821720794197-l5jjkdh4v2usv0phj5vrchtgtchm3t4s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

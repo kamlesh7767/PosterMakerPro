@@ -76,6 +76,8 @@ dependencies {
 
 
     implementation 'com.google.android.gms:play-services-ads:22.2.0'
+    implementation 'com.github.yalantis:ucrop:2.2.6'
+
 
 
     testImplementation 'junit:junit:4.13.2'

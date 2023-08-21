@@ -9,6 +9,7 @@ import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.PostItem
 import com.garudpuran.postermakerpro.models.RechargeItem
+import com.garudpuran.postermakerpro.models.SearchModel
 import com.garudpuran.postermakerpro.models.SubCategoryItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
@@ -137,6 +138,31 @@ class HomeViewModel @Inject constructor(
     }
     fun onObserveGetAllRcgResponseData(): LiveData<Resource<List<RechargeItem>>> {
         return getAllRcgResponse
+    }
+
+
+// getAllSearchItems
+    suspend fun getAllSearchItems(): Resource<List<SearchModel>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val uc = mainVMI.getAllSearchItems()
+                if (uc.isNotEmpty()) {
+                    Resource.success(uc)
+                } else {
+                    Resource.error(emptyList())
+                }
+            } catch (e: Exception) {
+                Resource.error(emptyList())
+            }
+        }
+    }
+
+    private val allSearchItemsCache = MutableLiveData< List<SearchModel>>()
+    fun setAllSearchItemsCache(data: List<SearchModel>) {
+        allSearchItemsCache.value = data
+    }
+    fun getAllSearchItemsCache(): LiveData<List<SearchModel>> {
+        return allSearchItemsCache
     }
 
 

@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_categories -> {
                     navController.popBackStack(navController.graph.startDestinationId, true)
                     navController.navigate(R.id.navigation_categories)
-
                 }
 
                 R.id.profile_fragment -> {

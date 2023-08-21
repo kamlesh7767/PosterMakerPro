@@ -23,7 +23,7 @@
                     android:layout_height="200dp"
                     android:scaleType="fitCenter"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/start_elipse"
+                    android:src="@drawable/pmp_app_icon"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +34,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:fontFamily="@font/roboto_semibold"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="80dp"
                     android:text="@string/welcome"
+                    android:gravity="center"
                     android:textColor="@color/primary_color"
                     android:textSize="40sp"
                     app:layout_constraintTop_toBottomOf="@+id/imageView"
@@ -49,6 +50,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/welcome_note"
                     android:layout_marginTop="10dp"
+                    android:gravity="center"
                     android:textColor="@color/primary_color"
                     android:textSize="18sp"
                     app:layout_constraintTop_toBottomOf="@+id/textView2"
@@ -106,28 +108,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mobile_no_ti"
                     app:tint="@color/white" />
-
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Or"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="20sp"
-                    android:layout_marginTop="40dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/proceed_btn" />
-
-                <ImageView
-                    android:id="@+id/google_btn"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/logo_google"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

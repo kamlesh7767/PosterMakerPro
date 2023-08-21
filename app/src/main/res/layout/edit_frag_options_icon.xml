@@ -8,7 +8,7 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/edit_frag_options_profile_hide_show_image_btn"
+        android:id="@+id/edit_frag_options_icon_hide_show_image_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/edit_frag_options_profile_change_image_btn"
+        android:id="@+id/edit_frag_options_icon_change_image_btn"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginEnd="10dp"
@@ -30,10 +30,10 @@
         android:textColor="@color/primary_color"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_profile_image_size_slider" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_icon_image_size_slider" />
 
     <TextView
-        android:id="@+id/edit_frag_options_profile_reset_image_btn"
+        android:id="@+id/edit_frag_options_icon_reset_image_btn"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:background="@drawable/rounded_white_btn"
@@ -45,7 +45,7 @@
         android:textSize="16sp"
         android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_profile_image_size_slider" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_icon_image_size_slider" />
 
     <TextView
         android:id="@+id/textView7"
@@ -56,10 +56,10 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_frag_options_profile_hide_show_image_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_frag_options_icon_hide_show_image_btn" />
 
     <com.google.android.material.slider.Slider
-        android:id="@+id/edit_profile_image_size_slider"
+        android:id="@+id/edit_icon_image_size_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:value="100"

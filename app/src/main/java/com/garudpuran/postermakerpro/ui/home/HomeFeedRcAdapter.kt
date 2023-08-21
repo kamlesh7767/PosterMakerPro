@@ -15,15 +15,14 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.SubCategoryItem
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 
-class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var dataset : List<FeedItem>,private val datasetSecond:List<Pair<CategoryItem,List<SubCategoryItem>>>,private var likedPosts:MutableList<String>,private val mListener2: HomeFeedCatSubCatItemAdapter.CatSubCatItemAdapterListener,private val language:String) :
+class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var dataset : List<FeedItem>,private var likedPosts:MutableList<String>?,private val language:String) :
     RecyclerView.Adapter<HomeFeedRcAdapter.ItemViewHolder>() {
     private val FEED_ITEM_VIEW_TYPE = 100
-    private val FEED_RC_ITEM_VIEW_TYPE = 200
-        // private var dataset = mutableListOf<FeedItem>()
-  //  private var likedPosts = mutableListOf<String>()
-  //  private var datasetSecond = mutableListOf<Pair<CategoryItem,List<SubCategoryItem>>>()
+    private val FEED_AD_VIEW_TYPE = 200
     private val combinedList: List<Any>
 
     init {
@@ -34,21 +33,22 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
     private fun generateCombinedList(): List<Any> {
         val combined = mutableListOf<Any>()
     combined.addAll(dataset)
-    combined.addAll(datasetSecond)
+        val adData = (0..10).toList()
+    combined.addAll(adData)
         return combined.shuffled()
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val rcView = view.findViewById<RecyclerView>(R.id.feed_interim_rc_view)
-        val itemUserName = view.findViewById<TextView>(R.id.feed_item_user_name_tv)
         val itemPostImage = view.findViewById<ImageView>(R.id.feed_item_post_pic)
+        val itemUserImg = view.findViewById<ImageView>(R.id.feed_item_user_profile_pic)
         val itemOutlinedLike = view.findViewById<ImageView>(R.id.feed_item_to_like_iv)
         val itemFilledLike = view.findViewById<ImageView>(R.id.feed_item_to_unlike_iv)
         val itemDesp = view.findViewById<TextView>(R.id.feed_item_user_desp_tv)
+        val itemTitle = view.findViewById<TextView>(R.id.feed_item_user_name_tv)
         val itemLikeTv = view.findViewById<TextView>(R.id.feed_item_like_tv)
         val checkoutbutton = view.findViewById<TextView>(R.id.feed_checkout_button)
         val likeAnv = view.findViewById<LottieAnimationView>(R.id.feed_like_anv)
-        val catSubCatItemTitleTv = view.findViewById<TextView>(R.id.feed_catsubCat_item_title_tv)
+        val adView = view.findViewById<AdView>(R.id.feed_banner_ad_v)
 
     }
 
@@ -61,7 +61,7 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
         } else {
             ItemViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.feed_category_item, parent, false)
+                    .inflate(R.layout.feed_ad_view_item, parent, false)
             )
         }
 
@@ -73,6 +73,14 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         if (holder.itemViewType == FEED_ITEM_VIEW_TYPE) {
+
+            if (likedPosts==null){
+                holder.itemFilledLike.visibility = View.GONE
+                holder.itemOutlinedLike.visibility = View.GONE
+                holder.itemLikeTv.visibility = View.GONE
+            }
+
+
             val item = combinedList[position] as FeedItem
             val doubleClick = DoubleClick(object : DoubleClickListener {
                 override fun onSingleClickEvent(view: View?) {
@@ -80,17 +88,20 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
                 }
 
                 override fun onDoubleClickEvent(view: View?) {
-                    if(!likedPosts.contains(item.image_url)){
-                        initLikeProcess(
-                            holder.likeAnv,
-                            holder.itemLikeTv,
-                            item
-                        )
+                    if(likedPosts!=null){
+                        if(!likedPosts!!.contains(item.image_url)){
+                            initLikeProcess(
+                                holder.likeAnv,
+                                holder.itemLikeTv,
+                                item
+                            )
 
-                        holder.itemFilledLike.visibility = View.VISIBLE
-                        holder.itemOutlinedLike.visibility = View.GONE
-                        likedPosts.add(item.image_url)
+                            holder.itemFilledLike.visibility = View.VISIBLE
+                            holder.itemOutlinedLike.visibility = View.GONE
+                            likedPosts!!.add(item.image_url)
+                        }
                     }
+
 
 
 
@@ -120,17 +131,20 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
             })
 
             holder.itemOutlinedLike.setOnClickListener {
-                // like the posr
-               if(!likedPosts.contains(item.image_url)){
-                   initLikeProcess(
-                       holder.likeAnv,
-                       holder.itemLikeTv,
-                       item
-                   )
-                   holder.itemFilledLike.visibility = View.VISIBLE
-                   holder.itemOutlinedLike.visibility = View.GONE
-                   likedPosts.add(item.image_url)
-               }
+
+                if(likedPosts!= null){
+                    if(!likedPosts!!.contains(item.image_url)){
+                        initLikeProcess(
+                            holder.likeAnv,
+                            holder.itemLikeTv,
+                            item
+                        )
+                        holder.itemFilledLike.visibility = View.VISIBLE
+                        holder.itemOutlinedLike.visibility = View.GONE
+                        likedPosts!!.add(item.image_url)
+                    }
+                }
+
 
             }
             holder.itemFilledLike.setOnClickListener {
@@ -144,7 +158,7 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
                 holder.itemFilledLike.visibility = View.GONE
                 holder.itemOutlinedLike.visibility = View.VISIBLE
                 mListener.onHomeFeedImageUnLiked(item)
-                likedPosts.remove(item.image_url)
+                likedPosts!!.remove(item.image_url)
             }
 
 
@@ -161,10 +175,19 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
                 "hi"->    holder.itemDesp.text = item.title_hin
             }
 
+            if(!item.createdByAdmin){
+                holder.itemTitle.text = item.userProfile?.name
+                Glide
+                    .with(holder.itemView.context)
+                    .load(item.userProfile?.profile_image_url)
+                    .centerCrop()
+                    .into(holder.itemUserImg)
+            }
+
 
             holder.itemLikeTv!!.text = "${item.likes} Likes"
 
-            if (likedPosts.contains(item.image_url)) {
+            if (likedPosts!!.contains(item.image_url)) {
                 // post is liked.
                 holder.itemOutlinedLike.visibility = View.GONE
                 holder.itemFilledLike.visibility = View.VISIBLE
@@ -181,18 +204,8 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
             }
 
         } else {
-            val item2 = combinedList[position] as Pair<CategoryItem,List<SubCategoryItem>>
-
-
-            when(language){
-                "en"->    holder.catSubCatItemTitleTv.text = item2.first.title_eng
-                "mr"->    holder.catSubCatItemTitleTv.text = item2.first.title_mar
-                "hi"->    holder.catSubCatItemTitleTv.text = item2.first.title_hin
-            }
-
-
-            val adapter = HomeFeedCatSubCatItemAdapter(item2.second,mListener2,language)
-            holder.rcView.adapter = adapter
+            val adRequest = AdRequest.Builder().build()
+            holder.adView.loadAd(adRequest)
         }
 
 
@@ -219,8 +232,8 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
     override fun getItemViewType(position: Int): Int {
         val item = combinedList[position]
 
-        return if (item is Pair<*,*>) {
-            FEED_RC_ITEM_VIEW_TYPE
+        return if (item is Int) {
+            FEED_AD_VIEW_TYPE
         } else {
             FEED_ITEM_VIEW_TYPE
         }

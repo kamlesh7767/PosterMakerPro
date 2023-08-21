@@ -18,6 +18,7 @@ class ViewPagerAdapter(private val data: UserPersonalProfileModel, private val l
     private lateinit var userPic: CircleImageView
     private lateinit var userName: TextView
     private lateinit var userDes: TextView
+    private lateinit var userAddress: TextView
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val constraintLayout: ConstraintLayout = itemView.findViewById(R.id.frame_root_con_l)
@@ -32,12 +33,15 @@ class ViewPagerAdapter(private val data: UserPersonalProfileModel, private val l
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val view = LayoutInflater.from(holder.itemView.context).inflate(layouts[position], null)
 
-        userPic = view.findViewById<CircleImageView>(R.id.story_user_profile_pic)
-        userName = view.findViewById<TextView>(R.id.story_user_name_tv)
-        userDes = view.findViewById<TextView>(R.id.story_user_desp_tv)
+        userPic = view.findViewById<CircleImageView>(R.id.user_profile_pic_iv)
+        userName = view.findViewById<TextView>(R.id.user_name_tv)
+        userDes = view.findViewById<TextView>(R.id.user_mobile_tv)
+        userAddress = view.findViewById<TextView>(R.id.user_address_tv)
 
         userDes.text = data.mobile_number
+        userDes.visibility = View.GONE
         userName.text = data.name
+        userAddress.text = data.address
         Glide.with(holder.itemView.context).load(data.profile_image_url).into(userPic)
 
         val layoutParams = ConstraintLayout.LayoutParams(

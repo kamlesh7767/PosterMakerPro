@@ -9,6 +9,7 @@ data class FeedItem(
     var title_mar:String = "",
     var title_hin:String = "",
     var image_url:String = "",
+    var original_image_url:String = "",
     var createdByAdmin:Boolean = true,
     var categoryId:String = "",
     var subCategoryId:String = "",

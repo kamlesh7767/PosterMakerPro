@@ -57,7 +57,7 @@
                 android:autoSizeMinTextSize="16sp"
                 android:autoSizeStepGranularity="2sp"
                 android:layout_gravity="center"
-                android:text="Your Business Address"
+                android:text="@string/your_business_address"
                 android:textColor="@color/red_two"
                 android:textSize="14sp" />
         </LinearLayout>

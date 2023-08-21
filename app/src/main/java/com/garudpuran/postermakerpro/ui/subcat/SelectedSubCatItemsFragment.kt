@@ -46,7 +46,7 @@ class SelectedSubCatItemsFragment : Fragment() ,AllSubCategoryPostsAdapter.AllSu
     }
 
     private fun observeGetAllPosts() {
-        viewModel.onObserveGetAllPostsResponseData().observe(requireActivity()){
+        viewModel.onObserveGetAllPostsResponseData().observe(requireActivity()){ it ->
             when (it.status) {
                 Status.LOADING -> {
                     binding.progress.root.visibility = View.VISIBLE
@@ -57,10 +57,14 @@ class SelectedSubCatItemsFragment : Fragment() ,AllSubCategoryPostsAdapter.AllSu
                 }
 
                 Status.SUCCESS -> {
-                    if (it.data!!.isNotEmpty()) {
+
+                    val visiblePostsList = it.data?.filter {its-> its.visibility!! }
+                    if (visiblePostsList!!.isNotEmpty()) {
                         binding.progress.root.visibility = View.GONE
-                        initRcView(it.data)
+                        initRcView(visiblePostsList)
                         Log.d(tag,"Got the Posts.")
+                    }else{
+                        binding.noPostsLl.visibility = View.VISIBLE
                     }
                 }
 

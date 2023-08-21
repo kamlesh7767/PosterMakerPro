@@ -35,12 +35,11 @@ class SelectProfessionalProfileBottomSheetFrag(
     private val  subCategoryId: String,
     private val postId: String
 ) :
-    BottomSheetDialogFragment(), SelectProfileAdapter.SelectProfileAdapterListener {
+    BottomSheetDialogFragment(), SelectProfileAdapter.SelectProfileAdapterListener ,CreateProfessionalProfileFragment.ProProfileUpdateListener{
     private lateinit var _binding: FragmentSelectProfessionalProfileBottomSheetBinding
     private val binding get() = _binding
 
     private val userViewModel: UserViewModel by viewModels()
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,10 +58,14 @@ class SelectProfessionalProfileBottomSheetFrag(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeUserData()
-
+        binding.createProfProfileBtn.setOnClickListener {
+            val frag = CreateProfessionalProfileFragment(this)
+            frag.show(childFragmentManager,"CreateProfessionalProfileFragment")
+        }
     }
 
     private fun observeUserData() {
+        binding.progress.visibility = View.VISIBLE
         val userProfilesCache = userViewModel.getAllProfessionalProfileItemsCache()
         if (userProfilesCache.value == null) {
             fetchData()
@@ -87,17 +90,30 @@ class SelectProfessionalProfileBottomSheetFrag(
                     setUi(userDataResults[0].data!!)
                 } else {
                     // Handle errors
+                    binding.progress.visibility = View.GONE
+                    binding.noProfilesLl.visibility = View.VISIBLE
                 }
             } catch (e: Exception) {
                 // Handle exceptions
+                binding.progress.visibility = View.GONE
             }
         }
     }
 
     private fun setUi(data: List<UserProfessionalProfileModel>) {
-        val adapter = SelectProfileAdapter(this)
-        adapter.setData(data)
-        binding.selectProfileItems.adapter = adapter
+        binding.progress.visibility = View.GONE
+
+
+        if(data.isEmpty()){
+            binding.noProfilesLl.visibility = View.VISIBLE
+        }else{
+            val adapter = SelectProfileAdapter(this)
+            adapter.setData(data)
+            binding.selectProfileItems.adapter = adapter
+            binding.noProfilesLl.visibility = View.GONE
+        }
+
+
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -126,6 +142,10 @@ class SelectProfessionalProfileBottomSheetFrag(
         intent.putExtra("profileLogoUrl",item.logo_image_url)
         startActivity(intent)
         dismiss()
+    }
+
+    override fun onProfileUpdated() {
+        observeUserData()
     }
 
 

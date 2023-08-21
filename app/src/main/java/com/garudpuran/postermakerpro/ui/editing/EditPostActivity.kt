@@ -1,11 +1,15 @@
 package com.garudpuran.postermakerpro.ui.editing
 
+import android.app.Activity
 import android.content.ContentValues
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -28,6 +32,7 @@ import com.garudpuran.postermakerpro.databinding.ActivityEditPostBinding
 import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.DownloadAndShareCustomDialog
+import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 import com.garudpuran.postermakerpro.ui.commonui.models.EditFragOptionsModel
 import com.garudpuran.postermakerpro.ui.editing.adapter.EditFragOptionsAdapter
@@ -37,17 +42,19 @@ import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import java.io.File
 
 @AndroidEntryPoint
 class EditPostActivity : AppCompatActivity(),
     EditFragOptionsAdapter.EditOptionsListener,
     OptionFramesRcAdapter.OptionFramesRcAdapterListener,
-    DownloadAndShareCustomDialog.DownAndShareDialogListener{
+    DownloadAndShareCustomDialog.DownAndShareDialogListener, ErrorDialogFrag.ErrorDialogListener {
     private lateinit var binding:ActivityEditPostBinding
 
     private val userViewModel: UserViewModel by viewModels()
@@ -56,11 +63,16 @@ class EditPostActivity : AppCompatActivity(),
     private var isNameFontAdded = false
     private var isAddressFontAdded = false
     private var isMobileFontAdded = false
+    private val PROFILE_CROP_REQUEST_CODE = 101
+    private val ICON_CROP_REQUEST_CODE = 202
 
     private lateinit var userPic: CircleImageView
     private lateinit var userName: TextView
     private lateinit var userDes: TextView
     private lateinit var userAddress: TextView
+
+    private var offsetX = 0
+    private var offsetY = 0
 
     private val TAG = "EditPostActivity"
 
@@ -71,7 +83,16 @@ class EditPostActivity : AppCompatActivity(),
     private val profilePicsContract =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it != null) {
-               userPic.setImageURI(it)
+                startCrop(it,PROFILE_CROP_REQUEST_CODE)
+               //userPic.setImageURI(it)
+            }
+        }
+
+    private val iconPicsContract =
+        registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if (it != null) {
+                startCrop(it,ICON_CROP_REQUEST_CODE)
+                //binding.iconIv.setImageURI(it)
             }
         }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,12 +100,46 @@ class EditPostActivity : AppCompatActivity(),
         binding = ActivityEditPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
        setUi()
-        binding.titlePostTv.text = intent.getStringExtra("engTitle")
+
+        binding.iconIv.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    offsetX = event.rawX.toInt() - view.x.toInt()
+                    offsetY = event.rawY.toInt() - view.y.toInt()
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val newX = event.rawX.toInt() - offsetX
+                    val newY = event.rawY.toInt() - offsetY
+
+                    val parentLayout = binding.iconIv.parent as ConstraintLayout
+                    val maxX = parentLayout.width - view.width
+                    val maxY = parentLayout.height - view.height
+
+                    // Ensure the image view stays within bounds
+                    val constrainedX = newX.coerceIn(0, maxX)
+                    val constrainedY = newY.coerceIn(0, maxY)
+
+                    view.x = constrainedX.toFloat()
+                    view.y = constrainedY.toFloat()
+                }
+            }
+            true
+        }
+
+
+        //binding.titlePostTv.text = intent.getStringExtra("engTitle")
         Glide
             .with(this)
             .load(intent.getStringExtra("imageUrl"))
             .centerCrop()
             .into(binding.imageView)
+
+
+        Glide
+            .with(this)
+            .load(intent.getStringExtra("profileLogoUrl"))
+            .centerCrop()
+            .into(binding.iconIv)
 
         binding.downloadBtn.setOnClickListener {
 
@@ -103,14 +158,32 @@ class EditPostActivity : AppCompatActivity(),
         binding.optionProfileImage.editFragOptionsProfileResetImageBtn.setOnClickListener {
             Glide
                 .with(this)
-                .load(intent.getStringExtra("imageUrl"))
+                .load(intent.getStringExtra("profileLogoUrl"))
                 .centerCrop()
                 .into(userPic)
         }
 
+
         binding.optionProfileImage.editProfileImageSizeSlider.addOnChangeListener { slider, value, fromUser ->
 
             changeUserPicSize(value)
+        }
+
+        binding.optionIcon.editIconImageSizeSlider.addOnChangeListener { slider, value, fromUser ->
+            changeIconSize(value)
+        }
+
+        // options icon
+        binding.optionIcon.editFragOptionsIconChangeImageBtn.setOnClickListener {
+            iconPicsContract.launch("image/*")
+        }
+
+        binding.optionIcon.editFragOptionsIconResetImageBtn.setOnClickListener {
+            Glide
+                .with(this)
+                .load(intent.getStringExtra("profileLogoUrl"))
+                .centerCrop()
+                .into(binding.iconIv)
         }
 
         binding.optionName.editUserNameSizeSlider.addOnChangeListener { slider, value, fromUser ->
@@ -250,6 +323,15 @@ class EditPostActivity : AppCompatActivity(),
 
         }
 
+        binding.optionIcon.editFragOptionsIconHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
+            if(p1){
+                binding.iconIv.visibility = View.VISIBLE
+            }else{
+                binding.iconIv.visibility = View.GONE
+            }
+
+        }
+
         binding.optionAddress.editFragOptionsAddressHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
             if(p1){
                 userAddress.visibility = View.VISIBLE
@@ -292,6 +374,15 @@ class EditPostActivity : AppCompatActivity(),
         userPic.layoutParams = layoutParams
     }
 
+    private fun changeIconSize(size: Float) {
+        val layoutParams = binding.iconIv.layoutParams
+        val density = this.resources.displayMetrics.density
+        val pxValue = (size * density + 0.5f).toInt()
+        layoutParams.width = pxValue
+        layoutParams.height = pxValue
+        binding.iconIv.layoutParams = layoutParams
+    }
+
     private fun changeUserNameSize(size: Float) {
 
         userName.textSize = size
@@ -310,7 +401,7 @@ class EditPostActivity : AppCompatActivity(),
 
 
     private fun setUi() {
-        setOptionFrames()
+        setOptionsUi(0)
         initFrameOptions()
         val adapterOptions = EditFragOptionsAdapter(this,this)
         binding.editFragOptionsList.adapter = adapterOptions
@@ -372,6 +463,26 @@ class EditPostActivity : AppCompatActivity(),
         }
     }
 
+    private fun startCrop(sourceUri: Uri, REQUEST_CODE: Int) {
+        val destinationUri = Uri.fromFile(File(this.cacheDir, "cropped_image.jpg"))
+
+        UCrop.of(sourceUri, destinationUri)
+            .withAspectRatio(1f, 1f) // Set the desired aspect ratio
+            .start(this,REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PROFILE_CROP_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val croppedUri = UCrop.getOutput(data!!)
+           userPic.setImageURI(croppedUri)
+        }
+        else if(requestCode == ICON_CROP_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            val croppedUri = UCrop.getOutput(data!!)
+            binding.iconIv.setImageURI(croppedUri)
+        }
+    }
+
     private fun initAddressFonts(){
         val fontNames = HomeResources.fonts()
 
@@ -414,95 +525,46 @@ class EditPostActivity : AppCompatActivity(),
 
 
     private fun setOptionsUi(id: Int) {
+        updateOptionsUI()
+
         when(id){
             0->{
-                setOptionFrames()
+                binding.optionFrames.root.visibility = View.VISIBLE
             }
             1->{
-                setOptionProfileImage()
+                binding.optionProfileImage.root.visibility = View.VISIBLE
             }
             2->{
-                setOptionIcon()
+                binding.optionIcon.root.visibility = View.VISIBLE
             }
             3->{
-                setOptionName()
+                binding.optionName.root.visibility = View.VISIBLE
+                if(!isNameFontAdded){
+                    initNameFonts()
+                }
             }
             4->{
-                setOptionAddress()
+                binding.optionAddress.root.visibility = View.VISIBLE
+                if(!isAddressFontAdded){
+                    initAddressFonts()
+                }
             }
             5->{
-                setOptionContacts()
+                binding.optionContacts.root.visibility = View.VISIBLE
+                if(!isMobileFontAdded){
+                    initMobileFonts()
+                }
             }
-
-
         }
 
     }
-
-    private fun setOptionProfileImage() {
-        binding.optionProfileImage.root.visibility = View.VISIBLE
-        binding.optionFrames.root.visibility = View.GONE
-        binding.optionIcon.root.visibility = View.GONE
-        binding.optionName.root.visibility = View.GONE
-        binding.optionAddress.root.visibility = View.GONE
-        binding.optionContacts.root.visibility = View.GONE
-    }
-
-    private fun setOptionContacts() {
+    private fun updateOptionsUI() {
         binding.optionProfileImage.root.visibility = View.GONE
         binding.optionFrames.root.visibility = View.GONE
         binding.optionIcon.root.visibility = View.GONE
         binding.optionName.root.visibility = View.GONE
         binding.optionAddress.root.visibility = View.GONE
-        binding.optionContacts.root.visibility = View.VISIBLE
-        if(!isMobileFontAdded){
-            initMobileFonts()
-        }
-
-    }
-
-    private fun setOptionAddress() {
-        binding.optionProfileImage.root.visibility = View.GONE
-        binding.optionFrames.root.visibility = View.GONE
-        binding.optionIcon.root.visibility = View.GONE
-        binding.optionName.root.visibility = View.GONE
-        binding.optionAddress.root.visibility = View.VISIBLE
         binding.optionContacts.root.visibility = View.GONE
-        if(!isAddressFontAdded){
-            initAddressFonts()
-        }
-    }
-
-    private fun setOptionName() {
-        binding.optionProfileImage.root.visibility = View.GONE
-        binding.optionFrames.root.visibility = View.GONE
-        binding.optionIcon.root.visibility = View.GONE
-        binding.optionName.root.visibility = View.VISIBLE
-        binding.optionAddress.root.visibility = View.GONE
-        binding.optionContacts.root.visibility = View.GONE
-        if(!isNameFontAdded){
-            initNameFonts()
-        }
-
-    }
-
-    private fun setOptionIcon() {
-        binding.optionProfileImage.root.visibility = View.GONE
-        binding.optionFrames.root.visibility = View.GONE
-        binding.optionIcon.root.visibility = View.VISIBLE
-        binding.optionName.root.visibility = View.GONE
-        binding.optionAddress.root.visibility = View.GONE
-        binding.optionContacts.root.visibility = View.GONE
-    }
-
-    private fun setOptionFrames() {
-        binding.optionProfileImage.root.visibility = View.GONE
-        binding.optionFrames.root.visibility = View.VISIBLE
-        binding.optionIcon.root.visibility = View.GONE
-        binding.optionName.root.visibility = View.GONE
-        binding.optionAddress.root.visibility = View.GONE
-        binding.optionContacts.root.visibility = View.GONE
-        //initFrameOptions()
     }
 
     private fun initFrameOptions() {
@@ -544,7 +606,8 @@ val ady = OptionFramesRcAdapter(this,this)
                     intent.getStringExtra("engTitle")!!,
                     intent.getStringExtra("marTitle")!!,
                     intent.getStringExtra("hinTitle")!!,
-                    "",false,intent.getStringExtra("postCatId")!!,intent.getStringExtra("postSubCatId")!!,intent.getStringExtra("postId")!!,1,0,true,value
+                    "",
+                    intent.getStringExtra("imageUrl")!!,false,intent.getStringExtra("postCatId")!!,intent.getStringExtra("postSubCatId")!!,intent.getStringExtra("postId")!!,1,0,true,value
                 )
 
             val combinedBitmap = viewToBitmap(binding.fullPostLayout)
@@ -652,11 +715,20 @@ val ady = OptionFramesRcAdapter(this,this)
                    shareAndDownloadPost(userData)
                 } else {
                     // Handle errors
+                    setErrorDialog()
                 }
             } catch (e: Exception) {
                 // Handle exceptions
+                setErrorDialog()
             }
         }
+    }
+
+    private fun setErrorDialog() {
+        binding.progress.root.visibility = View.GONE
+        val errorD = ErrorDialogFrag(this)
+        errorD.show(supportFragmentManager, "ErrorDialogFrag")
+
     }
 
     private fun observeUserData() {
@@ -676,6 +748,10 @@ shareAndDownloadPost(userProfilesCache.value!!)
 
     override fun onShareItClicked() {
       observeUserData()
+    }
+
+    override fun onDialogDismissed() {
+        finish()
     }
 
 

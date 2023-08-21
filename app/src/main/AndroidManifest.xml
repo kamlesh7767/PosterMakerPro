@@ -49,6 +49,11 @@
             android:name=".ui.editing.EditPostActivity"
             android:exported="true" />
 
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <service
             android:name=".firebasemessaging.MyFirebaseMessagingService"
             android:exported="false">

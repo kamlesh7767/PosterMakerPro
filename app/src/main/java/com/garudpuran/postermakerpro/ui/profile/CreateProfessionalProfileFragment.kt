@@ -1,7 +1,9 @@
 package com.garudpuran.postermakerpro.ui.profile
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -26,7 +28,9 @@ import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 
@@ -35,6 +39,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
     private lateinit var _binding: FragmentCreateProfessionalProfileBinding
     private val binding get() = _binding
     private lateinit var imageUri: Uri
+    private val CROP_REQUEST_CODE = 101
     private val userViewModel: UserViewModel by viewModels()
     private var imageSelected = false
     private val profilePicsContract =
@@ -43,7 +48,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
                 imageSelected = true
                 binding.removeSelectedImageResetBtn.visibility = View.VISIBLE
                 imageUri = it
-                binding.userProfilePic.setImageURI(it)
+                startCrop(it)
             }
         }
 
@@ -62,7 +67,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.editProfilePicBtn.setOnClickListener {
+        binding.userProfilePic.setOnClickListener {
             profilePicsContract.launch("image/*")
         }
 
@@ -88,6 +93,12 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
 
         }
 
+        binding.removeSelectedImageResetBtn.setOnClickListener {
+            imageSelected = false
+            binding.userProfilePic.setImageResource(R.drawable.naruto)
+            binding.removeSelectedImageResetBtn.visibility = View.GONE
+        }
+
 
         binding.registrationMobileNoEt.addTextChangedListener {
             val ss = it?.removePrefix("+91")
@@ -111,18 +122,18 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
             .observe(requireActivity()) {
                 when (it.status) {
                     Status.LOADING -> {
-                        binding.progress.root.visibility = View.VISIBLE
+                        binding.progress.visibility = View.VISIBLE
                     }
 
                     Status.ERROR -> {
                         Utils.showToast(requireActivity(), getString(R.string.error))
                         binding.updateUserProfileBtn.visibility = View.VISIBLE
-                        binding.progress.root.visibility = View.GONE
+                        binding.progress.visibility = View.GONE
                     }
 
                     Status.SUCCESS -> {
                         if (it.data == ResponseStrings.SUCCESS) {
-                            binding.progress.root.visibility = View.GONE
+                            binding.progress.visibility = View.GONE
                             Utils.showToast(requireActivity(), getString(R.string.updated_successfully))
                             binding.updateUserProfileBtn.visibility = View.VISIBLE
                             mListener.onProfileUpdated()
@@ -142,5 +153,21 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
 
     }
 
+    private fun startCrop(sourceUri: Uri) {
+        val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_image.jpg"))
 
+        UCrop.of(sourceUri, destinationUri)
+            .withAspectRatio(1f, 1f) // Set the desired aspect ratio
+            .start(requireContext(), this, CROP_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CROP_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val croppedUri = UCrop.getOutput(data!!)
+            imageUri = croppedUri!!
+            binding.userProfilePic.setImageResource(R.drawable.pmp_image_placeholder)
+            binding.userProfilePic.setImageURI(croppedUri)
+        }
+    }
 }
