@@ -53,8 +53,7 @@ import java.io.File
 @AndroidEntryPoint
 class EditPostActivity : AppCompatActivity(),
     EditFragOptionsAdapter.EditOptionsListener,
-    OptionFramesRcAdapter.OptionFramesRcAdapterListener,
-    DownloadAndShareCustomDialog.DownAndShareDialogListener, ErrorDialogFrag.ErrorDialogListener {
+    OptionFramesRcAdapter.OptionFramesRcAdapterListener, ErrorDialogFrag.ErrorDialogListener {
     private lateinit var binding:ActivityEditPostBinding
 
     private val userViewModel: UserViewModel by viewModels()
@@ -142,10 +141,14 @@ class EditPostActivity : AppCompatActivity(),
             .into(binding.iconIv)
 
         binding.downloadBtn.setOnClickListener {
-
-            val dialog = DownloadAndShareCustomDialog(this, this)
-            dialog.show(supportFragmentManager,"DownloadAndShareCustomDialog")
+            val combinedBitmap = viewToBitmap(binding.fullPostLayout)
+            saveImageToGallery(combinedBitmap!!,  intent.getStringExtra("engTitle")!!)
             }
+
+        binding.shareBtn.setOnClickListener {
+            val combinedBitmap = viewToBitmap(binding.fullPostLayout)
+            saveAndShareImage(combinedBitmap!!,System.currentTimeMillis().toString())
+        }
 
         binding.backBtn.setOnClickListener {
             finish()
@@ -597,23 +600,33 @@ val ady = OptionFramesRcAdapter(this,this)
 
     }
 
-    private fun shareAndDownloadPost(value: UserPersonalProfileModel) {
+        private fun saveAndShareImage(bitmap: Bitmap, fileName: String){
+            val resolver = this.contentResolver
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/")
+            }
 
-        if(!isEmptyFrameSelected()){
-            val feedItem =
-                FeedItem(
-                    null,
-                    intent.getStringExtra("engTitle")!!,
-                    intent.getStringExtra("marTitle")!!,
-                    intent.getStringExtra("hinTitle")!!,
-                    "",
-                    intent.getStringExtra("imageUrl")!!,false,intent.getStringExtra("postCatId")!!,intent.getStringExtra("postSubCatId")!!,intent.getStringExtra("postId")!!,1,0,true,value
-                )
+            val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            uri?.let {
+                resolver.openOutputStream(it)?.use { outputStream ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                }
+            }
 
-            val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-            saveImageToGalleryAndUpload(combinedBitmap!!,  intent.getStringExtra("engTitle")!!,feedItem)
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "image/*"
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+
+            // Specify the package name of WhatsApp to ensure sharing through WhatsApp
+            // shareIntent.setPackage("com.whatsapp")
+
+            // You can add more conditions for other platforms here if needed
+
+            startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
-    }
+
 
     private fun viewToBitmap(view: View): Bitmap? {
         var createBitmap: Bitmap? = null
@@ -644,27 +657,7 @@ val ady = OptionFramesRcAdapter(this,this)
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             }
         }
-        Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show()
-    }
-
-
-    private fun saveImageToGalleryAndUpload(bitmap: Bitmap, fileName: String,feedItem: FeedItem) {
-        val resolver = this.contentResolver
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/")
-        }
-
-        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        uri?.let {
-            resolver.openOutputStream(it)?.use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            }
-        }
-        observeResponse()
-        userViewModel.uploadFeedPostItem(uri!!,feedItem)
-
+        Toast.makeText(this,"Downloaded",Toast.LENGTH_SHORT).show()
     }
 
 
@@ -698,56 +691,12 @@ val ady = OptionFramesRcAdapter(this,this)
         }
     }
 
-    private fun fetchData() {
-        this.lifecycleScope.launch {
-            try {
-                val trendingStoriesDeferred4 =
-                    async { userViewModel.getUserProfileAsync(auth.uid!!) }
-
-                val userDataResults = awaitAll(
-                    trendingStoriesDeferred4
-                )
-
-                // Check results and proceed
-                val allUserDataSuccess = userDataResults.all { it.status == Status.SUCCESS }
-                if (allUserDataSuccess) {
-                  val  userData = userDataResults[0].data!!
-                   shareAndDownloadPost(userData)
-                } else {
-                    // Handle errors
-                    setErrorDialog()
-                }
-            } catch (e: Exception) {
-                // Handle exceptions
-                setErrorDialog()
-            }
-        }
-    }
 
     private fun setErrorDialog() {
         binding.progress.root.visibility = View.GONE
         val errorD = ErrorDialogFrag(this)
         errorD.show(supportFragmentManager, "ErrorDialogFrag")
 
-    }
-
-    private fun observeUserData() {
-        val userProfilesCache = userViewModel.getUserProfileCache()
-        if (userProfilesCache.value == null) {
-            fetchData()
-        }else{
-shareAndDownloadPost(userProfilesCache.value!!)
-        }
-    }
-
-    override fun onJustDownClicked() {
-        val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-        saveImageToGallery(combinedBitmap!!,  intent.getStringExtra("engTitle")!!)
-
-    }
-
-    override fun onShareItClicked() {
-      observeUserData()
     }
 
     override fun onDialogDismissed() {
