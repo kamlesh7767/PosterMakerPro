@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
 
         setContentView(binding.root)
-
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavigation.setItemSelected(R.id.navigation_home)

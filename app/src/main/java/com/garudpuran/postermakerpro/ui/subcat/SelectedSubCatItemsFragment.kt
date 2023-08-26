@@ -54,6 +54,7 @@ class SelectedSubCatItemsFragment : Fragment() ,AllSubCategoryPostsAdapter.AllSu
 
                 Status.ERROR -> {
                     binding.progress.root.visibility = View.GONE
+                    binding.noPostsLl.visibility = View.VISIBLE
                 }
 
                 Status.SUCCESS -> {
@@ -65,6 +66,7 @@ class SelectedSubCatItemsFragment : Fragment() ,AllSubCategoryPostsAdapter.AllSu
                         Log.d(tag,"Got the Posts.")
                     }else{
                         binding.noPostsLl.visibility = View.VISIBLE
+                        binding.progress.root.visibility = View.GONE
                     }
                 }
 

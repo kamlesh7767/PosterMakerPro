@@ -1,12 +1,16 @@
 package com.garudpuran.postermakerpro.ui.editing
 
+import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -15,24 +19,21 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditStoryBinding
-import com.garudpuran.postermakerpro.models.FeedItem
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
-import com.garudpuran.postermakerpro.ui.commonui.DownloadAndShareCustomDialog
 import com.garudpuran.postermakerpro.ui.editing.adapter.ViewPagerAdapter
 import com.garudpuran.postermakerpro.ui.home.HomeViewModel
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
-import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.garudpuran.postermakerpro.utils.Status
-import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +42,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 
 @AndroidEntryPoint
@@ -64,13 +66,11 @@ class EditStoryActivity : AppCompatActivity()
         //binding.titlePostTv.text = intent.getStringExtra("engTitle")
 
         binding.downloadBtn.setOnClickListener {
-            val combinedBitmap = viewToBitmap(binding.completeStoryLayout)
-            saveImageToGallery(combinedBitmap!!, System.currentTimeMillis().toString())
+         askForStoragePermissions(1)
 
         }
         binding.shareBtn.setOnClickListener {
-            val combinedBitmap = viewToBitmap(binding.completeStoryLayout)
-            saveAndShareImage(combinedBitmap!!, System.currentTimeMillis().toString())
+          askForStoragePermissions(2)
 
         }
 
@@ -95,6 +95,98 @@ class EditStoryActivity : AppCompatActivity()
             view.destroyDrawingCache()
         }
     }
+
+        private fun askForStoragePermissions(value:Int){
+            if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.Q){
+               accordingToTheBTNPOS(value,true)
+            }else{
+                if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),333)
+                }else{
+                    accordingToTheBTNPOS(value,false)
+                }
+            }
+        }
+
+
+        private fun accordingToTheBTNPOS(value:Int,newOrOld:Boolean){
+            if(newOrOld){
+                if(value == 1){
+                    val combinedBitmap = viewToBitmap(binding.completeStoryLayout)
+                    saveImageToGallery(combinedBitmap!!, System.currentTimeMillis().toString())
+                }else{
+                    val combinedBitmap = viewToBitmap(binding.completeStoryLayout)
+                    saveAndShareImage(combinedBitmap!!, System.currentTimeMillis().toString())
+                }
+            }else{
+                if(value == 1){
+                    saveToOldGallery()
+                }else{
+                    saveAndShareOld()
+                }
+            }
+
+        }
+private  fun saveToOldGallery(){
+    val bitmap = viewToBitmap(binding.completeStoryLayout)
+    val imageFileName = System.currentTimeMillis().toString() + ".jpg"
+
+    val cw = ContextWrapper(applicationContext)
+    // path to /data/data/yourapp/app_data/imageDir
+    // path to /data/data/yourapp/app_data/imageDir
+    val directory = cw.getDir("imageDir", MODE_PRIVATE)
+    // Create imageDir
+    // Create imageDir
+    val myPath = File(directory, "${imageFileName}.jpg")
+
+    var fos: FileOutputStream? = null
+    try {
+        fos = FileOutputStream(myPath)
+        // Use the compress method on the BitMap object to write image to the OutputStream
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fos)
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+    } finally {
+        try {
+            fos!!.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    //return directory.absolutePath
+
+// Now the image will be visible in the gallery
+
+}
+
+        private fun saveAndShareOld(){
+            val bitmap = viewToBitmap(binding.completeStoryLayout)
+            val imageFileName = System.currentTimeMillis().toString() + ".jpg"
+
+            val imageDir = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Pictures")
+            if (!imageDir.exists()) {
+                imageDir.mkdirs()
+            }
+
+            val imageFile = File(imageDir, imageFileName)
+
+            val outputStream = FileOutputStream(imageFile)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.close()
+
+            val fileUri = FileProvider.getUriForFile(
+                this,
+                "com.garudpuran.postermakerpro.fileprovider",
+                imageFile
+            )
+
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "image/*"
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
+            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+
+        }
+
 
     private fun saveImageToGallery(bitmap: Bitmap, fileName: String) {
         val resolver = this.contentResolver
@@ -261,6 +353,14 @@ Log.d("SCROLL_POSITION",value.indexOfFirst { it.Id == intent.getStringExtra("tre
             override fun isViewFromObject(view: View, `object`: Any): Boolean {
                 return view === `object`
             }
+        }
+
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+        ) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
 
 

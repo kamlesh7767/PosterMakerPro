@@ -27,7 +27,6 @@
         android:layout_height="30dp"
         android:autoSizeMaxTextSize="25sp"
         android:autoSizeMinTextSize="15sp"
-        android:background="@drawable/circular_yellow_stroked_bg"
         android:elevation="5dp"
         android:gravity="center"
         android:maxLength="2"

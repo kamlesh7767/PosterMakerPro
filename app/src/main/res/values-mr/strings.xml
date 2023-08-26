@@ -84,6 +84,22 @@
     <string name="language_settings">भाषा सेटिंग्ज</string>
     <string name="change_app_language">ऍप भाषा बदला</string>
     <string name="address_hint">"पत्ता "</string>
+    <string name="post_will_be_downloaded_and_added_on_the_home_screen_nthis_action_is_irreversible">पोस्ट डाउनलोड केली जाईल आणि होम-स्क्रीनवर जोडली जाईल. ही क्रिया अपरिवर्तनीय आहे!</string>
+    <string name="download_it">डाउनलोड</string>
+    <string name="share_it">शेअर करा..</string>
+    <string name="no_internet_connection">इंटरनेट कनेक्शन नाही!</string>
+    <string name="please_turn_on_your_internet_if_problem_persists_try_after_some_time">कृपया आपले इंटरनेट चालू करा. समस्या कायम राहिल्यास काही वेळाने प्रयत्न करा.</string>
+    <string name="retry">पुन्हा प्रयत्न करा</string>
+    <string name="no_profiles_added">कोणतेही प्रोफाइल जोडले गेले नाही!</string>
+    <string name="you_can_add_new_profiles_with_the_button_below">तुम्ही खालील बटणाच्या सहाय्याने नवे प्रोफाइल जोडू शकता.</string>
+    <string name="share_with_our_community">आमच्या समुदायसारख्या लोकांसोबत सामायिक करा</string>
+    <string name="no_posters_found">कोणतेही पोस्टर सापडले नाहीत!</string>
+    <string name="we_keep_on_adding_new_posters_though_ncheck_later_for_updates">आम्ही नवे पोस्टर लगत असतो, परंतु अपडेटसाठी नंतर पहा.</string>
+    <string name="your_business_address">तुमचा व्यवसायिक पत्ता</string>
+    <string name="trending_stories">आजच्या चालण्या</string>
+    <string name="enter_your_email_id">तुमचा ईमेल आयडी प्रविष्ट करा.</string>
+    <string name="enter_your_mobile_number">तुमचा मोबाइल नंबर प्रविष्ट करा.</string>
+    <string name="downloaded">डाउनलोड केले आहे</string>
 
 
 </resources>

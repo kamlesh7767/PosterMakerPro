@@ -85,7 +85,7 @@
     <string name="address_hint">Address</string>
     <string name="profile_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="post_will_be_downloaded_and_added_on_the_home_screen_nthis_action_is_irreversible">Post will be downloaded and added on the home-screen.\nThis action is irreversible!</string>
     <string name="download_it">Download it!</string>
     <string name="share_it">Share it..</string>
@@ -98,10 +98,11 @@
     <string name="no_posters_found">No Posters Found!</string>
     <string name="we_keep_on_adding_new_posters_though_ncheck_later_for_updates">We keep on adding new posters though!\nCheck later for updates.</string>
     <string name="your_business_address">Your Business Address</string>
-    <string name="trending_stories">Trending Stories</string>
+    <string name="trending_stories">For Today</string>
     <string name="enter_your_email_id">Enter your email id.</string>
     <string name="enter_your_mobile_number">Enter your mobile number.</string>
     <string name="downloaded">Downloaded</string>
+    <string name="poster_maker_pro">Poster Maker Pro</string>
 
 
 </resources>
