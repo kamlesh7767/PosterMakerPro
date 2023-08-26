@@ -283,7 +283,8 @@ Log.d("SCROLL_POSITION",value.indexOfFirst { it.Id == intent.getStringExtra("tre
         }
 
         private fun setUi(value: UserPersonalProfileModel) {
-        val adapter = ViewPagerAdapter(value, HomeResources.fullFrames())
+        val frameList = listOf(R.layout.frame_1,R.layout.frame_2,R.layout.frame_3,R.layout.frame_4,R.layout.frame_5,R.layout.frame_6,R.layout.frame_7,R.layout.frame_8_topless,R.layout.frame_9,R.layout.frame_10,R.layout.frame_11,R.layout.frame_12,R.layout.frame_13,R.layout.frame_14,R.layout.frame_15,R.layout.frame_16_topless,R.layout.frame_17,R.layout.frame_18,R.layout.frame_19)
+        val adapter = ViewPagerAdapter(value, frameList)
         binding.viewpager.adapter = adapter
 
     }
