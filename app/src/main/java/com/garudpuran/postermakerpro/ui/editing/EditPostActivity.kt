@@ -43,16 +43,9 @@ import java.io.File
 
 @AndroidEntryPoint
 class EditPostActivity : AppCompatActivity(),
-    EditFragOptionsAdapter.EditOptionsListener,
     OptionFramesRcAdapter.OptionFramesRcAdapterListener, ErrorDialogFrag.ErrorDialogListener {
     private lateinit var binding: ActivityEditPostBinding
-
-    private val userViewModel: UserViewModel by viewModels()
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var selectedFramePosition = 0
-    private var isNameFontAdded = false
-    private var isAddressFontAdded = false
-    private var isMobileFontAdded = false
     private val PROFILE_CROP_REQUEST_CODE = 101
     private val ICON_CROP_REQUEST_CODE = 202
 
@@ -117,9 +110,6 @@ class EditPostActivity : AppCompatActivity(),
             }
             true
         }
-
-
-        //binding.titlePostTv.text = intent.getStringExtra("engTitle")
         Glide
             .with(this)
             .load(intent.getStringExtra("imageUrl"))
@@ -147,216 +137,28 @@ class EditPostActivity : AppCompatActivity(),
             finish()
         }
 
-        binding.optionProfileImage.editFragOptionsProfileChangeImageBtn.setOnClickListener {
-            profilePicsContract.launch("image/*")
-        }
-
-        binding.optionProfileImage.editFragOptionsProfileResetImageBtn.setOnClickListener {
-            Glide
-                .with(this)
-                .load(intent.getStringExtra("profileLogoUrl"))
-                .centerCrop()
-                .into(userPic)
-        }
 
 
-        binding.optionProfileImage.editProfileImageSizeSlider.addOnChangeListener { slider, value, fromUser ->
 
-            changeUserPicSize(value)
-        }
 
-        binding.optionIcon.editIconImageSizeSlider.addOnChangeListener { slider, value, fromUser ->
-            changeIconSize(value)
-        }
+
 
         // options icon
-        binding.optionIcon.editFragOptionsIconChangeImageBtn.setOnClickListener {
-            iconPicsContract.launch("image/*")
-        }
-
-        binding.optionIcon.editFragOptionsIconResetImageBtn.setOnClickListener {
-            Glide
-                .with(this)
-                .load(intent.getStringExtra("profileLogoUrl"))
-                .centerCrop()
-                .into(binding.iconIv)
-        }
-
-        binding.optionName.editUserNameSizeSlider.addOnChangeListener { slider, value, fromUser ->
-
-            changeUserNameSize(value)
-        }
-
-        binding.optionContacts.editUserMobileSizeSlider.addOnChangeListener { slider, value, fromUser ->
-
-            changeUserMobileSize(value)
-        }
-
-        binding.optionAddress.editUserAddressSizeSlider.addOnChangeListener { slider, value, fromUser ->
-
-            changeUserAddressSize(value)
-        }
 
 
-        val nameColorSelectorGroup = PickerGroup<IntegerHSLColor>().also {
-            it.registerPickers(
-                binding.optionName.nameHueSeekBar,
-                binding.optionName.nameLightnessSeekBar
-            )
-        }
-
-        val mobileColorSelectorGroup = PickerGroup<IntegerHSLColor>().also {
-            it.registerPickers(
-                binding.optionContacts.mobileHueSeekBar,
-                binding.optionContacts.mobileLightnessSeekBar
-            )
-        }
-
-        val addressColorSelectorGroup = PickerGroup<IntegerHSLColor>().also {
-            it.registerPickers(
-                binding.optionAddress.addressHueSeekBar,
-                binding.optionAddress.addressLightnessSeekBar
-            )
-        }
-
-        nameColorSelectorGroup.addListener(object :
-            ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
-            override fun onColorChanged(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int
-            ) {
-                userName.setTextColor(color.toColorInt())
-            }
-
-            override fun onColorPicked(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int,
-                fromUser: Boolean
-            ) {
-
-            }
-
-            override fun onColorPicking(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int,
-                fromUser: Boolean
-            ) {
-
-            }
 
 
-        })
-
-        mobileColorSelectorGroup.addListener(object :
-            ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
-            override fun onColorChanged(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int
-            ) {
-                userDes.setTextColor(color.toColorInt())
-            }
-
-            override fun onColorPicked(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int,
-                fromUser: Boolean
-            ) {
-
-            }
-
-            override fun onColorPicking(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int,
-                fromUser: Boolean
-            ) {
-
-            }
 
 
-        })
-
-        addressColorSelectorGroup.addListener(object :
-            ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
-            override fun onColorChanged(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int
-            ) {
-                userAddress.setTextColor(color.toColorInt())
-            }
-
-            override fun onColorPicked(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int,
-                fromUser: Boolean
-            ) {
-
-            }
-
-            override fun onColorPicking(
-                picker: ColorSeekBar<IntegerHSLColor>,
-                color: IntegerHSLColor,
-                value: Int,
-                fromUser: Boolean
-            ) {
-
-            }
 
 
-        })
 
 
-        binding.optionProfileImage.editFragOptionsProfileHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
-            if (p1) {
-                userPic.visibility = View.VISIBLE
-            } else {
-                userPic.visibility = View.GONE
-            }
 
-        }
 
-        binding.optionIcon.editFragOptionsIconHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
-            if (p1) {
-                binding.iconIv.visibility = View.VISIBLE
-            } else {
-                binding.iconIv.visibility = View.GONE
-            }
 
-        }
 
-        binding.optionAddress.editFragOptionsAddressHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
-            if (p1) {
-                userAddress.visibility = View.VISIBLE
-            } else {
-                userAddress.visibility = View.GONE
-            }
 
-        }
-
-        binding.optionContacts.editFragOptionsMobileHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
-            if (p1) {
-                userDes.visibility = View.VISIBLE
-            } else {
-                userDes.visibility = View.GONE
-            }
-
-        }
-
-        binding.optionName.editFragOptionsNameHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
-            if (p1) {
-                userName.visibility = View.VISIBLE
-            } else {
-                userName.visibility = View.GONE
-            }
-
-        }
 
     }
 
@@ -382,97 +184,11 @@ class EditPostActivity : AppCompatActivity(),
         binding.iconIv.layoutParams = layoutParams
     }
 
-    private fun changeUserNameSize(size: Float) {
-
-        userName.textSize = size
-    }
-
-    private fun changeUserMobileSize(size: Float) {
-        userDes.textSize = size
-    }
-
-    private fun changeUserAddressSize(size: Float) {
-        userAddress.textSize = size
-    }
-
 
     private fun setUi() {
-        setOptionsUi(0)
-        initFrameOptions()
-        val adapterOptions = EditFragOptionsAdapter(this, this)
-        binding.editFragOptionsList.adapter = adapterOptions
     }
 
-    private fun initNameFonts() {
-        val fontNames = HomeResources.fonts()
 
-        // Create an ArrayAdapter using the font names and a default spinner layout
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fontNames)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Apply the adapter to the spinner
-        binding.optionName.fontSpinner.adapter = adapter
-
-        // Set an item selected listener for the spinner
-        binding.optionName.fontSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    // Get the selected font name
-                    val selectedFontName = fontNames[position]
-
-                    // Load the selected font
-                    val typeface = ResourcesCompat.getFont(
-                        this@EditPostActivity,
-                        getFontResourceId(selectedFontName)
-                    )
-
-
-                    userName.typeface = typeface
-                    isNameFontAdded = true
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-    }
-
-    private fun initMobileFonts() {
-        val fontNames = HomeResources.fonts()
-
-        // Create an ArrayAdapter using the font names and a default spinner layout
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fontNames)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Apply the adapter to the spinner
-        binding.optionContacts.mobileFontSpinner.adapter = adapter
-
-        // Set an item selected listener for the spinner
-        binding.optionContacts.mobileFontSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    // Get the selected font name
-                    val selectedFontName = fontNames[position]
-                    val typeface = ResourcesCompat.getFont(
-                        this@EditPostActivity,
-                        getFontResourceId(selectedFontName)
-                    )
-
-                    userDes.typeface = typeface
-                    isMobileFontAdded = true
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-    }
 
     private fun startCrop(sourceUri: Uri, REQUEST_CODE: Int) {
         val destinationUri = Uri.fromFile(File(this.cacheDir, "cropped_image.jpg"))
@@ -493,96 +209,12 @@ class EditPostActivity : AppCompatActivity(),
         }
     }
 
-    private fun initAddressFonts() {
-        val fontNames = HomeResources.fonts()
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fontNames)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.optionAddress.fontSpinner.adapter = adapter
-        binding.optionAddress.fontSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    val selectedFontName = fontNames[position]
-                    val typeface = ResourcesCompat.getFont(
-                        this@EditPostActivity,
-                        getFontResourceId(selectedFontName)
-                    )
-                    userAddress.typeface = typeface
-                    isAddressFontAdded = true
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-    }
 
 
-    override fun onEditOptionsClicked(item: EditFragOptionsModel) {
-        if (selectedFramePosition == 0) {
-            Utils.showToast(this, "Select a frame first!")
-        } else {
-            setOptionsUi(item.id)
-        }
-
-    }
 
 
-    private fun setOptionsUi(id: Int) {
-        updateOptionsUI()
 
-        when (id) {
-            0 -> {
-                binding.optionFrames.root.visibility = View.VISIBLE
-            }
 
-            1 -> {
-                binding.optionProfileImage.root.visibility = View.VISIBLE
-            }
-
-            2 -> {
-                binding.optionIcon.root.visibility = View.VISIBLE
-            }
-
-            3 -> {
-                binding.optionName.root.visibility = View.VISIBLE
-                if (!isNameFontAdded) {
-                    initNameFonts()
-                }
-            }
-
-            4 -> {
-                binding.optionAddress.root.visibility = View.VISIBLE
-                if (!isAddressFontAdded) {
-                    initAddressFonts()
-                }
-            }
-
-            5 -> {
-                binding.optionContacts.root.visibility = View.VISIBLE
-                if (!isMobileFontAdded) {
-                    initMobileFonts()
-                }
-            }
-        }
-
-    }
-
-    private fun updateOptionsUI() {
-        binding.optionProfileImage.root.visibility = View.GONE
-        binding.optionFrames.root.visibility = View.GONE
-        binding.optionIcon.root.visibility = View.GONE
-        binding.optionName.root.visibility = View.GONE
-        binding.optionAddress.root.visibility = View.GONE
-        binding.optionContacts.root.visibility = View.GONE
-    }
-
-    private fun initFrameOptions() {
-        val ady = OptionFramesRcAdapter(this, this)
-        binding.optionFrames.editOptionsFramesRcView.adapter = ady
-    }
 
     override fun onOptionFramesClicked(position: Int) {
         selectedFramePosition = position

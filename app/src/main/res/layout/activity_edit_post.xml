@@ -136,66 +136,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/full_post_layout">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/edit_frag_options_list"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="#0A000000"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/new_chip_tv_item" />
+                app:tabIndicatorColor="@color/primary_color"
+                app:tabIndicatorFullWidth="true"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/primary_color" />
 
-            <ScrollView
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="vertical"
+                android:layout_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_frag_options_list">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-                    <include
-                        android:id="@+id/option_frames"
-                        layout="@layout/edit_frag_options_frames_layout"
-                        android:visibility="visible" />
-
-                    <include
-                        android:id="@+id/option_profile_image"
-                        layout="@layout/edit_frag_options_profile_image"
-                        android:visibility="gone" />
-
-                    <include
-                        android:id="@+id/option_icon"
-                        layout="@layout/edit_frag_options_icon"
-                        android:visibility="gone" />
-
-                    <include
-                        android:id="@+id/option_name"
-                        layout="@layout/edit_frag_options_name"
-                        android:visibility="gone" />
-
-                    <include
-                        android:id="@+id/option_address"
-                        layout="@layout/edit_frag_options_address"
-                        android:visibility="gone" />
-
-                    <include
-                        android:id="@+id/option_contacts"
-                        layout="@layout/edit_frag_options_contacts"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-            </ScrollView>
+                app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
