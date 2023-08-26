@@ -10,13 +10,12 @@
         android:id="@+id/frame_footer_parent_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/frame_twelve"
+        android:background="@drawable/frame_thirtneen"
         android:paddingStart="15dp"
         android:paddingTop="10dp"
         android:paddingBottom="8dp"
-        android:layout_marginEnd="-15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/user_profile_pic_iv"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
@@ -27,12 +26,11 @@
             android:fontFamily="@font/roboto_semibold"
             android:gravity="center"
             android:text="@string/poster_maker_pro"
-            android:textColor="@color/red_two"
+            android:textColor="@color/primary_color"
             android:textSize="25sp"
             app:layout_constraintBottom_toTopOf="@+id/user_address_tv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <TextView
             android:id="@+id/user_address_tv"
@@ -43,7 +41,7 @@
             android:gravity="center"
             android:paddingHorizontal="20dp"
             android:text="Your Business Address"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@+id/user_mobile_tv"
             app:layout_constraintEnd_toEndOf="@+id/user_name_tv"
@@ -58,7 +56,7 @@
             android:gravity="center"
             android:paddingHorizontal="20dp"
             android:text="Mobile no: +913434343343"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

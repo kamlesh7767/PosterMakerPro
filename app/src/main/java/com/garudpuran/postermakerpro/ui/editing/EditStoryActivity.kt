@@ -30,6 +30,7 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditStoryBinding
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
+import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 import com.garudpuran.postermakerpro.ui.editing.adapter.ViewPagerAdapter
 import com.garudpuran.postermakerpro.ui.home.HomeViewModel
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
@@ -282,9 +283,7 @@ Log.d("SCROLL_POSITION",value.indexOfFirst { it.Id == intent.getStringExtra("tre
         }
 
         private fun setUi(value: UserPersonalProfileModel) {
-
-        val frameList = listOf(R.layout.frame_1,R.layout.frame_2,R.layout.frame_3,R.layout.frame_4,R.layout.frame_5,R.layout.frame_6)
-        val adapter = ViewPagerAdapter(value, frameList)
+        val adapter = ViewPagerAdapter(value, HomeResources.fullFrames())
         binding.viewpager.adapter = adapter
 
     }
