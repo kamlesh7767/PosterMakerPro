@@ -20,7 +20,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.lifecycleScope
 import codes.side.andcolorpicker.converter.toColorInt
 import codes.side.andcolorpicker.group.PickerGroup
 import codes.side.andcolorpicker.group.registerPickers
@@ -29,32 +28,24 @@ import codes.side.andcolorpicker.view.picker.ColorSeekBar
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditPostBinding
-import com.garudpuran.postermakerpro.models.FeedItem
-import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
-import com.garudpuran.postermakerpro.ui.commonui.DownloadAndShareCustomDialog
 import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
 import com.garudpuran.postermakerpro.ui.commonui.models.EditFragOptionsModel
 import com.garudpuran.postermakerpro.ui.editing.adapter.EditFragOptionsAdapter
 import com.garudpuran.postermakerpro.ui.editing.adapter.OptionFramesRcAdapter
-import com.garudpuran.postermakerpro.utils.ResponseStrings
-import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 import java.io.File
 
 @AndroidEntryPoint
 class EditPostActivity : AppCompatActivity(),
     EditFragOptionsAdapter.EditOptionsListener,
     OptionFramesRcAdapter.OptionFramesRcAdapterListener, ErrorDialogFrag.ErrorDialogListener {
-    private lateinit var binding:ActivityEditPostBinding
+    private lateinit var binding: ActivityEditPostBinding
 
     private val userViewModel: UserViewModel by viewModels()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -75,30 +66,31 @@ class EditPostActivity : AppCompatActivity(),
 
     private val TAG = "EditPostActivity"
 
-    fun isEmptyFrameSelected():Boolean{
+    fun isEmptyFrameSelected(): Boolean {
         return selectedFramePosition == 0
     }
 
     private val profilePicsContract =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it != null) {
-                startCrop(it,PROFILE_CROP_REQUEST_CODE)
-               //userPic.setImageURI(it)
+                startCrop(it, PROFILE_CROP_REQUEST_CODE)
+                //userPic.setImageURI(it)
             }
         }
 
     private val iconPicsContract =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it != null) {
-                startCrop(it,ICON_CROP_REQUEST_CODE)
+                startCrop(it, ICON_CROP_REQUEST_CODE)
                 //binding.iconIv.setImageURI(it)
             }
         }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       setUi()
+        setUi()
 
         binding.iconIv.setOnTouchListener { view, event ->
             when (event.action) {
@@ -106,6 +98,7 @@ class EditPostActivity : AppCompatActivity(),
                     offsetX = event.rawX.toInt() - view.x.toInt()
                     offsetY = event.rawY.toInt() - view.y.toInt()
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val newX = event.rawX.toInt() - offsetX
                     val newY = event.rawY.toInt() - offsetY
@@ -142,12 +135,12 @@ class EditPostActivity : AppCompatActivity(),
 
         binding.downloadBtn.setOnClickListener {
             val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-            saveImageToGallery(combinedBitmap!!,  intent.getStringExtra("engTitle")!!)
-            }
+            saveImageToGallery(combinedBitmap!!, intent.getStringExtra("engTitle")!!)
+        }
 
         binding.shareBtn.setOnClickListener {
             val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-            saveAndShareImage(combinedBitmap!!,System.currentTimeMillis().toString())
+            saveAndShareImage(combinedBitmap!!, System.currentTimeMillis().toString())
         }
 
         binding.backBtn.setOnClickListener {
@@ -191,7 +184,7 @@ class EditPostActivity : AppCompatActivity(),
 
         binding.optionName.editUserNameSizeSlider.addOnChangeListener { slider, value, fromUser ->
 
-           changeUserNameSize(value)
+            changeUserNameSize(value)
         }
 
         binding.optionContacts.editUserMobileSizeSlider.addOnChangeListener { slider, value, fromUser ->
@@ -226,7 +219,8 @@ class EditPostActivity : AppCompatActivity(),
             )
         }
 
-        nameColorSelectorGroup.addListener(object : ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
+        nameColorSelectorGroup.addListener(object :
+            ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
             override fun onColorChanged(
                 picker: ColorSeekBar<IntegerHSLColor>,
                 color: IntegerHSLColor,
@@ -244,19 +238,20 @@ class EditPostActivity : AppCompatActivity(),
 
             }
 
-           override fun onColorPicking(
-               picker: ColorSeekBar<IntegerHSLColor>,
-               color: IntegerHSLColor,
-               value: Int,
-               fromUser: Boolean
-           ) {
+            override fun onColorPicking(
+                picker: ColorSeekBar<IntegerHSLColor>,
+                color: IntegerHSLColor,
+                value: Int,
+                fromUser: Boolean
+            ) {
 
-           }
+            }
 
 
-       })
+        })
 
-        mobileColorSelectorGroup.addListener(object : ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
+        mobileColorSelectorGroup.addListener(object :
+            ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
             override fun onColorChanged(
                 picker: ColorSeekBar<IntegerHSLColor>,
                 color: IntegerHSLColor,
@@ -286,7 +281,8 @@ class EditPostActivity : AppCompatActivity(),
 
         })
 
-        addressColorSelectorGroup.addListener(object : ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
+        addressColorSelectorGroup.addListener(object :
+            ColorSeekBar.OnColorPickListener<ColorSeekBar<IntegerHSLColor>, IntegerHSLColor> {
             override fun onColorChanged(
                 picker: ColorSeekBar<IntegerHSLColor>,
                 color: IntegerHSLColor,
@@ -318,45 +314,45 @@ class EditPostActivity : AppCompatActivity(),
 
 
         binding.optionProfileImage.editFragOptionsProfileHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
-            if(p1){
+            if (p1) {
                 userPic.visibility = View.VISIBLE
-            }else{
+            } else {
                 userPic.visibility = View.GONE
             }
 
         }
 
         binding.optionIcon.editFragOptionsIconHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
-            if(p1){
+            if (p1) {
                 binding.iconIv.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.iconIv.visibility = View.GONE
             }
 
         }
 
         binding.optionAddress.editFragOptionsAddressHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
-            if(p1){
+            if (p1) {
                 userAddress.visibility = View.VISIBLE
-            }else{
+            } else {
                 userAddress.visibility = View.GONE
             }
 
         }
 
         binding.optionContacts.editFragOptionsMobileHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
-            if(p1){
-                 userDes.visibility = View.VISIBLE
-            }else{
+            if (p1) {
+                userDes.visibility = View.VISIBLE
+            } else {
                 userDes.visibility = View.GONE
             }
 
         }
 
         binding.optionName.editFragOptionsNameHideShowBtn.setOnCheckedChangeListener { p0, p1 ->
-            if(p1){
+            if (p1) {
                 userName.visibility = View.VISIBLE
-            }else{
+            } else {
                 userName.visibility = View.GONE
             }
 
@@ -400,17 +396,14 @@ class EditPostActivity : AppCompatActivity(),
     }
 
 
-
-
-
     private fun setUi() {
         setOptionsUi(0)
         initFrameOptions()
-        val adapterOptions = EditFragOptionsAdapter(this,this)
+        val adapterOptions = EditFragOptionsAdapter(this, this)
         binding.editFragOptionsList.adapter = adapterOptions
     }
 
-    private fun initNameFonts(){
+    private fun initNameFonts() {
         val fontNames = HomeResources.fonts()
 
         // Create an ArrayAdapter using the font names and a default spinner layout
@@ -421,24 +414,33 @@ class EditPostActivity : AppCompatActivity(),
         binding.optionName.fontSpinner.adapter = adapter
 
         // Set an item selected listener for the spinner
-        binding.optionName.fontSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Get the selected font name
-                val selectedFontName = fontNames[position]
+        binding.optionName.fontSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Get the selected font name
+                    val selectedFontName = fontNames[position]
 
-                // Load the selected font
-                val typeface = ResourcesCompat.getFont(this@EditPostActivity, getFontResourceId(selectedFontName))
+                    // Load the selected font
+                    val typeface = ResourcesCompat.getFont(
+                        this@EditPostActivity,
+                        getFontResourceId(selectedFontName)
+                    )
 
 
-                userName.typeface = typeface
-                isNameFontAdded = true
+                    userName.typeface = typeface
+                    isNameFontAdded = true
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
     }
 
-    private fun initMobileFonts(){
+    private fun initMobileFonts() {
         val fontNames = HomeResources.fonts()
 
         // Create an ArrayAdapter using the font names and a default spinner layout
@@ -449,21 +451,27 @@ class EditPostActivity : AppCompatActivity(),
         binding.optionContacts.mobileFontSpinner.adapter = adapter
 
         // Set an item selected listener for the spinner
-        binding.optionContacts.mobileFontSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Get the selected font name
-                val selectedFontName = fontNames[position]
+        binding.optionContacts.mobileFontSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Get the selected font name
+                    val selectedFontName = fontNames[position]
+                    val typeface = ResourcesCompat.getFont(
+                        this@EditPostActivity,
+                        getFontResourceId(selectedFontName)
+                    )
 
-                // Load the selected font
-                val typeface = ResourcesCompat.getFont(this@EditPostActivity, getFontResourceId(selectedFontName))
+                    userDes.typeface = typeface
+                    isMobileFontAdded = true
+                }
 
-                // Apply the selected font to the TextView
-                userDes.typeface = typeface
-                isMobileFontAdded = true
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
     }
 
     private fun startCrop(sourceUri: Uri, REQUEST_CODE: Int) {
@@ -471,96 +479,97 @@ class EditPostActivity : AppCompatActivity(),
 
         UCrop.of(sourceUri, destinationUri)
             .withAspectRatio(1f, 1f) // Set the desired aspect ratio
-            .start(this,REQUEST_CODE)
+            .start(this, REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PROFILE_CROP_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val croppedUri = UCrop.getOutput(data!!)
-           userPic.setImageURI(croppedUri)
-        }
-        else if(requestCode == ICON_CROP_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            userPic.setImageURI(croppedUri)
+        } else if (requestCode == ICON_CROP_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val croppedUri = UCrop.getOutput(data!!)
             binding.iconIv.setImageURI(croppedUri)
         }
     }
 
-    private fun initAddressFonts(){
+    private fun initAddressFonts() {
         val fontNames = HomeResources.fonts()
-
-        // Create an ArrayAdapter using the font names and a default spinner layout
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fontNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Apply the adapter to the spinner
         binding.optionAddress.fontSpinner.adapter = adapter
+        binding.optionAddress.fontSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedFontName = fontNames[position]
+                    val typeface = ResourcesCompat.getFont(
+                        this@EditPostActivity,
+                        getFontResourceId(selectedFontName)
+                    )
+                    userAddress.typeface = typeface
+                    isAddressFontAdded = true
+                }
 
-        // Set an item selected listener for the spinner
-        binding.optionAddress.fontSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Get the selected font name
-                val selectedFontName = fontNames[position]
-
-                // Load the selected font
-                val typeface = ResourcesCompat.getFont(this@EditPostActivity, getFontResourceId(selectedFontName))
-
-                // Apply the selected font to the TextView
-                userAddress.typeface = typeface
-                isAddressFontAdded = true
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
     }
 
 
-
     override fun onEditOptionsClicked(item: EditFragOptionsModel) {
-        if(selectedFramePosition == 0){
-            Utils.showToast(this,"Select a frame first!")
-        }else{
+        if (selectedFramePosition == 0) {
+            Utils.showToast(this, "Select a frame first!")
+        } else {
             setOptionsUi(item.id)
         }
 
     }
 
 
-
     private fun setOptionsUi(id: Int) {
         updateOptionsUI()
 
-        when(id){
-            0->{
+        when (id) {
+            0 -> {
                 binding.optionFrames.root.visibility = View.VISIBLE
             }
-            1->{
+
+            1 -> {
                 binding.optionProfileImage.root.visibility = View.VISIBLE
             }
-            2->{
+
+            2 -> {
                 binding.optionIcon.root.visibility = View.VISIBLE
             }
-            3->{
+
+            3 -> {
                 binding.optionName.root.visibility = View.VISIBLE
-                if(!isNameFontAdded){
+                if (!isNameFontAdded) {
                     initNameFonts()
                 }
             }
-            4->{
+
+            4 -> {
                 binding.optionAddress.root.visibility = View.VISIBLE
-                if(!isAddressFontAdded){
+                if (!isAddressFontAdded) {
                     initAddressFonts()
                 }
             }
-            5->{
+
+            5 -> {
                 binding.optionContacts.root.visibility = View.VISIBLE
-                if(!isMobileFontAdded){
+                if (!isMobileFontAdded) {
                     initMobileFonts()
                 }
             }
         }
 
     }
+
     private fun updateOptionsUI() {
         binding.optionProfileImage.root.visibility = View.GONE
         binding.optionFrames.root.visibility = View.GONE
@@ -571,21 +580,21 @@ class EditPostActivity : AppCompatActivity(),
     }
 
     private fun initFrameOptions() {
-val ady = OptionFramesRcAdapter(this,this)
+        val ady = OptionFramesRcAdapter(this, this)
         binding.optionFrames.editOptionsFramesRcView.adapter = ady
     }
 
     override fun onOptionFramesClicked(position: Int) {
         selectedFramePosition = position
         binding.fullFrameLayout.removeAllViews()
-        if(position!=0){
-            val view = LayoutInflater.from(this).inflate( HomeResources.fullFrames()[position], null)
+        if (position != 0) {
+            val view = LayoutInflater.from(this).inflate(HomeResources.fullFrames()[position], null)
             userPic = view.findViewById<CircleImageView>(R.id.user_profile_pic_iv)
             userName = view.findViewById<TextView>(R.id.user_name_tv)
             userDes = view.findViewById<TextView>(R.id.user_mobile_tv)
             userAddress = view.findViewById<TextView>(R.id.user_address_tv)
 //  downloadAndSetFont("font_text_one.ttf")
-            userDes.text = "Mob No: "+intent.getStringExtra("profileMobileNumber")
+            userDes.text = "Mob No: " + intent.getStringExtra("profileMobileNumber")
             userName.text = intent.getStringExtra("profileName")
             userAddress.text = intent.getStringExtra("profileAddress")
             Glide.with(this).load(intent.getStringExtra("profileLogoUrl")).into(userPic)
@@ -600,32 +609,26 @@ val ady = OptionFramesRcAdapter(this,this)
 
     }
 
-        private fun saveAndShareImage(bitmap: Bitmap, fileName: String){
-            val resolver = this.contentResolver
-            val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/")
-            }
-
-            val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-            uri?.let {
-                resolver.openOutputStream(it)?.use { outputStream ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                }
-            }
-
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "image/*"
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-
-            // Specify the package name of WhatsApp to ensure sharing through WhatsApp
-            // shareIntent.setPackage("com.whatsapp")
-
-            // You can add more conditions for other platforms here if needed
-
-            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+    private fun saveAndShareImage(bitmap: Bitmap, fileName: String) {
+        val resolver = this.contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/")
         }
+
+        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        uri?.let {
+            resolver.openOutputStream(it)?.use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
+        }
+
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "image/*"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        startActivity(Intent.createChooser(shareIntent, "Share Image"))
+    }
 
 
     private fun viewToBitmap(view: View): Bitmap? {
@@ -643,7 +646,7 @@ val ady = OptionFramesRcAdapter(this,this)
         }
     }
 
-    private fun saveImageToGallery(bitmap: Bitmap, fileName: String,) {
+    private fun saveImageToGallery(bitmap: Bitmap, fileName: String) {
         val resolver = this.contentResolver
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
@@ -657,38 +660,7 @@ val ady = OptionFramesRcAdapter(this,this)
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             }
         }
-        Toast.makeText(this,"Downloaded",Toast.LENGTH_SHORT).show()
-    }
-
-
-
-    private fun observeResponse() {
-        userViewModel.onObserveUploadFeedPostItemResponseData().observe(this){
-            when (it.status) {
-                Status.LOADING -> {
-                    binding.progress.root.visibility = View.VISIBLE
-                }
-
-                Status.ERROR -> {
-                    Utils.showToast(this,"Error!")
-                    binding.downloadBtn.visibility = View.VISIBLE
-                }
-
-                Status.SUCCESS -> {
-                    if (it.data == ResponseStrings.SUCCESS) {
-                        binding.progress.root.visibility = View.GONE
-                        val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-                        saveImageToGallery(combinedBitmap!!,intent.getStringExtra("engTitle")!! )
-                        binding.downloadBtn.visibility = View.VISIBLE
-                        Toast.makeText(this,"Uploaded Successfully",Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                Status.SESSION_EXPIRE -> {
-
-                }
-            }
-        }
+        Toast.makeText(this, "Downloaded", Toast.LENGTH_SHORT).show()
     }
 
 
