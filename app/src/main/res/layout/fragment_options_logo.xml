@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/rounded_white_btn"
+            android:background="@drawable/outline_rounded_orange_stroke_bg"
             android:fontFamily="@font/roboto_semibold"
             android:gravity="center"
             android:paddingHorizontal="8dp"
@@ -40,7 +40,7 @@
             android:id="@+id/edit_frag_options_icon_reset_image_btn"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:background="@drawable/rounded_white_btn"
+            android:background="@drawable/outline_rounded_orange_stroke_bg"
             android:fontFamily="@font/roboto_semibold"
             android:gravity="center"
             android:paddingHorizontal="8dp"
@@ -50,6 +50,24 @@
             android:layout_marginStart="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_icon_image_size_slider" />
+
+        <TextView
+            android:id="@+id/edit_frag_options_logo_bg_rmv_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="@drawable/outline_rounded_orange_stroke_bg"
+            android:fontFamily="@font/roboto_semibold"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:text="Remove Background"
+            android:textColor="@color/primary_color"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_frag_options_icon_hide_show_image_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/edit_frag_options_icon_hide_show_image_btn"
+            app:layout_constraintTop_toTopOf="@+id/edit_frag_options_icon_hide_show_image_btn" />
+
+
 
         <TextView
             android:id="@+id/textView7"

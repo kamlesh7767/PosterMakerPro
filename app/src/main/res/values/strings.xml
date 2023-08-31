@@ -103,6 +103,7 @@
     <string name="enter_your_mobile_number">Enter your mobile number.</string>
     <string name="downloaded">Downloaded</string>
     <string name="poster_maker_pro">Poster Maker Pro</string>
+    <string name="select_a_frame_first">Select a frame first!</string>
 
 
 </resources>

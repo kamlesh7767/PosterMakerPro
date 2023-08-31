@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.garudpuran.postermakerpro.PaymentActivity
-import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.databinding.FragmentProfileBinding
 import com.garudpuran.postermakerpro.databinding.FragmentRechargesBinding
 import com.garudpuran.postermakerpro.models.RechargeItem
 import com.garudpuran.postermakerpro.ui.home.HomeViewModel

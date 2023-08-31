@@ -10,12 +10,8 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
-import com.garudpuran.postermakerpro.ui.commonui.models.EditFragOptionsModel
-import de.hdodenhof.circleimageview.CircleImageView
 
 class OptionFramesRcAdapter(
     private val mListener: OptionFramesRcAdapterListener,
@@ -31,6 +27,8 @@ class OptionFramesRcAdapter(
         val parentL: ConstraintLayout = view.findViewById(R.id.edit_options_frame_rc_item_parent_l)
     }
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.edit_frag_frames_rc_item, parent, false)
@@ -43,11 +41,13 @@ class OptionFramesRcAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.positionTv.text = position.toString()
-        if(position!=0){
-            holder.imageView.setImageDrawable(AppCompatResources.getDrawable(context,dataset[position]))
+
+        if (position != 0) {
+            holder.imageView.setImageDrawable(AppCompatResources.getDrawable(context, dataset[position]))
+        } else {
+            // Clear the ImageView for the 0th item
+            holder.imageView.setImageDrawable(null)
         }
-
-
 
         if (position == selectedPosition) {
             holder.parentL.background =
@@ -59,16 +59,17 @@ class OptionFramesRcAdapter(
             holder.positionTv.setTextColor(context.getColor(com.denzcoskun.imageslider.R.color.grey_font))
         }
 
-       holder.itemView.setOnClickListener {
-           setItemSelected(position)
-           mListener.onOptionFramesClicked(position)
-       }
-
+        holder.itemView.setOnClickListener {
+            setItemSelected(position)
+            mListener.onOptionFramesClicked(position)
+        }
     }
 
     private fun setItemSelected(position: Int) {
+        val oldPosition = selectedPosition
         selectedPosition = position
-        notifyDataSetChanged()
+        notifyItemChanged(oldPosition)
+        notifyItemChanged(position)
     }
 
 

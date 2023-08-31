@@ -2,6 +2,7 @@ package com.garudpuran.postermakerpro.ui.editing
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -36,6 +37,10 @@ import com.garudpuran.postermakerpro.ui.home.HomeViewModel
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
@@ -57,12 +62,15 @@ class EditStoryActivity : AppCompatActivity()
 
     private var userData = UserPersonalProfileModel()
     private var trendingStories = listOf<TrendingStoriesItemModel>()
-
+        private var mInterstitialAd: InterstitialAd? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         observeUserData()
+
+
+
 
         //binding.titlePostTv.text = intent.getStringExtra("engTitle")
 
@@ -79,7 +87,7 @@ class EditStoryActivity : AppCompatActivity()
             finish()
         }
 
-
+        showAd()
     }
 
     private fun viewToBitmap(view: View): Bitmap? {
@@ -204,7 +212,27 @@ private  fun saveToOldGallery(){
             }
         }
         Toast.makeText(this, getString(R.string.downloaded), Toast.LENGTH_SHORT).show()
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.show(this)
+        }
     }
+
+        private fun showAd() {
+            var adRequest = AdRequest.Builder().build()
+
+            InterstitialAd.load(this,"ca-app-pub-4135756483743089/1376225141", adRequest, object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                    Log.d("ADVERT", adError.toString())
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                    Log.d("ADVERT", "Shown")
+                }
+            })
+        }
+
 
         private fun saveAndShareImage(bitmap: Bitmap, fileName: String){
             val resolver = this.contentResolver
@@ -231,6 +259,9 @@ private  fun saveToOldGallery(){
             // You can add more conditions for other platforms here if needed
 
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.show(this)
+            }
         }
 
     private fun observeUserData() {

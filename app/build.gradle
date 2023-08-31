@@ -78,6 +78,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:22.2.0'
     implementation 'com.github.yalantis:ucrop:2.2.6'
 
+    //bg remover
+    implementation 'com.github.GhayasAhmad:auto-background-remover:1.0.3'
+
+    //implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.5'
+
 
 
     testImplementation 'junit:junit:4.13.2'

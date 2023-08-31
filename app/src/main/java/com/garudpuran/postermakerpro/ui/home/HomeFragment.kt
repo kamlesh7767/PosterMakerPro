@@ -24,6 +24,7 @@ import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.editing.EditStoryActivity
+import com.garudpuran.postermakerpro.ui.intro.IntroActivity
 import com.garudpuran.postermakerpro.ui.profile.CreatePersonalProfileFragment
 import com.garudpuran.postermakerpro.ui.profile.SelectProfessionalProfileBottomSheetFrag
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
@@ -33,6 +34,7 @@ import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.utils.Utils.getProfileBottomPopUpStatus
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
+import com.google.android.gms.ads.AdRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +59,12 @@ class HomeFragment : Fragment(),
     private var searchItemList = listOf<SearchModel>()
     private var doubleBackToExitPressedOnce = false
     private lateinit var onBackPressedCallback: OnBackPressedCallback
+
+    private fun showAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.profileBannerAdV.loadAd(adRequest)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -115,6 +123,16 @@ class HomeFragment : Fragment(),
             }
         }
 
+        binding.infoBtn.setOnClickListener {
+            sendToIntro()
+        }
+
+    }
+
+    private fun sendToIntro() {
+        val intent = Intent(requireActivity(), IntroActivity::class.java)
+        intent.putExtra("destination",2)
+        startActivity(intent)
     }
 
     private fun initSearch(s: CharSequence) {
@@ -284,7 +302,7 @@ class HomeFragment : Fragment(),
             binding.homeUserNameTv.text = data.name
             binding.homeWelComeTv.text = getString(R.string.welcome)
         }
-
+showAd()
 
     }
 

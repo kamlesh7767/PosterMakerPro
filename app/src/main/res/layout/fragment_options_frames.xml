@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.garudpuran.postermakerpro.ui.editing.adapter.HorizontalRecyclerView
             android:id="@+id/edit_options_frames_rc_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

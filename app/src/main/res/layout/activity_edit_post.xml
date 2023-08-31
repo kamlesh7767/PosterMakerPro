@@ -51,6 +51,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
+
             <ImageView
                 android:id="@+id/share_btn"
                 android:layout_width="30dp"
@@ -78,18 +79,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
 
+            <ImageView
+                android:id="@+id/maskedAddIv"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/add"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageView
+                android:id="@+id/maskedIv"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="matrix"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+
+
+
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="fitXY"
+                android:src="@drawable/greetings_sample"
                 app:layout_constraintDimensionRatio="1:1"
-                android:src="@drawable/image"
-                app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/full_frame_layout"
@@ -116,8 +145,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/naruto"
-                    app:civ_border_width="2dp"
-                    app:civ_border_color="@color/white"
+                    app:civ_border_width="0dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,7 +157,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             android:background="@drawable/top_rounded_white_filled_bg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -140,11 +167,11 @@
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#0A000000"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabIndicatorColor="@color/primary_color"
                 app:tabIndicatorFullWidth="true"
                 app:tabMode="scrollable"
+
                 app:tabSelectedTextColor="@color/primary_color" />
 
             <androidx.viewpager2.widget.ViewPager2

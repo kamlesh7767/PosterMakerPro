@@ -163,9 +163,20 @@
                     android:drawableTint="@color/primary_color"
                     android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
-                    android:layout_marginBottom="100dp"
                     android:text="@string/create_profile" />
+
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/profile_banner_ad_v"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:adSize="BANNER"
+                    android:layout_marginBottom="100dp"
+                    app:adUnitId="@string/profile_ad_unit_id"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
 
             </LinearLayout>
 

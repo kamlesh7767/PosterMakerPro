@@ -12,10 +12,7 @@ import com.bumptech.glide.Glide
 import com.ddd.androidutils.DoubleClick
 import com.ddd.androidutils.DoubleClickListener
 import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.models.CategoryItem
 import com.garudpuran.postermakerpro.models.FeedItem
-import com.garudpuran.postermakerpro.models.SubCategoryItem
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 
 
@@ -23,20 +20,7 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
     RecyclerView.Adapter<HomeFeedRcAdapter.ItemViewHolder>() {
     private val FEED_ITEM_VIEW_TYPE = 100
     private val FEED_AD_VIEW_TYPE = 200
-    private val combinedList: List<Any>
 
-    init {
-        combinedList = generateCombinedList()
-
-    }
-
-    private fun generateCombinedList(): List<Any> {
-        val combined = mutableListOf<Any>()
-    combined.addAll(dataset)
-        val adData = (0..10).toList()
-    combined.addAll(adData)
-        return combined.shuffled()
-    }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val itemPostImage = view.findViewById<ImageView>(R.id.feed_item_post_pic)
@@ -53,27 +37,17 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return if (viewType == FEED_ITEM_VIEW_TYPE) {
-            ItemViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.feed_rc_item, parent, false)
-            )
-        } else {
-            ItemViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.feed_ad_view_item, parent, false)
-            )
-        }
-
+        return ItemViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.feed_rc_item, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
-        return generateCombinedList().size
+        return dataset.size
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        if (holder.itemViewType == FEED_ITEM_VIEW_TYPE) {
-
             if (likedPosts==null){
                 holder.itemFilledLike.visibility = View.GONE
                 holder.itemOutlinedLike.visibility = View.GONE
@@ -81,7 +55,7 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
             }
 
 
-            val item = combinedList[position] as FeedItem
+            val item = dataset[position]
             val doubleClick = DoubleClick(object : DoubleClickListener {
                 override fun onSingleClickEvent(view: View?) {
 
@@ -203,10 +177,7 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
                 mListener.onHomeFeedCheckOutBtnClicked(item)
             }
 
-        } else {
-            val adRequest = AdRequest.Builder().build()
-            holder.adView.loadAd(adRequest)
-        }
+
 
 
     }
@@ -225,19 +196,6 @@ class HomeFeedRcAdapter(private val mListener: HomeFeedClickListener,private var
         }
 
         mListener.onHomeFeedImageLiked(item)
-    }
-
-
-
-    override fun getItemViewType(position: Int): Int {
-        val item = combinedList[position]
-
-        return if (item is Int) {
-            FEED_AD_VIEW_TYPE
-        } else {
-            FEED_ITEM_VIEW_TYPE
-        }
-
     }
 
 

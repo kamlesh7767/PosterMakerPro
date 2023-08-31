@@ -16,10 +16,12 @@ import androidx.core.widget.addTextChangedListener
 import com.garudpuran.postermakerpro.MainActivity
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityOtpactivityBinding
+import com.garudpuran.postermakerpro.ui.intro.IntroActivity
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.garudpuran.postermakerpro.utils.UserReferences
+import com.garudpuran.postermakerpro.utils.Utils
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
@@ -45,11 +47,16 @@ class OTPActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOtpactivityBinding
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var phoneNumber: String
+    private var isReturned = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOtpactivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if(isReturned){
+            sendToMain()
+        }
 
         OTP = intent.getStringExtra("OTP").toString()
         resendToken = intent.getParcelableExtra("resendToken")!!
@@ -322,7 +329,7 @@ class OTPActivity : AppCompatActivity() {
                         FirebaseFirestore.getInstance().collection(UserReferences.USER_MAIN_NODE)
                     db.document(uid).get().addOnSuccessListener {
                         if (it.exists()) {
-                            sendToMain()
+                           checkAndNavigate()
                         } else {
                             updateUserData(uid, params)
                         }
@@ -341,6 +348,24 @@ class OTPActivity : AppCompatActivity() {
             }
     }
 
+    private fun checkAndNavigate(){
+        if(Utils.getIntroStatus(this)){
+            sendToIntro()
+        }else{
+            sendToMain()
+        }
+    }
+
+
+
+
+    private fun sendToIntro() {
+        val intent = Intent(this, IntroActivity::class.java)
+        intent.putExtra("destination",1)
+        startActivity(intent)
+        isReturned = true
+        finish()
+    }
     private fun sendToMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
@@ -371,7 +396,7 @@ class OTPActivity : AppCompatActivity() {
                     if (it.data == ResponseStrings.SUCCESS) {
                         Toast.makeText(this, getString(R.string.authenticated_successfully), Toast.LENGTH_SHORT)
                             .show()
-                        sendToMain()
+                       checkAndNavigate()
                     }
                 }
 

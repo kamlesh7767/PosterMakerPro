@@ -27,6 +27,7 @@ import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
+import com.google.android.gms.ads.AdRequest
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +52,10 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
                 startCrop(it)
             }
         }
-
+    private fun showAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.profileBannerAdV.loadAd(adRequest)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.BottomSheetDialogStyle)
@@ -67,6 +71,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showAd()
         binding.userProfilePic.setOnClickListener {
             profilePicsContract.launch("image/*")
         }

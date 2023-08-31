@@ -5,9 +5,12 @@ object AppPrefConstants{
 object UserReferences{
     const val USER_MAIN_NODE = "users"
     const val USER_PROFILE = "profile"
+    const val USER_INTRO = "intro"
     const val USER_PROFESSIONAL_PROFILES = "professional_profile"
     const val USER_PROFILE_STATUS = "status_profile"
+    const val USER_INTRO_STATUS = "status_intro"
     const val USER_PROFILE_STATUS_SHOWED = "showed"
+    const val USER_INTRO_STATUS_SHOWED = "intro_showed"
 
 
 }

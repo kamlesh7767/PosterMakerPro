@@ -25,8 +25,8 @@
             android:gravity="center"
             android:text="@string/poster_maker_pro"
             android:textColor="@color/red_two"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@+id/user_address_tv"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/user_mobile_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +42,7 @@
             android:text="Your Business Address"
             android:textColor="@color/red_one"
             android:textSize="13sp"
-            app:layout_constraintBottom_toTopOf="@+id/user_mobile_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/user_name_tv"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -57,7 +57,7 @@
             android:text="Mobile no: +919595559577"
             android:textColor="@color/red_two"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/user_address_tv"
             app:layout_constraintEnd_toEndOf="@+id/user_address_tv"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -69,7 +69,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:scaleType="centerCrop"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
         android:src="@drawable/pmp_app_icon"
         app:layout_constraintBottom_toBottomOf="@+id/frame_footer_parent_layout"

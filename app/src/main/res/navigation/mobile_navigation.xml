@@ -104,7 +104,7 @@
         android:label="CreateProfessionalProfileFragment" />
     <fragment
         android:id="@+id/rechargesFragment"
-        android:name="com.garudpuran.postermakerpro.ui.recharge.RechargesFragment"
+        android:name="com.garudpuran.postermakerpro.ui.intro.RechargesFragment"
         android:label="fragment_recharges"
         tools:layout="@layout/fragment_recharges" />
     <fragment

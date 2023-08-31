@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="10dp"
         android:orientation="horizontal"
         android:background="@drawable/frame_eight_header"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,61 +26,64 @@
 
         <TextView
             android:id="@+id/user_name_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="10dp"
             android:fontFamily="@font/roboto_semibold"
-            android:gravity="center"
+            android:gravity="start"
             android:text="@string/poster_maker_pro"
             android:textColor="@color/white"
-            android:textSize="35sp"
-            app:layout_constraintBottom_toTopOf="@+id/user_address_tv"
+            android:textSize="20sp"
+            android:layout_marginStart="120dp"
+            app:layout_constraintBottom_toTopOf="@+id/user_mobile_tv"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/user_address_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="6dp"
             android:fontFamily="@font/roboto_semibold"
-            android:gravity="center"
+            android:gravity="start"
             android:text="Your Business Address"
             android:textColor="@color/white"
             android:textSize="13sp"
-            app:layout_constraintBottom_toTopOf="@+id/user_mobile_tv"
-            app:layout_constraintEnd_toEndOf="@+id/user_name_tv"
-            app:layout_constraintStart_toStartOf="@+id/user_name_tv" />
+            android:layout_marginStart="120dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/user_mobile_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
+            android:layout_marginStart="120dp"
             android:fontFamily="@font/roboto_semibold"
-            android:gravity="center"
+            android:gravity="start"
             android:text="Mobile no: +919595559577"
             android:textColor="@color/white"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/user_name_tv"
-            app:layout_constraintStart_toStartOf="@+id/user_name_tv" />
+            app:layout_constraintBottom_toTopOf="@+id/user_address_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_profile_pic_iv"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginStart="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/pmp_app_icon"
-        app:civ_border_color="@color/red_two"
-        app:civ_border_width="5dp"
+        app:civ_border_width="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frame_footer_parent_layout" />

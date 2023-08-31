@@ -1,8 +1,8 @@
 package com.garudpuran.postermakerpro.ui.editing.adapter
 
-import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsAddressFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsFramesFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsLogoFragment
@@ -11,20 +11,27 @@ import com.garudpuran.postermakerpro.ui.editing.options.OptionsProfilePhotoFragm
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsUserNameFragment
 
 
-class EditingPostOptionsVPAdapter(fragment: Fragment?) : FragmentStateAdapter(fragment!!) {
+class EditingPostOptionsVPAdapter(private val optionsFrameListener: OptionsFramesFragment.OptionFramesListener,
+                                  private val optionsProfileListener: OptionsProfilePhotoFragment.OptionsProfilePicListener,
+                                  private val optionsLogoListener: OptionsLogoFragment.OptionsLogoListener,
+                                  private val optionsNameListener: OptionsUserNameFragment.OptionsNameListener,
+                                  private val optionsAddressListener: OptionsAddressFragment.OptionsAddressListener,
+                                  private val optionsMoNoListener: OptionsMobileNumberFragment.OptionsMoNoListener,
+                                  activity: EditPostActivity) : FragmentStateAdapter(activity) {
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> OptionsFramesFragment()
-            1 -> OptionsProfilePhotoFragment()
-            2 -> OptionsLogoFragment()
-            3 -> OptionsUserNameFragment()
-            4 -> OptionsAddressFragment()
-            5 -> OptionsMobileNumberFragment()
+            0 -> OptionsFramesFragment(optionsFrameListener)
+            1 -> OptionsProfilePhotoFragment(optionsProfileListener)
+            2 -> OptionsLogoFragment(optionsLogoListener)
+            3 -> OptionsUserNameFragment(optionsNameListener)
+            4 -> OptionsAddressFragment(optionsAddressListener)
+            5 -> OptionsMobileNumberFragment(optionsMoNoListener)
 
             else -> throw IllegalArgumentException("Invalid position: $position")
         }
     }
+
 
     override fun getItemCount(): Int {
         return 6

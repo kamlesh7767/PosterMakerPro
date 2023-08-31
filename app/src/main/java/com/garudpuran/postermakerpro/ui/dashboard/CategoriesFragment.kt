@@ -24,6 +24,7 @@ import com.garudpuran.postermakerpro.ui.home.HomeViewModel
 import com.garudpuran.postermakerpro.ui.subcat.SelectedSubCatItemsFragmentArgs
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
+import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -39,6 +40,11 @@ class CategoriesFragment : Fragment(),HomeFeedCatSubCatItemAdapter.CatSubCatItem
     private  val args: CategoriesFragmentArgs by navArgs()
     private  var searchedCatSubCatPair = mutableListOf<Pair<CategoryItem, MutableList<SubCategoryItem>>>()
     private  var catSubCatPairList = listOf< Pair<CategoryItem, MutableList<SubCategoryItem>>>()
+
+    private fun showAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.profileBannerAdV.loadAd(adRequest)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -177,6 +183,7 @@ binding.catFragSearchEt.addTextChangedListener {
         val adapter = CategoriesAdapter(data,this,getSelectedLanguage())
         binding.categoriesRc.adapter=adapter
         binding.categoriesRc.visibility = View.VISIBLE
+        showAd()
     }
 
     private fun getSelectedLanguage(): String {

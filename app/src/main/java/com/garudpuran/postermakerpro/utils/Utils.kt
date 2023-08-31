@@ -17,7 +17,7 @@ object Utils {
     fun showToast(activity: Activity, message: String){
         val toast = Toast(activity)
         toast.duration = Toast.LENGTH_SHORT
-      toast.setGravity(Gravity.TOP,0,0)
+      toast.setGravity(Gravity.BOTTOM,0,0)
         val inflater = activity.layoutInflater
 
         val view: View = inflater.inflate(
@@ -35,6 +35,15 @@ object Utils {
         )
         val pref = profilePref.getString(UserReferences.USER_PROFILE_STATUS,"")
         return pref != UserReferences.USER_PROFILE_STATUS_SHOWED
+    }
+
+    fun getIntroStatus(activity: Activity):Boolean{
+        val profilePref = activity.getSharedPreferences(
+            UserReferences.USER_INTRO,
+            Context.MODE_PRIVATE
+        )
+        val pref = profilePref.getString(UserReferences.USER_INTRO_STATUS,"")
+        return pref != UserReferences.USER_INTRO_STATUS_SHOWED
     }
 
     fun View.hide(){

@@ -14,7 +14,7 @@ import com.garudpuran.postermakerpro.databinding.FragmentOptionsMobileNumberBind
 import com.garudpuran.postermakerpro.databinding.FragmentOptionsUserNameBinding
 
 
-class OptionsLogoFragment : Fragment() {
+class OptionsLogoFragment(private val mListener: OptionsLogoListener) : Fragment() {
     private var _binding: FragmentOptionsLogoBinding? = null
     private val binding get() = _binding!!
 
@@ -23,30 +23,41 @@ class OptionsLogoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentOptionsLogoBinding.inflate(inflater, container, false)
         binding.editFragOptionsIconHideShowImageBtn.setOnCheckedChangeListener { p0, p1 ->
-            if (p1) {
-
-            } else {
-            }
+            mListener.logoHideShowBtnClicked(p1)
 
         }
 
         binding.editFragOptionsIconResetImageBtn.setOnClickListener {
+            mListener.logoResetClicked()
+        }
 
+        binding.editFragOptionsLogoBgRmvBtn.setOnClickListener {
+            mListener.logoPicBgRemove()
         }
 
 
         binding.editIconImageSizeSlider.addOnChangeListener { slider, value, fromUser ->
-
+            mListener.logoSizeSliderClicked(value)
         }
 
         // options icon
         binding.editFragOptionsIconChangeImageBtn.setOnClickListener {
-
+            mListener.logoChangeClicked()
         }
 
         return binding.root
+    }
+
+    interface OptionsLogoListener {
+        fun logoHideShowBtnClicked(p1: Boolean)
+        fun logoSizeSliderClicked(value: Float)
+
+        fun logoChangeClicked()
+
+        fun logoResetClicked()
+
+        fun logoPicBgRemove()
     }
 }
