@@ -15,8 +15,8 @@ android {
         applicationId "com.garudpuran.postermakerpro"
         minSdk 28
         targetSdk 34
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -81,7 +81,7 @@ dependencies {
     //bg remover
     implementation 'com.github.GhayasAhmad:auto-background-remover:1.0.3'
 
-    //implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
     implementation 'com.github.MikeOrtiz:TouchImageView:3.5'
 
 
