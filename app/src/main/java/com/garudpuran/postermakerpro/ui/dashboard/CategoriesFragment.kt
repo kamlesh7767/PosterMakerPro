@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -95,12 +96,16 @@ class CategoriesFragment : Fragment(), HomeFeedCatSubCatItemAdapter.CatSubCatIte
             viewLifecycleOwner,
             onBackPressedCallback
         )
-        observeData()
         return binding.root
     }
 
+    private lateinit var nestedScrollView: CustomNestedScrollView
+    private var savedScrollState: Parcelable? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        nestedScrollView = view.findViewById(R.id.parentNS)
+        observeData()
 binding.catFragSearchEt.addTextChangedListener {
     val s = it?.trim()
     if (s!!.isNotEmpty()) {
@@ -118,8 +123,32 @@ binding.catFragSearchEt.addTextChangedListener {
         binding.infoBtn.setOnClickListener {
             sendToIntro()
         }
-
+        if (savedScrollState != null) {
+            nestedScrollView.setSavedScrollState(savedScrollState)
+        }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        // Save the scroll state of the CustomNestedScrollView
+        savedScrollState = nestedScrollView.onSaveInstanceState()
+        outState.putParcelable("scroll_state", savedScrollState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // Restore the scroll state if it was saved
+        if (savedInstanceState != null) {
+            savedScrollState = savedInstanceState.getParcelable("scroll_state")
+            if (savedScrollState != null) {
+                nestedScrollView.setSavedScrollState(savedScrollState)
+            }
+        }
+    }
+
+
 
     private fun sendToIntro() {
         val intent = Intent(requireActivity(), IntroActivity::class.java)
@@ -193,9 +222,9 @@ binding.catFragSearchEt.addTextChangedListener {
                         setErrorDialog()
                     }
 
-                    binding.homeWelComeTv.visibility = View.GONE
-                    binding.homeUserNameTv.visibility = View.GONE
-                    binding.homeUserProfilePic.visibility = View.GONE
+                    //binding.homeWelComeTv.visibility = View.GONE
+                   // binding.homeUserNameTv.visibility = View.GONE
+                   // binding.homeUserProfilePic.visibility = View.GONE
 
                 }
 

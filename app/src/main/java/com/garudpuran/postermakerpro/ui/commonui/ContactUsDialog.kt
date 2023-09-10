@@ -37,7 +37,8 @@ class ContactUsDialog(private val mListener:ContactUsDialogListener) : DialogFra
         }
 
         binding.copyMail.setOnClickListener {
-
+          mListener.onCopyMailClicked()
+            dismiss()
         }
 
 
@@ -58,5 +59,6 @@ class ContactUsDialog(private val mListener:ContactUsDialogListener) : DialogFra
 
     interface ContactUsDialogListener{
         fun onCreateMailClicked()
+        fun onCopyMailClicked()
     }
 }

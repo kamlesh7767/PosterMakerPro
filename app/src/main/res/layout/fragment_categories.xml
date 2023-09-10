@@ -7,7 +7,8 @@
     android:orientation="vertical"
     tools:context=".ui.dashboard.CategoriesFragment">
 
-    <androidx.core.widget.NestedScrollView
+    <com.garudpuran.postermakerpro.ui.dashboard.CustomNestedScrollView
+        android:id="@+id/parentNS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -18,7 +19,6 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/home_top_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_corners_rounded_filled_bg"
@@ -57,7 +57,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginStart="10dp"
-                    android:src="@drawable/pmp_image_placeholder"
+                    android:src="@drawable/add_image"
                     android:layout_marginTop="10dp"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dp"
@@ -182,7 +182,7 @@
         </LinearLayout>
 
 
-    </androidx.core.widget.NestedScrollView>
+    </com.garudpuran.postermakerpro.ui.dashboard.CustomNestedScrollView>
 
     <include
         android:id="@+id/progress"

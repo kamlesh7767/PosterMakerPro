@@ -37,6 +37,7 @@ import com.garudpuran.postermakerpro.ui.editing.options.OptionsLogoFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsMobileNumberFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsProfilePhotoFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsUserNameFragment
+import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Utils
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -45,6 +46,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.firestore.FirebaseFirestore
 import com.slowmac.autobackgroundremover.BackgroundRemover
 import com.slowmac.autobackgroundremover.OnBackgroundChangeListener
 import com.yalantis.ucrop.UCrop
@@ -432,6 +434,7 @@ binding.maskedIv.setOnTouchListener { v, event ->
         shareIntent.type = "image/*"
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(Intent.createChooser(shareIntent, "Share Image"))
+        updateDownloadCount()
     }
 
 
@@ -465,11 +468,37 @@ binding.maskedIv.setOnTouchListener { v, event ->
             }
         }
         Toast.makeText(this, "Downloaded", Toast.LENGTH_SHORT).show()
+        updateDownloadCount()
         if(Utils.getReviewPopUpStatus(this)){
             setReviewDialog()
         }
 
     }
+
+    private fun updateDownloadCount() {
+        val catId = intent.getStringExtra("postCatId")
+        val subCatId = intent.getStringExtra("postSubCatId")
+        val postId = intent.getStringExtra("postId")
+        val db = FirebaseFirestore.getInstance()
+        val dbRef = db.collection(FirebaseStorageConstants.MAIN_CATEGORIES_NODE).document(catId!!)
+                .collection(FirebaseStorageConstants.MAIN_SUB_CATEGORIES_NODE)
+                .document(subCatId!!)
+                .collection(FirebaseStorageConstants.SUB_CATEGORIES_POSTS_NODE).document(postId!!)
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(dbRef)
+            if (snapshot.exists()) {
+                val currentNumber = snapshot.getLong("downloads") ?: 0
+                val updatedNumber = currentNumber + 1
+                transaction.update(dbRef, "downloads", updatedNumber)
+            }
+            null
+        }
+
+
+
+    }
+
     private fun resetMatrix() {
         matrix.reset()
         binding.maskedIv.imageMatrix = matrix

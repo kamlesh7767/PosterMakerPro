@@ -95,7 +95,8 @@
     <string name="no_profiles_added">No Profiles Added!</string>
     <string name="you_can_add_new_profiles_with_the_button_below">You can add new profiles with the button below.</string>
     <string name="share_with_our_community">Share With Our Community</string>
-    <string name="file_ready">File Is Ready..</string>
+    <string name="file_ready" translatable="false">File Is Ready..</string>
+    <string name="write_us_a_mail">Let us know your queries</string>
     <string name="no_posters_found">No Posters Found!</string>
     <string name="we_keep_on_adding_new_posters_though_ncheck_later_for_updates">We keep on adding new posters though!\nCheck later for updates.</string>
     <string name="your_business_address">Your Business Address</string>
@@ -103,8 +104,8 @@
     <string name="enter_your_email_id">Enter your email id.</string>
     <string name="enter_your_mobile_number">Enter your mobile number.</string>
     <string name="downloaded">Downloaded</string>
-    <string name="poster_maker_pro">Poster Maker Pro</string>
-    <string name="select_a_frame_first">Select a frame first!</string>
+    <string name="poster_maker_pro" translatable="false">Poster Maker Pro</string>
+    <string name="select_a_frame_first" translatable="false">Select a frame first!</string>
 
 
 </resources>

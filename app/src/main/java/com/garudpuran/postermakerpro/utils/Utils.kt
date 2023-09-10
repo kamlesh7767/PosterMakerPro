@@ -18,7 +18,7 @@ object Utils {
     fun showToast(activity: Activity, message: String){
         val toast = Toast(activity)
         toast.duration = Toast.LENGTH_SHORT
-      toast.setGravity(Gravity.BOTTOM,0,0)
+      toast.setGravity(Gravity.BOTTOM,0,100)
         val inflater = activity.layoutInflater
 
         val view: View = inflater.inflate(

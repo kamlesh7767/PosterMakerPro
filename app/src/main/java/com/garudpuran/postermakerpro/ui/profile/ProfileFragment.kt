@@ -1,8 +1,8 @@
 package com.garudpuran.postermakerpro.ui.profile
 
-import android.adservices.common.AdData
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -25,12 +25,9 @@ import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFragment
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
+import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdSize.BANNER
-import com.google.android.gms.ads.AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize
-import com.google.android.gms.ads.AdView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,11 +101,13 @@ observeUserData()
         }
 
         binding.profileContactUsBtn.setOnClickListener {
-            val errorD = ContactUsDialog(this)
-            val fragmentTransaction = childFragmentManager.beginTransaction()
-            fragmentTransaction.add(errorD, "ErrorDialogFrag")
-            fragmentTransaction.commitAllowingStateLoss()
+         contactFrag()
         }
+
+        binding.profileDeleteAccBtn.setOnClickListener {
+          contactFrag()
+        }
+
 
         binding.profileBack.setOnClickListener {
             startActivity(requireActivity().intent)
@@ -157,6 +156,13 @@ observeUserData()
             alertDialog.show()
 
         }
+    }
+
+    private fun contactFrag(){
+        val contactFrag = ContactUsDialog(this)
+        val fragmentTransaction = childFragmentManager.beginTransaction()
+        fragmentTransaction.add(contactFrag, "ContactDialogFrag")
+        fragmentTransaction.commitAllowingStateLoss()
     }
 
     private fun profileCreate(data: UserPersonalProfileModel) {
@@ -291,6 +297,14 @@ observeUserData()
         composeEmail("postermakerpro@gmail.com")
     }
 
+    override fun onCopyMailClicked() {
+        val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val textToCopy = "postermakerpro@gmail.com"
+        val clip = ClipData.newPlainText("Label", textToCopy)
+        clipboard.setPrimaryClip(clip)
+        Utils.showToast(requireActivity(),"Copied")
+    }
+
     private fun composeEmail(emailAddress: String) {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("mailto:")  // Specifies that this is a mailto: intent
@@ -299,7 +313,7 @@ observeUserData()
         if (intent.resolveActivity(requireActivity().packageManager) != null) {
             startActivity(intent)
         } else {
-            // Handle the case where no email client is available
+            onCopyMailClicked()
         }
     }
 }

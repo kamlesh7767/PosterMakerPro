@@ -18,7 +18,6 @@ import com.garudpuran.postermakerpro.ui.editing.EditPostActivity
 import com.garudpuran.postermakerpro.utils.Status
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -135,6 +134,7 @@ class SelectProfessionalProfileBottomSheetFrag(
         intent.putExtra("postCatId",categoryId)
         intent.putExtra("postSubCatId",subCategoryId)
         intent.putExtra("postId",postId)
+
 
         intent.putExtra("profileName",item.name)
         intent.putExtra("profileMobileNumber",item.mobile_number)
