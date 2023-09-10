@@ -3,26 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
-
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.garudpuran.postermakerpro.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_navigation_home_to_profile_fragment"
-            app:destination="@id/profile_fragment" />
-        <action
-            android:id="@+id/action_navigation_home_to_selectedSubCatItems"
-            app:destination="@id/selectedSubCatItems" />
-        <action
-            android:id="@+id/action_navigation_home_to_notificationFragment"
-            app:destination="@id/notificationFragment" />
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_categories"
-            app:destination="@id/navigation_categories" />
-    </fragment>
+    app:startDestination="@id/navigation_categories">
 
     <fragment
         android:id="@+id/navigation_categories"
@@ -36,6 +17,9 @@
             android:name="catId"
             app:argType="string"
             android:defaultValue='' />
+        <action
+            android:id="@+id/action_navigation_categories_to_profile_fragment"
+            app:destination="@id/profile_fragment" />
     </fragment>
 
     <fragment

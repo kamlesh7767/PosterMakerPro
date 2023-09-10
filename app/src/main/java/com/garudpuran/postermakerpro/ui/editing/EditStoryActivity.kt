@@ -2,7 +2,6 @@ package com.garudpuran.postermakerpro.ui.editing
 
 import android.Manifest
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -31,13 +30,16 @@ import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditStoryBinding
 import com.garudpuran.postermakerpro.models.TrendingStoriesItemModel
 import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
-import com.garudpuran.postermakerpro.ui.commonui.HomeResources
+import com.garudpuran.postermakerpro.ui.commonui.DownloadAndShareCustomDialog
+import com.garudpuran.postermakerpro.ui.commonui.ReviewDialogFragment
 import com.garudpuran.postermakerpro.ui.editing.adapter.ViewPagerAdapter
 import com.garudpuran.postermakerpro.ui.home.HomeViewModel
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
+import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -52,7 +54,7 @@ import java.io.IOException
 
 
 @AndroidEntryPoint
-class EditStoryActivity : AppCompatActivity()
+class EditStoryActivity : AppCompatActivity(), DownloadAndShareCustomDialog.DownAndShareDialogListener
     {
     private lateinit var binding: ActivityEditStoryBinding
 
@@ -75,11 +77,11 @@ class EditStoryActivity : AppCompatActivity()
         //binding.titlePostTv.text = intent.getStringExtra("engTitle")
 
         binding.downloadBtn.setOnClickListener {
-         askForStoragePermissions(1)
+loadAd()
 
         }
         binding.shareBtn.setOnClickListener {
-          askForStoragePermissions(2)
+loadAd()
 
         }
 
@@ -87,10 +89,71 @@ class EditStoryActivity : AppCompatActivity()
             finish()
         }
 
-        showAd()
+
     }
 
-    private fun viewToBitmap(view: View): Bitmap? {
+        private fun setReviewDialog() {
+            val rD = ReviewDialogFragment()
+            rD.show(supportFragmentManager, "ReviewDialogFrag")
+
+        }
+
+        private fun showAd(){
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        downShareDialog()
+                    }
+                }
+
+                mInterstitialAd?.show(this)
+            }else{
+                downShareDialog()
+            }
+            binding.progress.root.visibility = View.GONE
+        }
+
+        private fun loadAd () {
+            binding.progress.root.visibility = View.VISIBLE
+            var adRequest = AdRequest.Builder().build()
+
+            InterstitialAd.load(this,"ca-app-pub-4135756483743089/1376225141", adRequest, object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                    showAd()
+                    Log.d("ADVERT", adError.toString())
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                    showAd()
+                    Log.d("ADVERT", "Shown")
+                }
+
+
+            })
+
+
+        }
+
+        private fun downShareDialog() {
+            binding.progress.root.visibility = View.GONE
+            val dialogFrag = DownloadAndShareCustomDialog(this,this)
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.add(dialogFrag, "DialogFrag")
+            fragmentTransaction.commitAllowingStateLoss()
+        }
+
+        override fun onJustDownClicked() {
+            askForStoragePermissions(1)
+        }
+
+        override fun onShareItClicked() {
+            askForStoragePermissions(2)
+        }
+
+
+        private fun viewToBitmap(view: View): Bitmap? {
         var createBitmap: Bitmap? = null
         view.isDrawingCacheEnabled = true
         view.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
@@ -212,26 +275,11 @@ private  fun saveToOldGallery(){
             }
         }
         Toast.makeText(this, getString(R.string.downloaded), Toast.LENGTH_SHORT).show()
-        if (mInterstitialAd != null) {
-            mInterstitialAd?.show(this)
+        if(Utils.getReviewPopUpStatus(this)){
+            setReviewDialog()
         }
     }
 
-        private fun showAd() {
-            var adRequest = AdRequest.Builder().build()
-
-            InterstitialAd.load(this,"ca-app-pub-4135756483743089/1376225141", adRequest, object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mInterstitialAd = null
-                    Log.d("ADVERT", adError.toString())
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    mInterstitialAd = interstitialAd
-                    Log.d("ADVERT", "Shown")
-                }
-            })
-        }
 
 
         private fun saveAndShareImage(bitmap: Bitmap, fileName: String){

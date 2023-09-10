@@ -9,7 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.garudpuran.postermakerpro.R.*
+import com.garudpuran.postermakerpro.R.id
+import com.garudpuran.postermakerpro.R.layout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 object Utils {
@@ -35,6 +36,15 @@ object Utils {
         )
         val pref = profilePref.getString(UserReferences.USER_PROFILE_STATUS,"")
         return pref != UserReferences.USER_PROFILE_STATUS_SHOWED
+    }
+
+    fun getReviewPopUpStatus(activity: Activity):Boolean{
+        val profilePref = activity.getSharedPreferences(
+            UserReferences.USER_PROFILE,
+            Context.MODE_PRIVATE
+        )
+        val pref = profilePref.getString(UserReferences.USER_REVIEW_STATUS_SHOW,UserReferences.USER_REVIEW_STATUS_DO_SHOW)
+        return pref == UserReferences.USER_REVIEW_STATUS_DO_SHOW
     }
 
     fun getIntroStatus(activity: Activity):Boolean{

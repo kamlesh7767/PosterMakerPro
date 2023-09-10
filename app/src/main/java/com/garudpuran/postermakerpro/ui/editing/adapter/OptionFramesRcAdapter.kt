@@ -56,7 +56,7 @@ class OptionFramesRcAdapter(
         } else {
             holder.parentL.background =
                 AppCompatResources.getDrawable(context, R.drawable.chip_not_selected_bg)
-            holder.positionTv.setTextColor(context.getColor(com.denzcoskun.imageslider.R.color.grey_font))
+            holder.positionTv.setTextColor(context.getColor(R.color.grey_font))
         }
 
         holder.itemView.setOnClickListener {

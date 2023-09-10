@@ -1,0 +1,83 @@
+<!-- res/layout/custom_dialog_layout.xml -->
+<com.google.android.material.card.MaterialCardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+app:cardCornerRadius="20dp"
+android:elevation="10dp"
+android:layout_margin="16dp"
+android:layout_gravity="center"
+    >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:padding="15dp"
+    >
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView2"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/rating" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please Rate our App and Provide Your Suggestions."
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView2" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/doNotShowCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/primary_color"
+        android:text="Do not show this again"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/rate_app_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/filled_primary_rounded_bg"
+        android:paddingHorizontal="6dp"
+        android:text="REVIEW"
+        android:letterSpacing="0.2"
+        android:fontFamily="@font/baloo_bhai"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/doNotShowCheck" />
+
+    <ImageView
+        android:id="@+id/close_dialog"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:elevation="8dp"
+        android:src="@drawable/baseline_close_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
