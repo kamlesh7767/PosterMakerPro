@@ -55,7 +55,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
                     app:boxBackgroundColor="@color/white"
                     app:boxBackgroundMode="outline"
                     app:boxCornerRadiusBottomEnd="15dp"
@@ -86,10 +85,10 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/registration_mobile_no_ti"
+                    android:id="@+id/mobile_no_ti"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     app:boxBackgroundColor="@color/white"
                     app:boxBackgroundMode="outline"
                     app:boxCornerRadiusBottomEnd="15dp"
@@ -102,22 +101,23 @@
                     app:counterEnabled="true"
                     app:counterMaxLength="10"
                     app:errorEnabled="true"
-                    app:hintTextColor="@color/orange"
+                    app:hintTextColor="@color/primary_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3"
                     app:prefixText="+91"
                     app:startIconDrawable="@drawable/baseline_phone_android_24"
-                    app:startIconTint="@color/orange"
-
-                    >
+                    app:startIconTint="@color/primary_color">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/registration_mobile_no_et"
+                        android:id="@+id/login_mobile_no_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="top"
-                        android:hint="@string/contact_number_hint"
+                        android:hint="@string/mobile_no_hint"
                         android:inputType="phone"
-                        android:maxLength="10"
+                        android:maxLength="13"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>

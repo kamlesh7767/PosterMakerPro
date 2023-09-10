@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var interstitialAd: InterstitialAd? = null
     private val handler = Handler()
-    private val adDisplayInterval = 90 * 1000
+    private val adDisplayInterval = 2 * 60 * 1000
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MobileAds.initialize(this) {}
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startAdDisplayLoop() {
-        val initialDelay = 20*1000L
+        val initialDelay = 30*1000L
         handler.postDelayed(adDisplayRunnable, initialDelay)
     }
 

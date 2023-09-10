@@ -1,26 +1,15 @@
 package com.garudpuran.postermakerpro.ui.commonui
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.databinding.ActivityMainBinding
 import com.garudpuran.postermakerpro.databinding.FragmentContactUsDialogBinding
-import com.garudpuran.postermakerpro.databinding.FragmentDownloadAndShareCustomDialogBinding
-import com.garudpuran.postermakerpro.databinding.FragmentErrorDialogBinding
-import com.garudpuran.postermakerpro.databinding.FragmentLanguageSelectionBottomSheetBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ContactUsDialog(private val mListener:ContactUsDialogListener) : DialogFragment() {
 
@@ -45,6 +34,10 @@ class ContactUsDialog(private val mListener:ContactUsDialogListener) : DialogFra
         binding.dialogSendMailBtn.setOnClickListener {
             mListener.onCreateMailClicked()
             dismiss()
+        }
+
+        binding.copyMail.setOnClickListener {
+
         }
 
 
