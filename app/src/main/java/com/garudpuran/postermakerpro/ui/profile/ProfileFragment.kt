@@ -25,6 +25,7 @@ import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.commonui.LanguageSelectionBottomSheetFragment
 import com.garudpuran.postermakerpro.utils.AppPrefConstants
 import com.garudpuran.postermakerpro.utils.Status
+import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.android.gms.ads.AdRequest
@@ -147,6 +148,7 @@ observeUserData()
                         getString(R.string.yes)
                     ) { _, _ ->
                         auth.signOut()
+                       clearPref()
                         val intent = Intent(requireActivity(),PhoneActivity().javaClass)
                         startActivity(intent)
                         requireActivity().finish()
@@ -156,6 +158,13 @@ observeUserData()
             alertDialog.show()
 
         }
+    }
+
+    private fun clearPref() {
+        requireContext().getSharedPreferences(
+            UserReferences.USER_PROFILE,
+            Context.MODE_PRIVATE
+        ).edit().clear().apply()
     }
 
     private fun contactFrag(){

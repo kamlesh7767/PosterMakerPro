@@ -121,7 +121,7 @@ binding.catFragSearchEt.addTextChangedListener {
         }
 
         binding.infoBtn.setOnClickListener {
-            sendToIntro()
+            //sendToIntro()
         }
         if (savedScrollState != null) {
             nestedScrollView.setSavedScrollState(savedScrollState)

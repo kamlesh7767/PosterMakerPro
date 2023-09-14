@@ -10,7 +10,7 @@ class HomeResources {
             return listOf(R.layout.frame_0,R.layout.frame_1,R.layout.frame_2,R.layout.frame_3,R.layout.frame_4,R.layout.frame_5,R.layout.frame_6,R.layout.frame_7,R.layout.frame_8,R.layout.frame_9,R.layout.frame_10,R.layout.frame_11,R.layout.frame_12,R.layout.frame_13,R.layout.frame_14,R.layout.frame_15,R.layout.frame_16,R.layout.frame_17,R.layout.frame_18,R.layout.frame_19,R.layout.frame_20)
         }
         fun introPages():List<Int>{
-            return listOf(R.drawable.intro01,R.drawable.intro02,R.drawable.intro03,R.drawable.intro04,R.drawable.intro05,)
+            return emptyList()
         }
 
         fun miniFrames():List<Int>{
