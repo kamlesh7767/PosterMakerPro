@@ -1,30 +1,20 @@
 package com.garudpuran.postermakerpro.ui.profile
 
 import android.app.Activity
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
-import com.garudpuran.postermakerpro.databinding.FragmentCreatePersonalProfileBinding
 import com.garudpuran.postermakerpro.databinding.FragmentCreateProfessionalProfileBinding
-import com.garudpuran.postermakerpro.models.UserPersonalProfileModel
 import com.garudpuran.postermakerpro.models.UserProfessionalProfileModel
 import com.garudpuran.postermakerpro.utils.ResponseStrings
 import com.garudpuran.postermakerpro.utils.Status
-import com.garudpuran.postermakerpro.utils.UserReferences
 import com.garudpuran.postermakerpro.utils.Utils
 import com.garudpuran.postermakerpro.viewmodels.UserViewModel
 import com.google.android.gms.ads.AdRequest
@@ -78,7 +68,7 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
 
         binding.updateUserProfileBtn.setOnClickListener {
             val userName = binding.registrationFullNameEt.text?.trim().toString()
-            val mobile = binding.registrationMobileNoEt.text?.trim().toString()
+            val mobile = binding.loginMobileNoEt.text?.trim().toString()
             val userAddress = binding.registrationAddressEt.text?.trim().toString()
 
             if (userName.isNotEmpty()) {
@@ -105,8 +95,12 @@ class CreateProfessionalProfileFragment(private val mListener: ProProfileUpdateL
         }
 
 
-        binding.registrationMobileNoEt.addTextChangedListener {
-            val ss = it?.removePrefix("+91")
+        binding.loginMobileNoEt.addTextChangedListener {
+            if(it.toString().startsWith("+91")){
+                val ss = it.toString().removePrefix("+91")
+                binding.loginMobileNoEt.setText(ss)
+            }
+
         }
     }
 

@@ -36,13 +36,13 @@
 
     <TextView
         android:id="@+id/post_item_title_tv"
-        android:layout_width="match_parent"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto_regular"
         android:gravity="center"
         android:text="gdsfdsdgsdfgj"
-        android:maxLength="20"
+        android:maxLength="50"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

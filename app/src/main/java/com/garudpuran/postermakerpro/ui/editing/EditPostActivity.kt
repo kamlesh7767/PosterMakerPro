@@ -12,7 +12,6 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.FloatMath
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -27,8 +26,10 @@ import androidx.core.view.drawToBitmap
 import com.bumptech.glide.Glide
 import com.garudpuran.postermakerpro.R
 import com.garudpuran.postermakerpro.databinding.ActivityEditPostBinding
+import com.garudpuran.postermakerpro.ui.commonui.DownloadAndShareCustomDialog
 import com.garudpuran.postermakerpro.ui.commonui.ErrorDialogFrag
 import com.garudpuran.postermakerpro.ui.commonui.HomeResources
+import com.garudpuran.postermakerpro.ui.commonui.ReviewDialogFragment
 import com.garudpuran.postermakerpro.ui.editing.adapter.EditingPostOptionsVPAdapter
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsAddressFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsFramesFragment
@@ -36,13 +37,16 @@ import com.garudpuran.postermakerpro.ui.editing.options.OptionsLogoFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsMobileNumberFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsProfilePhotoFragment
 import com.garudpuran.postermakerpro.ui.editing.options.OptionsUserNameFragment
+import com.garudpuran.postermakerpro.utils.FirebaseStorageConstants
 import com.garudpuran.postermakerpro.utils.Utils
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.firestore.FirebaseFirestore
 import com.slowmac.autobackgroundremover.BackgroundRemover
 import com.slowmac.autobackgroundremover.OnBackgroundChangeListener
 import com.yalantis.ucrop.UCrop
@@ -55,6 +59,7 @@ import kotlin.math.sqrt
 @AndroidEntryPoint
 class EditPostActivity : AppCompatActivity(),
     ErrorDialogFrag.ErrorDialogListener,
+    DownloadAndShareCustomDialog.DownAndShareDialogListener,
     OptionsFramesFragment.OptionFramesListener,
     OptionsProfilePhotoFragment.OptionsProfilePicListener,
     OptionsLogoFragment.OptionsLogoListener,
@@ -88,13 +93,6 @@ class EditPostActivity : AppCompatActivity(),
     var newRot = 0f
     private val matrix: Matrix = Matrix()
     private val savedMatrix: Matrix = Matrix()
-    var fileNAME: String? = null
-    var framePos = 0
-
-    private val scale = 0f
-    private val newDist = 0f
-
-    // We can be in one of these 3 states
     private val NONE = 0
     private val DRAG = 1
     private val ZOOM = 2
@@ -105,7 +103,7 @@ class EditPostActivity : AppCompatActivity(),
     private val mid = PointF()
     var oldDist = 1f
 
-    val TOUCH_THRESHOLD = 10 // Adjust this value according to your needs
+    val TOUCH_THRESHOLD = 10
 
     fun onTouch(v: View, event: MotionEvent): Boolean {
         val view = v as ImageView
@@ -239,7 +237,7 @@ class EditPostActivity : AppCompatActivity(),
         binding = ActivityEditPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUi()
-showAd()
+
 
 binding.maskedIv.setOnTouchListener { v, event ->
     onTouch(v, event)
@@ -293,26 +291,64 @@ binding.maskedIv.setOnTouchListener { v, event ->
             .into(binding.iconIv)
 
         binding.downloadBtn.setOnClickListener {
-            val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-            saveImageToGallery(combinedBitmap!!, intent.getStringExtra("engTitle")!!)
-            if (mInterstitialAd != null) {
-                mInterstitialAd?.show(this)
-            }
+          loadAd()
         }
 
         binding.shareBtn.setOnClickListener {
-            val combinedBitmap = viewToBitmap(binding.fullPostLayout)
-            saveAndShareImage(combinedBitmap!!, System.currentTimeMillis().toString())
-            if (mInterstitialAd != null) {
-                mInterstitialAd?.show(this)
-            }
-
+            loadAd()
         }
 
         binding.backBtn.setOnClickListener {
             finish()
         }
 
+
+    }
+
+    private fun showAd(){
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                   downShareDialog()
+                }
+            }
+
+            mInterstitialAd?.show(this)
+        }else{
+            downShareDialog()
+        }
+        binding.progress.root.visibility = View.GONE
+    }
+
+    private fun loadAd () {
+        binding.progress.root.visibility = View.VISIBLE
+        var adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(this,"ca-app-pub-4135756483743089/2318643861", adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mInterstitialAd = null
+                showAd()
+                Log.d("ADVERT", adError.toString())
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                mInterstitialAd = interstitialAd
+                showAd()
+                Log.d("ADVERT", "Shown")
+            }
+
+
+        })
+
+
+    }
+
+    private fun downShareDialog() {
+        binding.progress.root.visibility = View.GONE
+        val dialogFrag = DownloadAndShareCustomDialog(this,this)
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(dialogFrag, "DialogFrag")
+        fragmentTransaction.commitAllowingStateLoss()
     }
 
     private fun changeUserPicSize(size: Float) {
@@ -335,8 +371,6 @@ binding.maskedIv.setOnTouchListener { v, event ->
 
 
     private fun setUi() {
-
-
         val pagerAdapter = EditingPostOptionsVPAdapter(this, this, this, this, this, this, this)
         binding.viewPager.adapter = pagerAdapter
         binding.viewPager.offscreenPageLimit = 4
@@ -400,6 +434,7 @@ binding.maskedIv.setOnTouchListener { v, event ->
         shareIntent.type = "image/*"
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(Intent.createChooser(shareIntent, "Share Image"))
+        updateDownloadCount()
     }
 
 
@@ -433,16 +468,45 @@ binding.maskedIv.setOnTouchListener { v, event ->
             }
         }
         Toast.makeText(this, "Downloaded", Toast.LENGTH_SHORT).show()
+        updateDownloadCount()
+        if(Utils.getReviewPopUpStatus(this)){
+            setReviewDialog()
+        }
+
     }
+
+    private fun updateDownloadCount() {
+        val catId = intent.getStringExtra("postCatId")
+        val subCatId = intent.getStringExtra("postSubCatId")
+        val postId = intent.getStringExtra("postId")
+        val db = FirebaseFirestore.getInstance()
+        val dbRef = db.collection(FirebaseStorageConstants.MAIN_CATEGORIES_NODE).document(catId!!)
+                .collection(FirebaseStorageConstants.MAIN_SUB_CATEGORIES_NODE)
+                .document(subCatId!!)
+                .collection(FirebaseStorageConstants.SUB_CATEGORIES_POSTS_NODE).document(postId!!)
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(dbRef)
+            if (snapshot.exists()) {
+                val currentNumber = snapshot.getLong("downloads") ?: 0
+                val updatedNumber = currentNumber + 1
+                transaction.update(dbRef, "downloads", updatedNumber)
+            }
+            null
+        }
+
+
+
+    }
+
     private fun resetMatrix() {
         matrix.reset()
         binding.maskedIv.imageMatrix = matrix
     }
 
-    private fun setErrorDialog() {
-        binding.progress.root.visibility = View.GONE
-        val errorD = ErrorDialogFrag(this)
-        errorD.show(supportFragmentManager, "ErrorDialogFrag")
+    private fun setReviewDialog() {
+        val rD = ReviewDialogFragment()
+        rD.show(supportFragmentManager, "ReviewDialogFrag")
 
     }
 
@@ -593,21 +657,7 @@ binding.maskedIv.setOnTouchListener { v, event ->
     }
     private var mInterstitialAd: InterstitialAd? = null
 
-    private fun showAd() {
-        var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-4135756483743089/2318643861", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                mInterstitialAd = null
-                Log.d("ADVERT", adError.toString())
-            }
-
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                mInterstitialAd = interstitialAd
-                Log.d("ADVERT", "Shown")
-            }
-        })
-    }
 
     override fun logoPicBgRemove() {
         val bm = binding.iconIv.drawToBitmap()
@@ -778,6 +828,17 @@ binding.maskedIv.setOnTouchListener { v, event ->
         }else{
             Utils.showToast(this,getString(R.string.select_a_frame_first))
         }
+    }
+
+    override fun onJustDownClicked() {
+        val combinedBitmap = viewToBitmap(binding.fullPostLayout)
+        saveImageToGallery(combinedBitmap!!, intent.getStringExtra("engTitle")!!)
+
+    }
+
+    override fun onShareItClicked() {
+        val combinedBitmap = viewToBitmap(binding.fullPostLayout)
+        saveAndShareImage(combinedBitmap!!, System.currentTimeMillis().toString())
     }
 
 

@@ -329,7 +329,7 @@ class OTPActivity : AppCompatActivity() {
                         FirebaseFirestore.getInstance().collection(UserReferences.USER_MAIN_NODE)
                     db.document(uid).get().addOnSuccessListener {
                         if (it.exists()) {
-                           checkAndNavigate()
+                            sendToMain()
                         } else {
                             updateUserData(uid, params)
                         }
@@ -349,11 +349,14 @@ class OTPActivity : AppCompatActivity() {
     }
 
     private fun checkAndNavigate(){
-        if(Utils.getIntroStatus(this)){
+        /*if(Utils.getIntroStatus(this)){
             sendToIntro()
         }else{
             sendToMain()
-        }
+        }*/
+
+
+
     }
 
 
@@ -396,7 +399,7 @@ class OTPActivity : AppCompatActivity() {
                     if (it.data == ResponseStrings.SUCCESS) {
                         Toast.makeText(this, getString(R.string.authenticated_successfully), Toast.LENGTH_SHORT)
                             .show()
-                       checkAndNavigate()
+                        sendToMain()
                     }
                 }
 

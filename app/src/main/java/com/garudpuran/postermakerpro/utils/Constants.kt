@@ -11,6 +11,9 @@ object UserReferences{
     const val USER_INTRO_STATUS = "status_intro"
     const val USER_PROFILE_STATUS_SHOWED = "showed"
     const val USER_INTRO_STATUS_SHOWED = "intro_showed"
+    const val USER_REVIEW_STATUS_SHOW = "review_show"
+    const val USER_REVIEW_STATUS_DO_NOT = "do_not_show_review"
+    const val USER_REVIEW_STATUS_DO_SHOW = "do_show_review"
 
 
 }

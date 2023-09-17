@@ -4,6 +4,7 @@
     <color name="primary_color">#FF8A36</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey_font">#454545</color>
     <color name="font_grey">#454545</color>
 
 

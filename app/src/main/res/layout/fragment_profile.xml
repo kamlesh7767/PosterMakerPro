@@ -550,7 +550,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout5"
+                    android:id="@+id/profile_delete_acc_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
@@ -578,7 +578,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="@string/erase_all_of_your_data"
+                        android:text="@string/write_us_a_mail"
                         android:textColor="@color/font_grey"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -606,9 +606,10 @@
                     android:layout_height="wrap_content"
                     app:adSize="BANNER"
                     app:adUnitId="ca-app-pub-4135756483743089/9917060144"
+                    android:layout_marginTop="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
+                    app:layout_constraintTop_toBottomOf="@+id/profile_delete_acc_btn" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
